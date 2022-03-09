@@ -1,4 +1,4 @@
 {
-    "route": "/assets/*",
-    "rewrite": "/assets/assets"
+    "route": "/assets*",
+    "rewrite": "/assets/assets/"
 }

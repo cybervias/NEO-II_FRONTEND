@@ -1,4 +1,0 @@
-{
-    "route": "/assets*",
-    "rewrite": "/assets/assets/"
-}

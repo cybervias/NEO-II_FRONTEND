@@ -3,14 +3,12 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "assets/AssetManifest.json": "a9130fbf4b4ccbec36853d8c9b647ab7",
-"assets/assets/images/login_bg_agro.jpeg": "4343defa53ec5345ff35a9d20dd1c8fa",
-"assets/assets/images/message.txt": "2fa1663efcc9aa05f30e7fafee984249",
-"assets/assets/images/neocert_logo.png": "c8e699c3acb94e0bab09c4dc9aa05364",
-"assets/assets/images/T4DMND0003313-_By_Pass_Jump-V02%2520(1).docx": "b7a308d33ea59fd060c84a9f4097e823",
-"assets/assets/images/T4DMND0003313-_By_Pass_Jump-V02.docx": "b7a308d33ea59fd060c84a9f4097e823",
+  "assets/AssetManifest.json": "701cae22d866970f97463a1c63472961",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "7e7a6cccddf6d7b20012a548461d5d81",
+"assets/images/login_bg_agro.jpeg": "4343defa53ec5345ff35a9d20dd1c8fa",
+"assets/images/message.txt": "2fa1663efcc9aa05f30e7fafee984249",
+"assets/images/neocert_logo.png": "c8e699c3acb94e0bab09c4dc9aa05364",
 "assets/NOTICES": "0b8f893ed69e51f9cc18e7f93d991ea0",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
 "assets/packages/fluttertoast/assets/toastify.css": "a85675050054f179444bc5ad70ffc635",
@@ -24,8 +22,8 @@ const RESOURCES = {
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "da6d7467615dec4f2a6d3189f383391b",
-"/": "da6d7467615dec4f2a6d3189f383391b",
+"index.html": "18e2c6b50c0528005804ed14efc6d284",
+"/": "18e2c6b50c0528005804ed14efc6d284",
 "main.dart.js": "c0ecd9a6853f933f2476989f20661337",
 "manifest.json": "07f96ddbada6a42e334096b17f184bd9",
 "version.json": "31ad7459046c8ebc10c17e09127cccad"

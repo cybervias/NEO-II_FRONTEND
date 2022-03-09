@@ -14,7 +14,6 @@ class PropriedadesModel {
   int? AreaOutrosUsos;
   String? Localizacao;
   String? UF;
-  int? ID;
 
   PropriedadesModel({
     this.idPropriedade,
@@ -30,7 +29,6 @@ class PropriedadesModel {
     this.AreaOutrosUsos,
     this.Localizacao,
     this.UF,
-    this.ID,
   });
 
   Map<String, dynamic> toMap() {
@@ -48,7 +46,6 @@ class PropriedadesModel {
       'AreaOutrosUsos': AreaOutrosUsos,
       'Localizacao': Localizacao,
       'UF': UF,
-      'ID': ID,
     };
   }
 
@@ -67,7 +64,6 @@ class PropriedadesModel {
       AreaOutrosUsos: map['AreaOutrosUsos']?.toInt(),
       Localizacao: map['Localizacao'],
       UF: map['UF'],
-      ID: map['ID']?.toInt(),
     );
   }
 

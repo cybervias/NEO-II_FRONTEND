@@ -44,15 +44,77 @@ class PropriedadesApi {
         "AreaInfraestrutura": oProp.AreaInfraestrutura,
         "AreaOutrosUsos": oProp.AreaOutrosUsos,
         "Localizacao": oProp.Localizacao,
-        "UF": oProp.UF,
-        "ID": oProp.ID
+        "UF": oProp.UF
       };
 
       var response = await http.put(url,
           headers: <String, String>{"Content-type": "application/json"},
           body: jsonEncode(body));
       if (response.statusCode == 200) {
-        return response.body;
+        var res = jsonDecode(response.body);
+        Map<String, dynamic> map = {
+          "type": res["type"],
+          "message": res["message"]
+        };
+        return map;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return "";
+  }
+
+  Future createPropriedade(PropriedadesModel oProp) async {
+    try {
+      var url = Uri.parse(
+          "https://neo-ii-back-end.azurewebsites.net/propriedades/create");
+
+      var body = {
+        "Nome": oProp.Nome,
+        "CNPJ": oProp.CNPJ,
+        "XCoord": oProp.XCoord,
+        "yCoord": oProp.yCoord,
+        "AreaPropriedade": oProp.AreaPropriedade,
+        "AreaTotal": oProp.AreaTotal,
+        "AreaPlantada": oProp.AreaPlantada,
+        "AreaEstimaConservacao": oProp.AreaEstimaConservacao,
+        "AreaInfraestrutura": oProp.AreaInfraestrutura,
+        "AreaOutrosUsos": oProp.AreaOutrosUsos,
+        "Localizacao": oProp.Localizacao,
+        "UF": oProp.UF,
+      };
+
+      var response = await http.post(url,
+          headers: <String, String>{'Content-Type': 'application/json'},
+          body: jsonEncode(body));
+      if (response.statusCode == 200) {
+        var res = jsonDecode(response.body);
+        Map<String, dynamic> map = {
+          "type": res["type"],
+          "message": res["message"]
+        };
+        return map;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return "";
+  }
+
+  Future deletePropriedade(int idProp) async {
+    try {
+      var url = Uri.parse(
+          "https://neo-ii-back-end.azurewebsites.net/propriedades/delete/$idProp");
+
+      var response = await http.delete(url);
+      if (response.statusCode == 200) {
+        var res = jsonDecode(response.body);
+
+        Map<String, dynamic> map = {
+          "type": res["type"],
+          "message": res["message"]
+        };
+        return map;
       }
     } catch (e) {
       print(e);

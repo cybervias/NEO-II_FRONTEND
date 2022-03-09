@@ -7,9 +7,10 @@ import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 
 class PropriedadesEdit extends StatefulWidget {
-  PropriedadesModel? propModel;
+  PropriedadesModel propModel;
   var tipoAcao;
-  PropriedadesEdit({Key? key, this.propModel, this.tipoAcao}) : super(key: key);
+  PropriedadesEdit({Key? key, required this.propModel, this.tipoAcao})
+      : super(key: key);
 
   @override
   State<PropriedadesEdit> createState() => _PropriedadesEditState();
@@ -41,32 +42,42 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
 
   @override
   Widget build(BuildContext context) {
-    oPropModel = widget.propModel!;
+    oPropModel = widget.propModel;
     appRepository = Provider.of<AppModel>(context);
     return Scaffold(
       body: _body(),
+      appBar: AppBar(
+        title: Text(widget.tipoAcao == "editar"
+            ? "Editar Propriedade (${widget.propModel.idPropriedade})"
+            : "Criar Nova Propriedade"),
+        backgroundColor: Color.fromARGB(246, 34, 37, 44),
+        automaticallyImplyLeading: false,
+        centerTitle: true,
+      ),
     );
   }
 
   _setText() {
-    oProp = widget.propModel!;
-    _controllerNome.text = oProp.Nome!;
-    _controllerCNPJ.text = oProp.CNPJ!;
-    _controllerXCoord.text = oProp.XCoord!.toString();
-    _controllerYCoord.text = oProp.yCoord!.toString();
-    _controllerAreaPropriedade.text = oProp.AreaPropriedade!.toString();
-    _controllerAreaTotal.text = oProp.AreaTotal!.toString();
+    oProp = widget.propModel;
+    _controllerNome.text = oProp.Nome ?? "";
+    _controllerCNPJ.text = oProp.CNPJ ?? "";
+    _controllerXCoord.text = oProp.XCoord.toString();
+    _controllerYCoord.text = oProp.yCoord.toString();
+    _controllerAreaPropriedade.text = oProp.AreaPropriedade.toString();
+    _controllerAreaTotal.text = oProp.AreaTotal.toString();
     _controllerAreaPlantada.text = oProp.AreaPlantada!.toString();
-    _controllerAreaEstimaConser.text = oProp.AreaEstimaConservacao!.toString();
-    _controllerAreaInfraestrutura.text = oProp.AreaInfraestrutura!.toString();
-    _controllerAreaOutro.text = oProp.AreaOutrosUsos!.toString();
-    _controllerLocalizacao.text = oProp.Localizacao!;
-    _controllerUF.text = oProp.UF!;
-    _controllerID.text = oProp.ID!.toString();
+    _controllerAreaEstimaConser.text = oProp.AreaEstimaConservacao.toString();
+    _controllerAreaInfraestrutura.text = oProp.AreaInfraestrutura.toString();
+    _controllerAreaOutro.text = oProp.AreaOutrosUsos.toString();
+    _controllerLocalizacao.text = oProp.Localizacao ?? "";
+    _controllerUF.text = oProp.UF ?? "";
   }
 
   _body() {
-    _setText();
+    if (widget.propModel.Nome != "") {
+      _setText();
+    }
+
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.only(top: 50),
@@ -138,7 +149,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                       child: TextFormField(
                         controller: _controllerYCoord,
                         decoration: const InputDecoration(
-                          labelText: "XCoord",
+                          labelText: "YCoord",
                           border: OutlineInputBorder(),
                           isDense: true,
                         ),
@@ -320,8 +331,12 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                             primary: Color.fromARGB(246, 34, 37, 44)),
-                        onPressed: () => _onClickSalvar(),
-                        child: Text("Salvar Alterações"),
+                        onPressed: () => widget.tipoAcao == "editar"
+                            ? _onClickSalvar()
+                            : _onClickAdd(),
+                        child: widget.tipoAcao == "editar"
+                            ? Text("Salvar Alterações")
+                            : Text("Adicionar"),
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -350,7 +365,49 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     int areaEstimaConservacao = int.parse(_controllerAreaEstimaConser.text);
     int areaInfraestrutura = int.parse(_controllerAreaInfraestrutura.text);
     int areaOutrosUsos = int.parse(_controllerAreaOutro.text);
-    int ID = int.parse(_controllerID.text);
+
+    PropriedadesApi propriedadesApi = PropriedadesApi();
+
+    PropriedadesModel oProp = PropriedadesModel(
+      idPropriedade: oPropModel.idPropriedade,
+      Nome: _controllerNome.text,
+      CNPJ: _controllerCNPJ.text,
+      XCoord: xCoord,
+      yCoord: yCoord,
+      AreaPropriedade: areaPropriedade,
+      AreaTotal: areaTotal,
+      AreaPlantada: areaPlantada,
+      AreaEstimaConservacao: areaEstimaConservacao,
+      AreaInfraestrutura: areaInfraestrutura,
+      AreaOutrosUsos: areaOutrosUsos,
+      Localizacao: _controllerLocalizacao.text,
+      UF: _controllerUF.text,
+    );
+
+    var messageReturn = await propriedadesApi.updatePropriedade(oProp);
+
+    if (messageReturn["type"] == "S") {
+      Fluttertoast.showToast(
+          msg: messageReturn["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          fontSize: 16.0);
+
+      AppModel app = Provider.of<AppModel>(context, listen: false);
+      app.setPage(PropriedadesPage());
+    }
+  }
+
+  _onClickAdd() async {
+    int xCoord = int.parse(_controllerXCoord.text);
+    int yCoord = int.parse(_controllerYCoord.text);
+    int areaPropriedade = int.parse(_controllerAreaPropriedade.text);
+    int areaTotal = int.parse(_controllerAreaTotal.text);
+    int areaPlantada = int.parse(_controllerAreaPlantada.text);
+    int areaEstimaConservacao = int.parse(_controllerAreaEstimaConser.text);
+    int areaInfraestrutura = int.parse(_controllerAreaInfraestrutura.text);
+    int areaOutrosUsos = int.parse(_controllerAreaOutro.text);
 
     PropriedadesApi propriedadesApi = PropriedadesApi();
 
@@ -367,16 +424,19 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
         AreaInfraestrutura: areaInfraestrutura,
         AreaOutrosUsos: areaOutrosUsos,
         Localizacao: _controllerLocalizacao.text,
-        UF: _controllerUF.text,
-        ID: ID);
+        UF: _controllerUF.text);
 
-    var messageReturn = await propriedadesApi.updatePropriedade(oProp);
+    var messageReturn = await propriedadesApi.createPropriedade(oProp);
 
-    Fluttertoast.showToast(
-        msg: messageReturn,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        fontSize: 16.0);
+    if (messageReturn["type"] == "S") {
+      Fluttertoast.showToast(
+          msg: messageReturn["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          fontSize: 16.0);
+      AppModel app = Provider.of<AppModel>(context, listen: false);
+      app.setPage(PropriedadesPage());
+    }
   }
 }

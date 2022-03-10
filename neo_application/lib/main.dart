@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:neo_application/pages/home_page/home_page.dart';
-import 'package:neo_application/pages/login_page/login_page.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:neo_application/pages/provider/drawer_provider.dart';
 import 'package:provider/provider.dart';
@@ -30,7 +29,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),
-          home: HomePage()),
+          home: const HomePage()),
     );
   }
 }

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:javascript/javascript.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 
 class PropriedadesApi {

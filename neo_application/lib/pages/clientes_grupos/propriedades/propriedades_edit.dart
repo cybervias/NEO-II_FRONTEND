@@ -52,7 +52,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
       body: _body(),
       appBar: AppBar(
         title: Text(widget.tipoAcao == "editar"
-            ? "EditarPropriedade (${widget.propModel.idPropriedade})"
+            ? "Editar Propriedade (${widget.propModel.idPropriedade})"
             : "Criar Nova Propriedade"),
         backgroundColor: Color.fromARGB(246, 34, 37, 44),
         automaticallyImplyLeading: false,

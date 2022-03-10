@@ -25,4 +25,10 @@ class AppModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
+  setSelectedUf(String uf) {
+    this.page = page;
+
+    notifyListeners();
+  }
 }

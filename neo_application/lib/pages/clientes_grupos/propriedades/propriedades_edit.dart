@@ -4,12 +4,15 @@ import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_page.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
+import 'package:neo_application/pages/utils/list_uf.dart';
 import 'package:provider/provider.dart';
 
 class PropriedadesEdit extends StatefulWidget {
   PropriedadesModel propModel;
   var tipoAcao;
-  PropriedadesEdit({Key? key, required this.propModel, this.tipoAcao})
+  String uf;
+  PropriedadesEdit(
+      {Key? key, required this.propModel, this.tipoAcao, this.uf = ""})
       : super(key: key);
 
   @override
@@ -34,11 +37,12 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
       TextEditingController();
   final TextEditingController _controllerAreaOutro = TextEditingController();
   final TextEditingController _controllerLocalizacao = TextEditingController();
-  final TextEditingController _controllerUF = TextEditingController();
-  final TextEditingController _controllerID = TextEditingController();
+
   late AppModel appRepository;
   double constWidth = 400;
   late PropriedadesModel oPropModel;
+  String? listUfSelecionado;
+  String? valueSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +52,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
       body: _body(),
       appBar: AppBar(
         title: Text(widget.tipoAcao == "editar"
-            ? "Editar Propriedade (${widget.propModel.idPropriedade})"
+            ? "EditarPropriedade (${widget.propModel.idPropriedade})"
             : "Criar Nova Propriedade"),
         backgroundColor: Color.fromARGB(246, 34, 37, 44),
         automaticallyImplyLeading: false,
@@ -70,13 +74,15 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     _controllerAreaInfraestrutura.text = oProp.AreaInfraestrutura.toString();
     _controllerAreaOutro.text = oProp.AreaOutrosUsos.toString();
     _controllerLocalizacao.text = oProp.Localizacao ?? "";
-    _controllerUF.text = oProp.UF ?? "";
+    listUfSelecionado = valueSelected != null ? valueSelected : oProp.UF;
   }
 
   _body() {
     if (widget.propModel.Nome != "") {
       _setText();
     }
+
+    List<String> listUfs = Uf().listUfs();
 
     return SingleChildScrollView(
       child: Container(
@@ -287,40 +293,38 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                       width: 30,
                       height: 20,
                     ),
-                    SizedBox(
-                      width: constWidth,
-                      height: 30,
-                      child: TextFormField(
-                        controller: _controllerUF,
-                        decoration: const InputDecoration(
-                          labelText: "UF",
-                          border: OutlineInputBorder(),
-                          isDense: true,
+                    Container(
+                        width: constWidth,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          border: Border.all(width: 1, color: Colors.grey),
+                          borderRadius: BorderRadius.circular(5),
                         ),
-                      ),
-                    ),
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            child: DropdownButton<String>(
+                              isDense: true,
+                              isExpanded: true,
+                              value: listUfSelecionado,
+                              onChanged: (newValue) => {
+                                setState(() {
+                                  valueSelected = newValue;
+                                  listUfSelecionado = valueSelected;
+                                })
+                              },
+                              items: listUfs.map((String value) {
+                                return DropdownMenuItem(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                            ),
+                          ),
+                        )),
                     const SizedBox(
                       width: 30,
                       height: 20,
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: constWidth,
-                      height: 30,
-                      child: TextFormField(
-                        controller: _controllerID,
-                        decoration: const InputDecoration(
-                          labelText: "ID",
-                          border: OutlineInputBorder(),
-                          isDense: true,
-                        ),
-                      ),
                     ),
                   ],
                 ),
@@ -381,7 +385,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
       AreaInfraestrutura: areaInfraestrutura,
       AreaOutrosUsos: areaOutrosUsos,
       Localizacao: _controllerLocalizacao.text,
-      UF: _controllerUF.text,
+      UF: listUfSelecionado,
     );
 
     var messageReturn = await propriedadesApi.updatePropriedade(oProp);
@@ -400,6 +404,20 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
   }
 
   _onClickAdd() async {
+    if (_controllerXCoord.text == "" ||
+        _controllerYCoord.text == "" ||
+        _controllerAreaPropriedade.text == "" ||
+        _controllerAreaTotal.text == "" ||
+        _controllerAreaPlantada.text == "" ||
+        _controllerAreaEstimaConser.text == "" ||
+        _controllerAreaInfraestrutura.text == "" ||
+        _controllerAreaOutro.text == "" ||
+        _controllerNome.text == "" ||
+        _controllerCNPJ.text == "" ||
+        _controllerLocalizacao.text == "") {
+      _onClickDialog();
+      return;
+    }
     int xCoord = int.parse(_controllerXCoord.text);
     int yCoord = int.parse(_controllerYCoord.text);
     int areaPropriedade = int.parse(_controllerAreaPropriedade.text);
@@ -424,7 +442,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
         AreaInfraestrutura: areaInfraestrutura,
         AreaOutrosUsos: areaOutrosUsos,
         Localizacao: _controllerLocalizacao.text,
-        UF: _controllerUF.text);
+        UF: listUfSelecionado);
 
     var messageReturn = await propriedadesApi.createPropriedade(oProp);
 
@@ -439,4 +457,90 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
       app.setPage(PropriedadesPage());
     }
   }
+
+  _onClickDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Container(
+            height: 200,
+            child: Center(
+              child: Text("Preencher campos obrigatorios"),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => {Navigator.pop(context)},
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromRGBO(75, 171, 143, 30)),
+              child: Text("Ok"),
+            )
+          ],
+        ),
+      );
+
+  // String? _validateNome(String? value) {
+  //    if (value!.isEmpty) {
+  //     return "Nome não";
+  //   }
+  // }
+
+  // String? _validateCnpj(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateXCoord(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateYCorrd(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateAreaPropriedade(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateAreaTotal(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateAreaPlantada(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateAreaEstimaConser(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateAreaInfr(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateAreaOutro(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
+
+  // String? _validateLocalizacao(String? value) {
+  //   if (value!.isEmpty) {
+  //     return "Digite o usuario";
+  //   }
+  // }
 }

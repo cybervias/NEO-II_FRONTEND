@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Container(
                   decoration: const BoxDecoration(
-                      color: Color.fromRGBO(75, 171, 143, 30),
+                      color: Color.fromRGBO(78, 204, 196, 2),
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10))),
@@ -161,7 +161,7 @@ class _LoginPageState extends State<LoginPage> {
             ElevatedButton(
               onPressed: () => {Navigator.pop(context)},
               style: ElevatedButton.styleFrom(
-                  primary: Color.fromRGBO(75, 171, 143, 30)),
+                  primary: Color.fromRGBO(78, 204, 196, 2)),
               child: Text("Ok"),
             )
           ],

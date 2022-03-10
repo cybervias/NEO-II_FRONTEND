@@ -54,7 +54,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
         title: Text(widget.tipoAcao == "editar"
             ? "Editar Propriedade (${widget.propModel.idPropriedade})"
             : "Criar Nova Propriedade"),
-        backgroundColor: Color.fromARGB(246, 34, 37, 44),
+        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),

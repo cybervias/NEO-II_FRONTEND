@@ -12,7 +12,7 @@ class AppButton extends StatelessWidget {
       width: 300,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          primary: Color.fromRGBO(75, 171, 143, 30),
+          primary: Color.fromRGBO(78, 204, 196, 2),
         ),
         // ignore: prefer_const_constructors
         child: showProgress

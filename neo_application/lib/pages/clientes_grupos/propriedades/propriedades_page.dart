@@ -26,7 +26,7 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
       body: _body(),
       appBar: AppBar(
         title: Text("Lista de Propriedades"),
-        backgroundColor: Color.fromARGB(246, 34, 37, 44),
+        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
@@ -35,7 +35,7 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
           _onNavAdd(context);
         },
         child: Icon(Icons.add),
-        backgroundColor: Color.fromARGB(246, 34, 37, 44),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
       ),
     );
   }

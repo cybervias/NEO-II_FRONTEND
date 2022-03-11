@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/home_page/home_page.dart';
+import 'package:neo_application/pages/login_page/login_api.dart';
+import 'package:neo_application/pages/login_page/user_token.dart';
 import 'package:neo_application/pages/utils/nav.dart';
 import 'package:neo_application/pages/widgets/app_button.dart';
 import 'package:neo_application/pages/widgets/app_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -53,7 +58,8 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Container(
                   decoration: const BoxDecoration(
-                      color: Color.fromRGBO(75, 171, 143, 30),
+                      color: Color.fromRGBO(78, 204, 196, 2),
+
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10))),
@@ -97,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                   "Acessar",
                   onPressed: _onClickLogin,
                   showProgress: _showProgress,
-                )
+                ),
               ],
             ),
           ),
@@ -112,16 +118,31 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    String login = _tLogin.text;
-    String senha = _tSenha.text;
+    LoginModel loginModel = LoginModel();
+    String username = _tLogin.text;
+    String password = _tSenha.text;
+    setState(() {
+      _showProgress = true;
+    });
+    var response = await loginModel.login(username, password);
 
-    print("Login: $login, Senha: $senha");
-    push(context, const HomePage());
+    if (response.access_token != null) {
+      push(context, HomePage());
+      setState(() {
+        _showProgress = false;
+      });
+    } else {
+      _onClickDialog();
+      setState(() {
+        _showProgress = false;
+      });
+    }
+
   }
 
   String? _validateLogin(String? text) {
     if (text!.isEmpty) {
-      return "Digite o login";
+      return "Digite o usuario";
     }
   }
 
@@ -130,4 +151,25 @@ class _LoginPageState extends State<LoginPage> {
       return "Digite a senha";
     }
   }
+
+  _onClickDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Container(
+            height: 200,
+            child: Center(
+              child: Text("Usuario ou senha incorreto"),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => {Navigator.pop(context)},
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromRGBO(78, 204, 196, 2)),
+              child: Text("Ok"),
+            )
+          ],
+        ),
+      );
+
 }

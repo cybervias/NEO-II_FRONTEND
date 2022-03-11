@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_page.dart';
+
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_page.dart';
 import 'package:neo_application/pages/default_page.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
@@ -177,6 +178,7 @@ class _SubListTileState extends State<SubListTile> {
             AppModel app = Provider.of<AppModel>(context, listen: false);
             app.setPage(EntidadesPage());
           },
+
         ),
         ListTile(
           title: Text(

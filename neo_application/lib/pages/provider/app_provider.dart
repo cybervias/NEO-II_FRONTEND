@@ -31,4 +31,5 @@ class AppModel extends ChangeNotifier {
 
     notifyListeners();
   }
+
 }

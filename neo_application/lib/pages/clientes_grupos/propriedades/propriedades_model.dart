@@ -29,6 +29,7 @@ class PropriedadesModel {
     this.AreaOutrosUsos,
     this.Localizacao,
     this.UF,
+
   });
 
   Map<String, dynamic> toMap() {

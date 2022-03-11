@@ -15,6 +15,7 @@ class PropriedadesEdit extends StatefulWidget {
       {Key? key, required this.propModel, this.tipoAcao, this.uf = ""})
       : super(key: key);
 
+
   @override
   State<PropriedadesEdit> createState() => _PropriedadesEditState();
 }
@@ -58,6 +59,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
+
     );
   }
 
@@ -156,6 +158,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                         controller: _controllerYCoord,
                         decoration: const InputDecoration(
                           labelText: "YCoord",
+
                           border: OutlineInputBorder(),
                           isDense: true,
                         ),
@@ -322,12 +325,14 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                             ),
                           ),
                         )),
+
                     const SizedBox(
                       width: 30,
                       height: 20,
                     ),
                   ],
                 ),
+
                 Container(
                   alignment: Alignment.bottomRight,
                   child: ButtonBar(
@@ -341,6 +346,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                         child: widget.tipoAcao == "editar"
                             ? Text("Salvar Alterações")
                             : Text("Adicionar"),
+
                       ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -426,6 +432,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     int areaEstimaConservacao = int.parse(_controllerAreaEstimaConser.text);
     int areaInfraestrutura = int.parse(_controllerAreaInfraestrutura.text);
     int areaOutrosUsos = int.parse(_controllerAreaOutro.text);
+
 
     PropriedadesApi propriedadesApi = PropriedadesApi();
 
@@ -543,4 +550,5 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
   //     return "Digite o usuario";
   //   }
   // }
+
 }

@@ -8,6 +8,7 @@ import 'package:neo_application/pages/widgets/app_button.dart';
 import 'package:neo_application/pages/widgets/app_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -58,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
                 Container(
                   decoration: const BoxDecoration(
                       color: Color.fromRGBO(78, 204, 196, 2),
+
                       borderRadius: BorderRadius.only(
                           topLeft: Radius.circular(10),
                           topRight: Radius.circular(10))),
@@ -115,6 +117,7 @@ class _LoginPageState extends State<LoginPage> {
     if (!formOk) {
       return;
     }
+
     LoginModel loginModel = LoginModel();
     String username = _tLogin.text;
     String password = _tSenha.text;
@@ -134,6 +137,7 @@ class _LoginPageState extends State<LoginPage> {
         _showProgress = false;
       });
     }
+
   }
 
   String? _validateLogin(String? text) {
@@ -167,4 +171,5 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       );
+
 }

@@ -1,7 +1,9 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+
 import 'package:javascript/javascript.dart';
+
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 
 class PropriedadesApi {
@@ -45,6 +47,7 @@ class PropriedadesApi {
         "AreaOutrosUsos": oProp.AreaOutrosUsos,
         "Localizacao": oProp.Localizacao,
         "UF": oProp.UF
+
       };
 
       var response = await http.put(url,
@@ -115,6 +118,7 @@ class PropriedadesApi {
           "message": res["message"]
         };
         return map;
+
       }
     } catch (e) {
       print(e);

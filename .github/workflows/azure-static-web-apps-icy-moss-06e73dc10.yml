@@ -22,11 +22,7 @@ jobs:
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
         with:
-<<<<<<<< HEAD:.github/workflows/azure-static-web-apps-icy-moss-06e73dc10.yml
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_MOSS_06E73DC10 }}
-========
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_COAST_0858DE610 }}
->>>>>>>> c9e9b7dd23f0c90a741f1046b5abea6365f185f3:.github/workflows/azure-static-web-apps-icy-coast-0858de610.yml
           repo_token: ${{ secrets.GITHUB_TOKEN }} # Used for Github integrations (i.e. PR comments)
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
@@ -45,9 +41,5 @@ jobs:
         id: closepullrequest
         uses: Azure/static-web-apps-deploy@v1
         with:
-<<<<<<<< HEAD:.github/workflows/azure-static-web-apps-icy-moss-06e73dc10.yml
-          azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_MOSS_06E73DC10 }}
-========
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN_ICY_COAST_0858DE610 }}
->>>>>>>> c9e9b7dd23f0c90a741f1046b5abea6365f185f3:.github/workflows/azure-static-web-apps-icy-coast-0858de610.yml
           action: "close"

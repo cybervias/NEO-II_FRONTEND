@@ -92,7 +92,7 @@ class _LoginPageState extends State<LoginPage> {
                   controller: _tSenha,
                   validator: _validateSenha,
                   keyboardType: TextInputType.number,
-                  focusNode: _focusSenha,
+                  focusNode: _focusSenha,  
                 ),
                 const SizedBox(
                   height: 10,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_page.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_page.dart';
+import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
 
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_page.dart';
 import 'package:neo_application/pages/default_page.dart';
@@ -189,6 +190,16 @@ class _SubListTileState extends State<SubListTile> {
           onTap: () {
             AppModel app = Provider.of<AppModel>(context, listen: false);
             app.setPage(PropriedadesPage());
+          },
+        ),
+        ListTile(
+          title: const Text(
+            "Fração de Propriedades",
+            style: TextStyle(color: Colors.white, fontSize: 12),
+          ),
+          onTap: () {
+            AppModel app = Provider.of<AppModel>(context, listen: false);
+            app.setPage(const FracaoPropPage());
           },
         ),
         ListTile(

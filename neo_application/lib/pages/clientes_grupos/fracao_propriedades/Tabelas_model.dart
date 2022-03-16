@@ -23,21 +23,36 @@ class TodasTabelasModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'entidades': entidades,
-      'grupos': grupos,
-      'propriedades': propriedades,
-      'fracaoPropriedades': fracaoPropriedades,
-      'controleEscopos': controleEscopos,
+      'entidades': entidades?.map((x) => x.toMap()).toList(),
+      'grupos': grupos?.map((x) => x.toMap()).toList(),
+      'propriedades': propriedades?.map((x) => x.toMap()).toList(),
+      'fracaoPropriedades': fracaoPropriedades?.map((x) => x.toMap()).toList(),
+      'controleEscopos': controleEscopos?.map((x) => x.toMap()).toList(),
     };
   }
 
   factory TodasTabelasModel.fromMap(Map<String, dynamic> map) {
     return TodasTabelasModel(
-      entidades: map['entidades'], //?.toInt(),
-      grupos: map['grupos'],
-      propriedades: map['propriedades'],
-      fracaoPropriedades: map['fracaoPropriedades'],
-      controleEscopos: map['controleEscopos'],
+      entidades: map['entidades'] != null
+          ? List<EntidadesModel>.from(
+              map['entidades']?.map((x) => EntidadesModel.fromMap(x)))
+          : null,
+      grupos: map['grupos'] != null
+          ? List<GruposModel>.from(
+              map['grupos']?.map((x) => GruposModel.fromMap(x)))
+          : null,
+      propriedades: map['propriedades'] != null
+          ? List<PropriedadesModel>.from(
+              map['propriedades']?.map((x) => PropriedadesModel.fromMap(x)))
+          : null,
+      fracaoPropriedades: map['fracaoPropriedades'] != null
+          ? List<FracaoPropModel>.from(
+              map['fracaoPropriedades']?.map((x) => FracaoPropModel.fromMap(x)))
+          : null,
+      controleEscopos: map['controleEscopos'] != null
+          ? List<ControleModel>.from(
+              map['controleEscopos']?.map((x) => ControleModel.fromMap(x)))
+          : null,
     );
   }
 

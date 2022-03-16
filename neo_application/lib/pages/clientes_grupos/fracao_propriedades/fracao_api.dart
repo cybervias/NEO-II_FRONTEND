@@ -28,7 +28,7 @@ class FracaoPropApi {
     throw "Erro ao carregar os dados";
   }
 
-  Future updateGrupo(FracaoPropModel oFracaoProp) async {
+  Future updateFracaoProp(FracaoPropModel oFracaoProp) async {
     try {
       var url = Uri.parse(
           "https://neo-ii-back-end.azurewebsites.net/fracaoPropriedade/update");
@@ -108,7 +108,8 @@ class FracaoPropApi {
 }
 
 class TodasTabelas {
-  Future<List<TodasTabelasModel>> getBuscaTodasTabelas() async {
+  List<EntidadesModel> list = [];
+  Future<TodasTabelasModel> getTodasTabelas() async {
     try {
       var url = Uri.parse(
           "https://neo-ii-back-end.azurewebsites.net/buscaTodasTabelas");
@@ -116,9 +117,10 @@ class TodasTabelas {
       var response = await http.get(url);
 
       if (response.statusCode == 200) {
-        var responseMap = json.decode(response.body) as List;
-        var x = responseMap.map((tabelas) => TodasTabelasModel.fromMap(tabelas)).toList();
-        return x;
+        var responseMap = json.decode(response.body);
+        var todasTabelas = TodasTabelasModel.fromMap(responseMap);
+        print(todasTabelas);
+        return todasTabelas;
       }
     } catch (e) {
       print(e);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_model.dart';
+import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_api.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -34,9 +36,11 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
   EntidadesModel valueSelected = EntidadesModel();
 
   EntidadesModel listEntidadesSelecionado = EntidadesModel();
-  
+  PropriedadesModel listPropriedadeSelecionado = PropriedadesModel();
+  TodasTabelasModel todasTabelas = TodasTabelasModel();
 
   List<EntidadesModel> listEntidades = [];
+  List<PropriedadesModel> listPropriedade = [];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -69,22 +73,46 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
     _controllerIDEntidade.text = oFracaoProp.IDEntidade.toString();
     _controllerIDPropriedade.text = oFracaoProp.IDPropriedade.toString();
     _controllerFracao.text = oFracaoProp.Fracao.toString();
+    if (listPropriedadeSelecionado.idPropriedade == null && oFracaoProp.IDPropriedade != 0) {
+      listPropriedadeSelecionado.idPropriedade = oFracaoProp.IDPropriedade;
+    }
+    if (listEntidadesSelecionado.Id == null && oFracaoProp.IDEntidade != 0) {
+      listEntidadesSelecionado.Id = oFracaoProp.IDEntidade;
+    }
     /*listEntidadesSelecionado.Nome =
         valueSelected.Nome != null ? valueSelected.Nome : oGrupo.IDGestor.toString();*/
   }
-  
+
   _body() {
 //List _listEntidades = EntidadesApi().getListEntidades();
 
     return FutureBuilder(
-      
-      future: TodasTabelas().getBuscaTodasTabelas(),
+      future: TodasTabelas().getTodasTabelas(),
       builder: (context, AsyncSnapshot snapshot) {
         if (snapshot.hasError) {
           return const Center(child: Text("Erro ao carregar os dados"));
         }
         if (snapshot.hasData) {
-          listEntidades = snapshot.data;
+          todasTabelas = snapshot.data;
+          listEntidades = todasTabelas.entidades!;
+          listPropriedade = todasTabelas.propriedades!;
+          List<EntidadesModel> listEntidadesValue = [];
+          List<PropriedadesModel> listPropriedadeValue = [];
+          //listEntidadesSelecionado.Nome = listEntidades[0].Nome;
+
+         /* if (oFracaoProp != null) {
+            listEntidadesValue = listEntidades
+                .where((entidades) => entidades.Id == oFracaoProp.IDEntidade)
+                .toList();
+            print(listEntidades);
+
+            listPropriedadeValue = listPropriedade
+                .where((propriedade) =>
+                    propriedade.idPropriedade == oFracaoProp.IDPropriedade)
+                .toList();
+            print(listPropriedade);
+          }*/
+
           return SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.only(top: 50),
@@ -116,18 +144,19 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
                                           hint: Text("Entidades Gestoras"),
                                           isDense: true,
                                           isExpanded: true,
-                                          value: listEntidadesSelecionado.Nome,
+                                          value: listEntidadesSelecionado.Id != null ? listEntidadesSelecionado.Id.toString() : listEntidades[0].Id.toString(),
                                           onChanged: (newValue) => {
                                             setState(() {
-                                              listEntidadesSelecionado.Nome = "";
-                                              listEntidadesSelecionado.Nome =
-                                                  newValue;
-                                              print(newValue);
+                                              listEntidadesSelecionado.Id =
+                                                  int.parse("$newValue");
+
+                                              print(newValue.toString());
                                             }),
                                           },
-                                          items: listEntidades.map<DropdownMenuItem<String>>((value) {
+                                          items: listEntidades.map<DropdownMenuItem<String>>(
+                                                  (value) {
                                             return DropdownMenuItem<String>(
-                                              value: value.Id.toString(),
+                                              value: value.Id.toString(), 
                                               child: Text(value.Nome!),
                                             );
                                           }).toList(),
@@ -139,7 +168,44 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
                                     width: 30,
                                     height: 20,
                                   ),
-                                  Container(
+                                 Container(
+                                    width: 300,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1, color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: DropdownButtonHideUnderline(
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButton<String>(
+                                          hint: Text("Propriedade"),
+                                          isDense: true,
+                                          isExpanded: true,
+                                          value: listPropriedadeSelecionado.idPropriedade != null ? listPropriedadeSelecionado.idPropriedade.toString() : listPropriedade[0].idPropriedade.toString(),
+                                          onChanged: (newValue) => {
+                                            setState(() {
+                                              listPropriedadeSelecionado
+                                                      .idPropriedade =
+                                                  int.parse("$newValue");
+
+                                              print(newValue.toString());
+                                            }),
+                                          },
+                                          items: listPropriedade
+                                              .map<DropdownMenuItem<String>>(
+                                                  (value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value.idPropriedade.toString(), 
+                                              child: Text(value.Nome!),
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  /*Container(
                                     width: 300,
                                     height: 40,
                                     decoration: BoxDecoration(
@@ -157,7 +223,8 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
                                           value: listEntidadesSelecionado.Nome,
                                           onChanged: (newValue) => {
                                             setState(() {
-                                              listEntidadesSelecionado.Nome = "";
+                                              listEntidadesSelecionado.Nome =
+                                                  "";
                                               listEntidadesSelecionado.Nome =
                                                   newValue;
                                               print(newValue);
@@ -174,7 +241,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
                                         ),
                                       ),
                                     ),
-                                  ),
+                                  ),*/
                                   const SizedBox(
                                     width: 30,
                                     height: 20,
@@ -240,17 +307,21 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
   _onClickSalvar() async {
     FracaoPropApi fracaoPropApi = FracaoPropApi();
 
- int Fracao = int.parse(_controllerFracao.text);
+    int Fracao = int.parse(_controllerFracao.text);
 // int IDEntidade = int.parse(_controllerIDEntidade.text);
     //int Fracao = int.parse(_controllerFracao.text);
 
     var listEnti = listEntidades
-        .where((element) => element.Nome == listEntidadesSelecionado.Nome)
+        .where(
+            (element) => element.Id == listEntidadesSelecionado.Id)
         .toList();
-//var listPropriedades = listPropriedades.where((element) => element.Nome == listPropriedadesSelecionado.Nome).toList();
+    var listPropriedades = listPropriedade
+        .where((element) =>
+            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
+        .toList();
 
-    int? idEntidades = 10; //listEnti[0].Id;
-    int? idPropriedades = 11; //listPropriedades[0].Id;
+    int? idEntidades = listEnti[0].Id;
+    int? idPropriedades = listPropriedades[0].idPropriedade;
 
     FracaoPropModel oFracaoProp = FracaoPropModel(
       ID: widget.fracaoPropModel.ID,
@@ -259,7 +330,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
       Fracao: Fracao,
     );
 
-    var messageReturn = await fracaoPropApi.updateGrupo(oFracaoProp);
+    var messageReturn = await fracaoPropApi.updateFracaoProp(oFracaoProp);
 
     if (messageReturn["type"] == "S") {
       Fluttertoast.showToast(
@@ -275,21 +346,26 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
   }
 
   _onClickAdd() async {
-    if (_controllerIDEntidade.text == "") {
+    if (_controllerFracao.text == "" || _controllerFracao.text == "0") {
       _onClickDialog();
       return;
     }
     FracaoPropApi fracaoPropApi = FracaoPropApi();
 
-    var listEnti = listEntidades
-        .where((element) => element.Nome == listEntidadesSelecionado.Nome)
-        .toList();
-
-int Fracao = int.parse(_controllerFracao.text);
+    int Fracao = int.parse(_controllerFracao.text);
 //int IDEntidade = int.parse(_controllerIDEntidade.text);
 
-    int? idEntidades = 10; //listEnti[0].Id;
-     int? idPropriedades = 11; //listPropriedades[0].Id;
+    var listEnti = listEntidades
+        .where(
+            (element) => element.Id == listEntidadesSelecionado.Id)
+        .toList();
+    var listPropriedades = listPropriedade
+        .where((element) =>
+            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
+        .toList();
+
+    int? idEntidades = listEnti[0].Id;
+    int? idPropriedades = listPropriedades[0].idPropriedade;
 
     FracaoPropModel oFracaoProp = FracaoPropModel(
       ID: widget.fracaoPropModel.ID,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_api.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_edit.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
@@ -17,6 +18,7 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
   Size get size => MediaQuery.of(context).size;
 
   List<FracaoPropModel> listFracaoProp = [];
+  List<TodasTabelasModel> listTabelas = [];
 
   FracaoPropApi fracaoPropApi = FracaoPropApi();
 
@@ -69,7 +71,7 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
                 return Card(
                   child: ListTile(
                     
-                    title: Text("Entidade: " + "${listFracaoProp[index].IDEntidade}" + " - " + "Propriedade: " +  "${listFracaoProp[index].IDPropriedade}"
+                    title: Text("Entidade: " + "${listFracaoProp[index].IDEntidade}" + " - " + "Propriedade: " +  "${listFracaoProp[index].IDPropriedade}" + " - " + "Fração: " +  "${listFracaoProp[index].Fracao}"
                         ),
                         
                     trailing: Row(

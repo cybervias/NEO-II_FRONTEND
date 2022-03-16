@@ -262,6 +262,16 @@ class _EntidadesEditState extends State<EntidadesEdit> {
           fontSize: 16.0);
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(EntidadesPage());
+    } else {
+      Fluttertoast.showToast(
+          msg: messageReturn["message"],
+          backgroundColor: Colors.redAccent,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.TOP,
+          timeInSecForIosWeb: 5,
+          fontSize: 16.0);
+         
+      
     }
   }
 

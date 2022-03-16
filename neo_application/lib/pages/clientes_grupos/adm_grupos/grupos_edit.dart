@@ -81,6 +81,9 @@ final _formKey = GlobalKey<FormState>();
         }
         if (snapshot.hasData) {
           listEntidades = snapshot.data;
+
+          print(listEntidades);
+
           return Form(
             key: _formKey,
             child: SingleChildScrollView(
@@ -175,6 +178,7 @@ final _formKey = GlobalKey<FormState>();
                                               setState(() {
                                                 listEntidadesSelecionado.Nome =
                                                     newValue;
+
                                               }),
                                             },
                                             items: listEntidades.map<DropdownMenuItem<String>>((value) {

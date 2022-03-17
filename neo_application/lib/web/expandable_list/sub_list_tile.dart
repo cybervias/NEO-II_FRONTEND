@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_page.dart';
+import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_page.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_page.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
 
@@ -217,6 +218,10 @@ class _SubListTileState extends State<SubListTile> {
             "Controle de Escopo",
             style: TextStyle(color: Colors.white, fontSize: 12),
           ),
+           onTap: () {
+            AppModel app = Provider.of<AppModel>(context, listen: false);
+            app.setPage(ControlePage());
+          },
         ),
       ],
     );

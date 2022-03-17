@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
@@ -6,6 +8,7 @@ import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
+
 
 class FracaoPropPage extends StatefulWidget {
   const FracaoPropPage({Key? key}) : super(key: key);
@@ -64,6 +67,7 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
         }
         if (snapshot.hasData) {
           listFracaoProp = snapshot.data;
+
           return Container(
             child: ListView.builder(
               itemCount: snapshot.data.length,
@@ -71,7 +75,7 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
                 return Card(
                   child: ListTile(
                     
-                    title: Text("Entidade: " + "${listFracaoProp[index].IDEntidade}" + " - " + "Propriedade: " +  "${listFracaoProp[index].IDPropriedade}" + " - " + "Fração: " +  "${listFracaoProp[index].Fracao}"
+                    title: Text("Entidade: " + "${Map.from(listFracaoProp[index].entidades)['Nome']}" + " - " + "Propriedade: " +  "${Map.from(listFracaoProp[index].propriedades)['Nome']}" + " - " + "Fração: " +  "${listFracaoProp[index].Fracao}"
                         ),
                         
                     trailing: Row(

@@ -12,6 +12,8 @@ class ControleModel {
   double? AreaEscopo;
   double? AreaAuditada;
   int? CicloTrabalho;
+
+  
   ControleModel({
     this.ID,
     this.idFracao,

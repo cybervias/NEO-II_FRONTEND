@@ -1,15 +1,23 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
+import 'package:javascript/javascript.dart';
+import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_model.dart';
+
 class FracaoPropModel {
   int? ID;
   int? IDEntidade;
+  var entidades;
   int? IDPropriedade;
+  var propriedades;
   int? Fracao;
 
   FracaoPropModel({
     this.ID,
     this.IDEntidade,
+    this.entidades,
     this.IDPropriedade,
+    this.propriedades,
     this.Fracao,
   });
 
@@ -17,7 +25,9 @@ class FracaoPropModel {
     return {
       'ID': ID,
       'IDEntidade': IDEntidade,
+      'entidades': entidades,
       'IDPropriedade': IDPropriedade,
+      'propriedades': propriedades,
       'Fracao': Fracao,
     };
   }
@@ -26,7 +36,9 @@ class FracaoPropModel {
     return FracaoPropModel(
       ID: map['ID']?.toInt(),
       IDEntidade: map['IDEntidade']?.toInt(),
+      entidades: map['entidades'],
       IDPropriedade: map['IDPropriedade']?.toInt(),
+      propriedades: map['propriedades'],
       Fracao: map['Fracao']?.toInt(),
     );
   }

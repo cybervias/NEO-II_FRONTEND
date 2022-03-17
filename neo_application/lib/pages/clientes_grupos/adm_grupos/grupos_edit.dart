@@ -160,36 +160,45 @@ final _formKey = GlobalKey<FormState>();
                                     height: 20,
                                   ),
                                   Container(
-                                      width: 300,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 1, color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<String>(
-                                            isDense: true,
-                                            isExpanded: true,
-                                            value: listEntidadesSelecionado.Nome,
-                                            onChanged: (newValue) => {
-                                              setState(() {
-                                                listEntidadesSelecionado.Nome =
-                                                    newValue;
+                                    width: 300,
+                                    height: 40,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1, color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: DropdownButtonHideUnderline(
+                                      child: ButtonTheme(
+                                        alignedDropdown: true,
+                                        child: DropdownButton<String>(
+                                          hint: Text("Entidades Gestoras"),
+                                          isDense: true,
+                                          isExpanded: true,
+                                          value: listEntidadesSelecionado.Id !=
+                                                  null
+                                              ? listEntidadesSelecionado.Id
+                                                  .toString()
+                                              : listEntidades[0].Id.toString(),
+                                          onChanged: (newValue) => {
+                                            setState(() {
+                                              listEntidadesSelecionado.Id =
+                                                  int.parse("$newValue");
 
-                                              }),
-                                            },
-                                            items: listEntidades.map<DropdownMenuItem<String>>((value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value.Nome,
-                                                child: Text(value.Nome!),
-                                              );
-                                            }).toList(),
-                                          ),
+                                              print(newValue.toString());
+                                            }),
+                                          },
+                                          items: listEntidades
+                                              .map<DropdownMenuItem<String>>(
+                                                  (value) {
+                                            return DropdownMenuItem<String>(
+                                              value: value.Id.toString(),
+                                              child: Text(value.Nome!),
+                                            );
+                                          }).toList(),
                                         ),
-                                      )),
+                                      ),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ),
@@ -237,9 +246,13 @@ final _formKey = GlobalKey<FormState>();
   }
 
   _onClickSalvar() async {
+    if (_controllerNome.text == "" || _controllerDataFormacao.text == "") {
+      _onClickDialog();
+      return;
+    }
     GruposApi gruposApi = GruposApi();
 
-    var listEnti = listEntidades.where((element) => element.Nome == listEntidadesSelecionado.Nome).toList();
+   var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id) .toList();
 
     int? idEntidades = listEnti[0].Id;
 
@@ -274,7 +287,7 @@ var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDa
     }
     GruposApi gruposApi = GruposApi();
 
-    var listEnti = listEntidades.where((element) => element.Nome == listEntidadesSelecionado.Nome).toList();
+    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id) .toList();
 
     int? idEntidades = listEnti[0].Id;
 
@@ -311,7 +324,7 @@ var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDa
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
-            height: 200,
+            height: 70,
             child: Center(
               child: Text("Preencher campos obrigatorios"),
             ),

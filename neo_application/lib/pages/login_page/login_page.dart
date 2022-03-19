@@ -7,6 +7,7 @@ import 'package:neo_application/pages/utils/nav.dart';
 import 'package:neo_application/pages/widgets/app_button.dart';
 import 'package:neo_application/pages/widgets/app_text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:neo_application/pages/utils/globals.dart' as globals;
 
 
 class LoginPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   _body(BuildContext context) {
+    globals.isValid = true;
     return Form(
       key: _formKey,
       child: Stack(children: [

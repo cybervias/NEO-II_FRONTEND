@@ -340,7 +340,6 @@ class _ControleEditState extends State<ControleEdit> {
                                         }
                                         return null;
                                       },*/
-
                                       controller: _controllerDataEntrada,
                                       style: TextStyle(
                                         color: Colors.black,

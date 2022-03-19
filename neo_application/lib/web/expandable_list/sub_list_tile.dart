@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_page.dart';
+import 'package:neo_application/pages/clientes_grupos/colaborador/colaborador_api.dart';
+import 'package:neo_application/pages/clientes_grupos/colaborador/colaborador_edit.dart';
+import 'package:neo_application/pages/clientes_grupos/colaborador/colaborador_page.dart';
 import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_page.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_page.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
 
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_page.dart';
 import 'package:neo_application/pages/default_page.dart';
+import 'package:neo_application/pages/login_page/login_api.dart';
+import 'package:neo_application/pages/login_page/user_token.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:neo_application/pages/utils/nav.dart';
 import 'package:provider/provider.dart';
@@ -19,6 +24,16 @@ class SubListTile extends StatefulWidget {
 
 class _SubListTileState extends State<SubListTile> {
   var selected;
+
+  final _formKey = GlobalKey<FormState>();
+
+  final _tLogin = TextEditingController();
+
+  final _tSenha = TextEditingController();
+
+  final _focusSenha = FocusNode();
+
+  bool _showProgress = false;
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +196,6 @@ class _SubListTileState extends State<SubListTile> {
             AppModel app = Provider.of<AppModel>(context, listen: false);
             app.setPage(EntidadesPage());
           },
-
         ),
         ListTile(
           title: Text(
@@ -218,14 +232,47 @@ class _SubListTileState extends State<SubListTile> {
             "Controle de Escopo",
             style: TextStyle(color: Colors.white, fontSize: 12),
           ),
-           onTap: () {
+          onTap: () {
             AppModel app = Provider.of<AppModel>(context, listen: false);
             app.setPage(ControlePage());
           },
         ),
+        ListTile(
+            title: Text(
+              "Colaborador",
+              style: TextStyle(color: Colors.white, fontSize: 12),
+            ),
+            onTap: _onClickColaborador
+            ),
       ],
     );
   }
+
+  _onClickColaborador() async {
+      AppModel app = Provider.of<AppModel>(context, listen: false);
+      app.setPage(ColaboradorPage());
+    
+  }
+
+  _onClickDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Container(
+            height: 200,
+            child: Center(
+              child: Text("Usuário não autorizado!"),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => {Navigator.pop(context)},
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromRGBO(78, 204, 196, 2)),
+              child: Text("Ok"),
+            )
+          ],
+        ),
+      );
 
   _expansionTileConfig() {
     return const ExpansionTile(

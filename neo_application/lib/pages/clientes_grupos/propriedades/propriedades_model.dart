@@ -6,14 +6,18 @@ class PropriedadesModel {
   String? CNPJ;
   int? XCoord;
   int? yCoord;
-  int? AreaPropriedade;
-  int? AreaTotal;
-  int? AreaPlantada;
-  int? AreaEstimaConservacao;
-  int? AreaInfraestrutura;
-  int? AreaOutrosUsos;
+  double? AreaPropriedade;
+  double? AreaTotal;
+  double? AreaPlantada;
+  double? AreaEstimaConservacao;
+  double? AreaInfraestrutura;
+  double? AreaOutrosUsos;
   String? Localizacao;
   String? UF;
+  var propManejo;
+  var tipoManejo;
+  var propFloresta;
+  var tipoFloresta;
 
   PropriedadesModel({
     this.idPropriedade,
@@ -29,6 +33,10 @@ class PropriedadesModel {
     this.AreaOutrosUsos,
     this.Localizacao,
     this.UF,
+    this.propManejo,
+    this.tipoManejo,
+    this.propFloresta,
+    this.tipoFloresta,
 
   });
 
@@ -47,6 +55,10 @@ class PropriedadesModel {
       'AreaOutrosUsos': AreaOutrosUsos,
       'Localizacao': Localizacao,
       'UF': UF,
+      'propManejo': propManejo,
+      'tipoManejo': tipoManejo,
+      'propFloresta': propFloresta,
+      'tipoFloresta': tipoFloresta,
     };
   }
 
@@ -57,14 +69,18 @@ class PropriedadesModel {
       CNPJ: map['CNPJ'],
       XCoord: map['XCoord']?.toInt(),
       yCoord: map['yCoord']?.toInt(),
-      AreaPropriedade: map['AreaPropriedade']?.toInt(),
-      AreaTotal: map['AreaTotal']?.toInt(),
-      AreaPlantada: map['AreaPlantada']?.toInt(),
-      AreaEstimaConservacao: map['AreaEstimaConservacao']?.toInt(),
-      AreaInfraestrutura: map['AreaInfraestrutura']?.toInt(),
+      AreaPropriedade: map['AreaPropriedade']?.toDouble(),
+      AreaTotal: map['AreaTotal']?.toDouble(),
+      AreaPlantada: map['AreaPlantada']?.toDouble(),
+      AreaEstimaConservacao: map['AreaEstimaConservacao']?.toDouble(),
+      AreaInfraestrutura: map['AreaInfraestrutura']?.toDouble(),
       AreaOutrosUsos: map['AreaOutrosUsos']?.toInt(),
       Localizacao: map['Localizacao'],
       UF: map['UF'],
+      propManejo: map['propManejo'],
+      tipoManejo: map['tipoManejo'],
+      propFloresta: map['propFloresta'],
+      tipoFloresta: map['tipoFloresta'],
     );
   }
 

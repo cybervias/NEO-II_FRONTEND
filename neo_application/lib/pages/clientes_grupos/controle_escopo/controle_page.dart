@@ -130,7 +130,7 @@ class _ControlePageState extends State<ControlePage> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 10,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {

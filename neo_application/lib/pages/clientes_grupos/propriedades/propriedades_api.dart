@@ -60,6 +60,13 @@ class PropriedadesApi {
           "message": res["message"]
         };
         return map;
+      } else {
+        
+        Map<String, dynamic> map = {
+          "type": "E",
+          "message": "Erro ao gravar dados"
+        };
+        return map;
       }
     } catch (e) {
       print(e);

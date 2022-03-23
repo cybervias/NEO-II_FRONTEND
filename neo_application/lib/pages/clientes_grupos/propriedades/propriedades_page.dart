@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_api.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_createPage.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_edit.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
@@ -44,23 +45,9 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
 
   void _onNavAdd(BuildContext context) {
     AppModel app = Provider.of<AppModel>(context, listen: false);
-    app.setPage(PropriedadesEdit(
-      propModel: PropriedadesModel(
-          Nome: "",
-          AreaEstimaConservacao: 0,
-          AreaInfraestrutura: 0,
-          AreaOutrosUsos: 0,
-          AreaPlantada: 0,
-          AreaPropriedade: 0,
-          AreaTotal: 0,
-          CNPJ: "",
-          Localizacao: "",
-          UF: "",
-          XCoord: 0,
-          idPropriedade: 0,
-          yCoord: 0),
-      tipoAcao: "adicionar",
-    ));
+    app.setPage(
+      PropriedadesCreate(),
+    );
   }
 
   _body() {
@@ -71,49 +58,60 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
           return Center(child: Text("Erro ao carregar os dados"));
         }
         if (snapshot.hasData) {
-          listProp = snapshot.data;
-          return Container(
-            child: ListView.builder(
-              itemCount: snapshot.data.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  child: ListTile(
-                    title: Text(
-                        listProp[index].Nome! + ' - ' + listProp[index].CNPJ!),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            AppModel app =
-                                Provider.of<AppModel>(context, listen: false);
-                            app.setPage(PropriedadesEdit(
-                              propModel: listProp[index],
-                              tipoAcao: "editar",
-                              indice: index,
-                            ));
-                          },
-                          icon: const Icon(
-                            Icons.edit,
-                            color: Color.fromARGB(246, 34, 37, 44),
-                          ),
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              CircularProgressIndicator();
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              listProp = snapshot.data;
+              return Container(
+                child: ListView.builder(
+                  itemCount: snapshot.data.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      child: ListTile(
+                        title: Text(listProp[index].Nome! +
+                            ' - ' +
+                            listProp[index].CNPJ!),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                AppModel app = Provider.of<AppModel>(context,
+                                    listen: false);
+                                app.setPage(PropriedadesEdit(
+                                  propModel: listProp[index],
+                                  tipoAcao: "editar",
+                                  indice: index,
+                                ));
+                              },
+                              icon: const Icon(
+                                Icons.edit,
+                                color: Color.fromARGB(246, 34, 37, 44),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () async {
+                                await _dialogDelete(index, context);
+                              },
+                              icon: const Icon(
+                                Icons.delete,
+                                color: Color.fromARGB(246, 34, 37, 44),
+                              ),
+                            ),
+                          ],
                         ),
-                        IconButton(
-                          onPressed: () async {
-                            await _dialogDelete(index, context);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Color.fromARGB(246, 34, 37, 44),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          );
+                      ),
+                    );
+                  },
+                ),
+              );
+          }
         }
         return const Center(
           child: CircularProgressIndicator(),
@@ -134,7 +132,7 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
-         PropriedadesApi().getListPropriedades();
+        PropriedadesApi().getListPropriedades();
       });
     }
   }
@@ -166,5 +164,4 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
           ],
         ),
       );
-
 }

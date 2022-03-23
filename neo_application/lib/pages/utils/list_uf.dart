@@ -1,10 +1,19 @@
-class Uf {
+import 'package:flutter/cupertino.dart';
+
+class Uf extends ChangeNotifier{
+  String ufSelecionada = ""; 
   String? sigla;
   late List<Uf>? ufs;
   Uf({this.sigla, this.ufs});
 
+  void setSelecionadoUf(selTipo){
+    ufSelecionada = selTipo;
+    notifyListeners();
+  }
+
   listUfs() {
     List<String> ufs = [
+      "",
       "AC",
       "AL",
       "AP",

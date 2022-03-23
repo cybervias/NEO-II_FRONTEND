@@ -18,6 +18,8 @@ class PropriedadesModel {
   var tipoManejo;
   var propFloresta;
   var tipoFloresta;
+  var propProdutos;
+  var produtos; 
 
   PropriedadesModel({
     this.idPropriedade,
@@ -37,6 +39,8 @@ class PropriedadesModel {
     this.tipoManejo,
     this.propFloresta,
     this.tipoFloresta,
+    this.propProdutos,
+    this.produtos,
 
   });
 
@@ -59,6 +63,8 @@ class PropriedadesModel {
       'tipoManejo': tipoManejo,
       'propFloresta': propFloresta,
       'tipoFloresta': tipoFloresta,
+      'propProdutos': propProdutos,
+      'produtos': produtos,
     };
   }
 
@@ -74,13 +80,15 @@ class PropriedadesModel {
       AreaPlantada: map['AreaPlantada']?.toDouble(),
       AreaEstimaConservacao: map['AreaEstimaConservacao']?.toDouble(),
       AreaInfraestrutura: map['AreaInfraestrutura']?.toDouble(),
-      AreaOutrosUsos: map['AreaOutrosUsos']?.toInt(),
+      AreaOutrosUsos: map['AreaOutrosUsos']?.toDouble(),
       Localizacao: map['Localizacao'],
       UF: map['UF'],
       propManejo: map['propManejo'],
       tipoManejo: map['tipoManejo'],
       propFloresta: map['propFloresta'],
       tipoFloresta: map['tipoFloresta'],
+      propProdutos: map['propProdutos'],
+      produtos: map['produtos'],
     );
   }
 

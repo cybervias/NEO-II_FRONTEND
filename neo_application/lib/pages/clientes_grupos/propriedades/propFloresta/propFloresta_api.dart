@@ -6,6 +6,28 @@ import 'package:neo_application/pages/clientes_grupos/propriedades/tipoFloresta/
 
 
 class PropFlorestaAPI {
+   //Busca Lista de PropFloresta
+  Future<List<PropFlorestaModel>> getListPropFloresta() async {
+    try {
+      var url =
+          Uri.parse("https://neo-ii-back-end.azurewebsites.net/propFloresta ");
+
+      var response = await http.get(url);
+
+      if (response.statusCode == 200) {
+        var responseMap = json.decode(response.body) as List;
+
+        return responseMap
+            .map((propFloresta ) => PropFlorestaModel.fromMap(propFloresta ))
+            .toList();
+      }
+    } catch (e) {
+      print(e);
+    }
+    throw "Erro ao carregar os dados";
+  }
+
+
   //Create Lista de TiposFloresta
   Future createPropManejo(PropFlorestaModel oPropFloresta) async {
     try {

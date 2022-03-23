@@ -3,16 +3,17 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propFloresta/propFloresta_Model.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propManejo/propManejo_api.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propManejo/propManejo_model.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/propProduto/propProduto_api.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/propProduto/propProduto_model.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_api.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_busy.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_page.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/tipoManejo/dropDownController.dart';
-import 'package:neo_application/pages/clientes_grupos/propriedades/tipoManejo/tipoManejoModel.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/tipoProduto/dropDownController.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:neo_application/pages/utils/list_uf.dart';
 import 'package:provider/provider.dart';
-
 import 'propFloresta/propFloresta_api.dart';
 import 'tipoFloresta/dropDownController.dart';
 
@@ -44,8 +45,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     {"ID": 3, "Descricao": "tipo manejo 2"},
     {"ID": 4, "Descricao": "tipo manejo 3"}
   ];
-
-//DOGLAS - 23/03
+  
   List<PropManejoModel> listPropManejo = [];
   List<PropriedadesModel> listProp = [];
 
@@ -54,10 +54,12 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
   DropDownControllerFloresta dropDownControllerFloresta =
       DropDownControllerFloresta();
 
+  DropDownControllerProduto dropDownControllerProduto =
+      DropDownControllerProduto();
+
   PropriedadesBusy? propriedadesBusy;
 
   bool isLoading = false;
-//DOGLAS - 23-03
 
   late PropriedadesModel oProp;
 
@@ -114,11 +116,17 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     _controllerAreaInfraestrutura.text = oProp.AreaInfraestrutura.toString();
     _controllerAreaOutro.text = oProp.AreaOutrosUsos.toString();
     _controllerLocalizacao.text = oProp.Localizacao ?? "";
-    listUfSelecionado = valueSelected != null ? valueSelected : oProp.UF;
+    listUfSelecionado = valueSelected != null
+        ? valueSelected
+        : oProp.UF != ""
+            ? oProp.UF
+            : "";
 
     dropDownController.buscarTipoManejo();
 
     dropDownControllerFloresta.buscarTipoFloresta();
+
+    dropDownControllerProduto.buscarTipoProduto();
   }
 
   _body() {
@@ -149,248 +157,221 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
               return ListView(
                 children: [
                   Card(
-                    child: SafeArea(
-                      child: LayoutBuilder(
-                        builder: (context, constraints) {
-                          return Column(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        return Container(
+                          padding: EdgeInsets.all(50),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Container(
-                                child: Container(
-                                  padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerNome,
-                                          decoration: const InputDecoration(
-                                            labelText: "Nome",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerCNPJ,
-                                          decoration: const InputDecoration(
-                                            labelText: "CNPJ",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerXCoord,
-                                          decoration: const InputDecoration(
-                                            labelText: "XCoord",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerYCoord,
-                                          decoration: const InputDecoration(
-                                            labelText: "YCoord",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller:
-                                              _controllerAreaPropriedade,
-                                          decoration: const InputDecoration(
-                                            labelText: "Área da Propriedade",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerAreaTotal,
-                                          decoration: const InputDecoration(
-                                            labelText: "Área Total",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerAreaPlantada,
-                                          decoration: const InputDecoration(
-                                            labelText: "Área Plantada",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller:
-                                              _controllerAreaEstimaConser,
-                                          decoration: const InputDecoration(
-                                            labelText:
-                                                "Área Estima de Conservação",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller:
-                                              _controllerAreaInfraestrutura,
-                                          decoration: const InputDecoration(
-                                            labelText: "Área de Infraestrutura",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerAreaOutro,
-                                          decoration: const InputDecoration(
-                                            labelText: " Outras Áreas",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      SizedBox(
-                                        width: constWidth,
-                                        height: 30,
-                                        child: TextFormField(
-                                          controller: _controllerLocalizacao,
-                                          decoration: const InputDecoration(
-                                            labelText: "Localização",
-                                            border: OutlineInputBorder(),
-                                            isDense: true,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      Container(
-                                        width: constWidth,
-                                        height: 30,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              width: 1, color: Colors.grey),
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                        ),
-                                        child: DropdownButtonHideUnderline(
-                                          child: ButtonTheme(
-                                            alignedDropdown: true,
-                                            child: DropdownButton<String>(
-                                              hint: Text("UF"),
-                                              isDense: true,
-                                              isExpanded: true,
-                                              value: listUfSelecionado,
-                                              onChanged: (newValue) => {
-                                                setState(() {
-                                                  valueSelected = newValue;
-                                                  listUfSelecionado =
-                                                      valueSelected;
-                                                })
-                                              },
-                                              items:
-                                                  listUfs.map((String value) {
-                                                return DropdownMenuItem(
-                                                  value: value,
-                                                  child: Text(value),
-                                                );
-                                              }).toList(),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        width: 30,
-                                        height: 20,
-                                      ),
-                                      _Buttons(),
-                                    ],
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerNome,
+                                  decoration: const InputDecoration(
+                                    labelText: "Nome",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
                                   ),
                                 ),
                               ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerCNPJ,
+                                  decoration: const InputDecoration(
+                                    labelText: "CNPJ",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerXCoord,
+                                  decoration: const InputDecoration(
+                                    labelText: "XCoord",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerYCoord,
+                                  decoration: const InputDecoration(
+                                    labelText: "YCoord",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerAreaPropriedade,
+                                  decoration: const InputDecoration(
+                                    labelText: "Área da Propriedade",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerAreaTotal,
+                                  decoration: const InputDecoration(
+                                    labelText: "Área Total",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerAreaPlantada,
+                                  decoration: const InputDecoration(
+                                    labelText: "Área Plantada",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerAreaEstimaConser,
+                                  decoration: const InputDecoration(
+                                    labelText: "Área Estimada de Conservação",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerAreaInfraestrutura,
+                                  decoration: const InputDecoration(
+                                    labelText: "Área de Infraestrutura",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerAreaOutro,
+                                  decoration: const InputDecoration(
+                                    labelText: " Outras Áreas",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: constWidth,
+                                height: 30,
+                                child: TextFormField(
+                                  controller: _controllerLocalizacao,
+                                  decoration: const InputDecoration(
+                                    labelText: "Localização",
+                                    border: OutlineInputBorder(),
+                                    isDense: true,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Container(
+                                width: constWidth,
+                                height: 30,
+                                decoration: BoxDecoration(
+                                  border:
+                                      Border.all(width: 1, color: Colors.grey),
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                child: DropdownButtonHideUnderline(
+                                  child: ButtonTheme(
+                                    alignedDropdown: true,
+                                    child: DropdownButton<String>(
+                                      hint: Text("UF"),
+                                      isDense: true,
+                                      isExpanded: true,
+                                      value: listUfSelecionado,
+                                      onChanged: (newValue) => {
+                                        setState(() {
+                                          valueSelected = newValue;
+                                          listUfSelecionado = valueSelected;
+                                        })
+                                      },
+                                      items: listUfs.map((String value) {
+                                        return DropdownMenuItem(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 30,
+                                height: 20,
+                              ),
                             ],
-                          );
-                        },
-                      ),
+                          ),
+                        );
+                      },
                     ),
                   ),
+                  _Buttons(),
                   // Card da Lisa de Manejo
                   Card(
                     child: Container(
@@ -404,7 +385,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Text("Manejo",
+                                Text("Tipos de Manejo",
                                     style: TextStyle(
                                       fontSize: 25,
                                       color: Colors.white,
@@ -473,7 +454,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Text("Floresta",
+                                Text("Tipos de Floresta",
                                     style: TextStyle(
                                       fontSize: 25,
                                       color: Colors.white,
@@ -540,7 +521,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               mainAxisSize: MainAxisSize.max,
                               children: [
-                                Text("Produto",
+                                Text("Produtos",
                                     style: TextStyle(
                                       fontSize: 25,
                                       color: Colors.white,
@@ -554,19 +535,19 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                                 child: Container(
                                   height: 300,
                                   child: ListView.builder(
-                                    itemCount: snapshot.data[widget.indice]
-                                        .tipoFloresta.length,
+                                    itemCount: snapshot
+                                        .data[widget.indice].produtos.length,
                                     itemBuilder: (context, index) {
                                       return Card(
                                         child: ListTile(
                                           title: Text(
-                                              "${Map.from(listProp[listIndice].tipoFloresta[index])['Descricao']}"),
+                                              "${Map.from(listProp[listIndice].produtos[index])['Descricao']}"),
                                           trailing: Row(
                                             mainAxisSize: MainAxisSize.min,
                                             children: [
                                               IconButton(
                                                 onPressed: () async {
-                                                  await _dialogDeleteManejo(
+                                                  await _dialogDeleteProduto(
                                                       index, context);
                                                 },
                                                 icon: const Icon(
@@ -588,7 +569,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
                             mainAxisSize: MainAxisSize.max,
-                            children: [_ButtonsManejo()],
+                            children: [_ButtonsProduto()],
                           ),
                         ],
                       ),
@@ -936,6 +917,170 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
 
 /*******************   FIM FUNÇÕES FLORESTAS   ************************************ */
 
+/*********************************************************************************
+*  Inicio de funções para a lista de Produto - ID:#ProdFIND
+*********************************************************************************/
+// BOTÃO PARA ABRIR O POPUP DE ADD TIPO PRODUTO
+  _ButtonsProduto() {
+    return Container(
+      alignment: Alignment.bottomRight,
+      child: ButtonBar(
+        children: <Widget>[
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+                primary: Color.fromARGB(246, 34, 37, 44)),
+            onPressed: () => _onClickAddProduto(),
+            child: Text("Adicionar"),
+          ),
+        ],
+      ),
+    );
+  }
+
+  //POPUP PARA ADD NOVO PRODUTO
+  _onClickAddProduto() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Container(
+            width: 300,
+            height: 40,
+            decoration: BoxDecoration(
+              border: Border.all(width: 1, color: Colors.grey),
+              borderRadius: BorderRadius.circular(5),
+            ),
+            child: AnimatedBuilder(
+              animation: dropDownControllerProduto,
+              builder: (context, child) {
+                if (dropDownControllerProduto.listTipoProduto.isEmpty) {
+                  return const CircularProgressIndicator();
+                } else {
+                  return DropdownButtonHideUnderline(
+                      child: ButtonTheme(
+                    child: DropdownButton(
+                      hint: Text("Tipos Produtos"),
+                      isDense: true,
+                      isExpanded: true,
+                      value: dropDownControllerProduto.selecionadoTipoProduto,
+                      onChanged: (value) => dropDownControllerProduto
+                          .setSelecionadoTipoProduto(value),
+                      items: dropDownControllerProduto.listTipoProduto
+                          .map((tipos) => DropdownMenuItem(
+                                child: Text(tipos.Descricao!),
+                                value: tipos,
+                              ))
+                          .toList(),
+                    ),
+                  ));
+                }
+              },
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => _onAddProduto(
+                  context,
+                  dropDownControllerProduto.selecionadoTipoProduto!.ID,
+                  dropDownControllerProduto.selecionadoTipoProduto!.Descricao),
+              child: Text("Salvar"),
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(246, 34, 37, 44)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Cancelar"),
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(246, 34, 37, 44)),
+            ),
+          ],
+        ),
+      );
+
+  void _onAddProduto(context, sId, sDesc) async {
+    var propProduto = PropProdutoModel(
+        IDPropriedade: oPropModel.idPropriedade, IDTipoManejo: sId);
+    var result = await PropProdutoApi().createPropProduto(propProduto);
+
+    if (result["type"] == "S") {
+      propriedadesBusy!.setOnLoad();
+      Fluttertoast.showToast(
+          msg: result["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 10,
+          fontSize: 16.0);
+      Navigator.pop(context);
+      setState(() {
+        PropriedadesApi().getListPropriedades();
+      });
+    } else {
+      Fluttertoast.showToast(
+          msg: result["message"],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 10,
+          fontSize: 16.0);
+      Navigator.pop(context);
+    }
+  }
+
+  _dialogDeleteProduto(int index, BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Container(
+            height: 50,
+            child: Center(
+              child: Text("Você deseja excluir este item?"),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => _deleteProduto(index, context),
+              child: Text("Sim"),
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(246, 34, 37, 44)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text("Não"),
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromARGB(246, 34, 37, 44)),
+            ),
+          ],
+        ),
+      );
+
+  Future<void> _deleteProduto(int index, BuildContext context) async {
+    var resposta = await PropProdutoApi()
+        .deletePropProduto(listProp[listIndice].propProdutos[index]["ID"]);
+    if (resposta["type"] == "S") {
+      propriedadesBusy!.setOnLoad();
+      Fluttertoast.showToast(
+          msg: resposta["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 10,
+          fontSize: 16.0);
+      Navigator.pop(context);
+      setState(() {
+        PropriedadesApi().getListPropriedades();
+      });
+    } else {
+      Fluttertoast.showToast(
+          msg: resposta["message"],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 10,
+          fontSize: 16.0);
+      Navigator.pop(context);
+    }
+  }
+
+/*******************   FIM FUNÇÕES PRODUTOS   ************************************ */
+
   _Buttons() {
     return Container(
       alignment: Alignment.bottomRight,
@@ -984,20 +1129,19 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     PropriedadesApi propriedadesApi = PropriedadesApi();
 
     PropriedadesModel oProp = PropriedadesModel(
-      idPropriedade: oPropModel.idPropriedade,
-      Nome: _controllerNome.text,
-      CNPJ: _controllerCNPJ.text,
-      XCoord: xCoord,
-      yCoord: yCoord,
-      AreaPropriedade: areaPropriedade,
-      AreaTotal: areaTotal,
-      AreaPlantada: areaPlantada,
-      AreaEstimaConservacao: areaEstimaConservacao,
-      AreaInfraestrutura: areaInfraestrutura,
-      AreaOutrosUsos: areaOutrosUsos,
-      Localizacao: _controllerLocalizacao.text,
-      UF: listUfSelecionado,
-    );
+        idPropriedade: oPropModel.idPropriedade,
+        Nome: _controllerNome.text,
+        CNPJ: _controllerCNPJ.text,
+        XCoord: xCoord,
+        yCoord: yCoord,
+        AreaPropriedade: areaPropriedade,
+        AreaTotal: areaTotal,
+        AreaPlantada: areaPlantada,
+        AreaEstimaConservacao: areaEstimaConservacao,
+        AreaInfraestrutura: areaInfraestrutura,
+        AreaOutrosUsos: areaOutrosUsos,
+        Localizacao: _controllerLocalizacao.text,
+        UF: listUfSelecionado);
 
     var messageReturn = await propriedadesApi.updatePropriedade(oProp);
 
@@ -1085,71 +1229,4 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           ],
         ),
       );
-
-  // String? _validateNome(String? value) {
-  //    if (value!.isEmpty) {
-  //     return "Nome não";
-  //   }
-  // }
-
-  // String? _validateCnpj(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateXCoord(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateYCorrd(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPropriedade(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaTotal(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPlantada(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaEstimaConser(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaInfr(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaOutro(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateLocalizacao(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
 }

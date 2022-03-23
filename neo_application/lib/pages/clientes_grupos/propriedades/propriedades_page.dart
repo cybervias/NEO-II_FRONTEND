@@ -90,6 +90,7 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
                             app.setPage(PropriedadesEdit(
                               propModel: listProp[index],
                               tipoAcao: "editar",
+                              indice: index,
                             ));
                           },
                           icon: const Icon(
@@ -129,11 +130,12 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 10,
           fontSize: 16.0);
       Navigator.pop(context);
-      AppModel app = Provider.of<AppModel>(context, listen: false);
-      app.setPage(PropriedadesPage());
+      setState(() {
+         PropriedadesApi().getListPropriedades();
+      });
     }
   }
 
@@ -141,7 +143,7 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
-            height: 50,
+            height: 60,
             child: Center(
               child: Text("Você deseja excluir este item?"),
             ),

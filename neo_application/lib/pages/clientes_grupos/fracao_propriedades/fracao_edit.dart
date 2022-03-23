@@ -183,12 +183,12 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
                                           hint: Text("Propriedade"),
                                           isDense: true,
                                           isExpanded: true,
-                                          value: listPropriedadeSelecionado.idPropriedade != null ? listPropriedadeSelecionado.idPropriedade.toString() : listPropriedade[0].idPropriedade.toString(),
+                                          value: listPropriedadeSelecionado.idPropriedade != null 
+                                          ? listPropriedadeSelecionado.idPropriedade.toString() 
+                                          : listPropriedade[0].idPropriedade.toString(),
                                           onChanged: (newValue) => {
                                             setState(() {
-                                              listPropriedadeSelecionado
-                                                      .idPropriedade =
-                                                  int.parse("$newValue");
+                                              listPropriedadeSelecionado.idPropriedade = int.parse("$newValue");
 
                                               print(newValue.toString());
                                             }),

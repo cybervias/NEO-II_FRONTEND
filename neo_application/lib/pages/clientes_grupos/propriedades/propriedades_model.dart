@@ -4,8 +4,8 @@ class PropriedadesModel {
   int? idPropriedade;
   String? Nome;
   String? CNPJ;
-  int? XCoord;
-  int? yCoord;
+  double? XCoord;
+  double? yCoord;
   double? AreaPropriedade;
   double? AreaTotal;
   double? AreaPlantada;
@@ -73,8 +73,8 @@ class PropriedadesModel {
       idPropriedade: map['idPropriedade']?.toInt(),
       Nome: map['Nome'],
       CNPJ: map['CNPJ'],
-      XCoord: map['XCoord']?.toInt(),
-      yCoord: map['yCoord']?.toInt(),
+      XCoord: map['XCoord']?.toDouble(),
+      yCoord: map['yCoord']?.toDouble(),
       AreaPropriedade: map['AreaPropriedade']?.toDouble(),
       AreaTotal: map['AreaTotal']?.toDouble(),
       AreaPlantada: map['AreaPlantada']?.toDouble(),

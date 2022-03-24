@@ -84,133 +84,122 @@ final _formKey = GlobalKey<FormState>();
 
           print(listEntidades);
 
-          return Form(
-            key: _formKey,
-            child: SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(top: 50),
-                child: Card(
-                  child: SafeArea(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return Column(
-                        children: [
-                          Container(
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerNome,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                      ),
-                                      decoration: InputDecoration(
-                                        border: const OutlineInputBorder(),
-                                        labelText: "Nome",
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerDataFormacao,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                      ),
-                                      decoration: InputDecoration(
-                                        border: const OutlineInputBorder(),
-                                        labelText: "Data Formatação",
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            Icons.date_range,
-                                            color: Color.fromARGB(96, 88, 87, 87),
-                                            size: 20,
-                                          ),
-                                          onPressed: () async {
-                                            final data = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
-                                            );
-                                            if (data != null)
-                                              setState(() => _value = data.toString());
+          return ListView(
+            children: [
+              Card(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                  return Container(
+                    padding: EdgeInsets.all(50),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                            controller: _controllerNome,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: "Nome",
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                            controller: _controllerDataFormacao,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: "Data da Formatação",
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.date_range,
+                                  color: Color.fromARGB(96, 88, 87, 87),
+                                  size: 20,
+                                ),
+                                onPressed: () async {
+                                  final data = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (data != null)
+                                    setState(() => _value = data.toString());
 
-                                            _controllerDataFormacao.text =  _value.substring(8, 10) + '/' + _value.substring(5, 7) +  '/' + _value.substring(0, 4);
-                                      
-                                            print( _controllerDataFormacao.text);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Entidades Gestoras"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listEntidadesSelecionado.Id !=
-                                                  null
-                                              ? listEntidadesSelecionado.Id
-                                                  .toString()
-                                              : listEntidades[0].Id.toString(),
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listEntidadesSelecionado.Id =
-                                                  int.parse("$newValue");
-
-                                              print(newValue.toString());
-                                            }),
-                                          },
-                                          items: listEntidades
-                                              .map<DropdownMenuItem<String>>(
-                                                  (value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.Id.toString(),
-                                              child: Text(value.Nome!),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                                  _controllerDataFormacao.text =  _value.substring(8, 10) + '/' + _value.substring(5, 7) +  '/' + _value.substring(0, 4);
+                            
+                                  print( _controllerDataFormacao.text);
+                                },
                               ),
                             ),
                           ),
-                          _Buttons()
-                        ],
-                      );
-                    }),
-                  ),
-                ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                hint: Text("Entidades Gestoras"),
+                                isDense: true,
+                                isExpanded: true,
+                                value: listEntidadesSelecionado.Id !=
+                                        null
+                                    ? listEntidadesSelecionado.Id
+                                        .toString()
+                                    : listEntidades[0].Id.toString(),
+                                onChanged: (newValue) => {
+                                  setState(() {
+                                    listEntidadesSelecionado.Id =
+                                        int.parse("$newValue");
+
+                                    print(newValue.toString());
+                                  }),
+                                },
+                                items: listEntidades
+                                    .map<DropdownMenuItem<String>>(
+                                        (value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value.Id.toString(),
+                                    child: Text(value.Nome!),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                        _Buttons()
+                      ],
+                    ),
+                  );
+                }),
               ),
-            ),
+            ],
           );
         }
         return Center(
@@ -324,9 +313,10 @@ var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDa
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
-            height: 70,
+            height: 60,
             child: Center(
-              child: Text("Preencher campos obrigatorios"),
+              child: Text(
+                  "Preencha os campos obrigatorios. \n\n      Nome, Data da Formatação."),
             ),
           ),
           actions: [

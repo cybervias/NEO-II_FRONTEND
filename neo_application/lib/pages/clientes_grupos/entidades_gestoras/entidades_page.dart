@@ -122,11 +122,20 @@ class _EntidadesPageState extends State<EntidadesPage> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
-      AppModel app = Provider.of<AppModel>(context, listen: false);
-      app.setPage(EntidadesPage());
+      setState(() {
+        EntidadesApi().getListEntidades();
+      });
+    } else {
+      Fluttertoast.showToast(
+          msg: resposta["message"],
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 7,
+          fontSize: 16.0);
+      Navigator.pop(context);
     }
   }
 

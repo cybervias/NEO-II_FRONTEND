@@ -68,117 +68,88 @@ class _EntidadesEditState extends State<EntidadesEdit> {
 
     List<String> listUfs = Uf().listUfs();
 
-    return SingleChildScrollView(
-      child: Container(
-        padding: EdgeInsets.only(top: 50),
-        child: Card(
-          child: SafeArea(
-            child: LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth < 786) {
-                return Column(
+    return ListView(
+      children: [
+        Card(
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                padding: EdgeInsets.all(50),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    _inputsEsq(listUfs),
-                   
-                     _Buttons()
-                     ],
-                );
-              } else {
-                return SafeArea(
-                  child: Column(
-                    children: [
-                      Row(
-                        children: [
-                          _inputsEsq(listUfs),
-                        ],
+                    SizedBox(
+                      width: 300,
+                      height: 30,
+                      child: TextFormField(
+                        controller: _controllerNome,
+                        decoration: const InputDecoration(
+                          labelText: "Nome",
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
                       ),
-                      Container(
-                        child: _Buttons(),
-                      )
-                    ],
-                  ),
-                );
-              }
-            }),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 300,
+                      height: 30,
+                      child: TextFormField(
+                        controller: _controllerContato,
+                        decoration: const InputDecoration(
+                          labelText: "Contato",
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 300,
+                      height: 30,
+                      child: TextFormField(
+                        controller: _controllerTelefone,
+                        decoration: const InputDecoration(
+                          labelText: "Telefone",
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                      height: 20,
+                    ),
+                    SizedBox(
+                      width: 300,
+                      height: 30,
+                      child: TextFormField(
+                        controller: _controllerEmail,
+                        decoration: const InputDecoration(
+                          labelText: "Email",
+                          border: OutlineInputBorder(),
+                          isDense: true,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                      height: 20,
+                    ),
+                    _Buttons()
+                  ],
+                ),
+              );
+            },
           ),
         ),
-      ),
-    );
-  }
-
-  _inputsEsq(List<String> listUfs) {
-    return Container(
-      child: Container(
-        padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              width: 300,
-              height: 30,
-              child: TextFormField(
-                controller: _controllerNome,
-                decoration: const InputDecoration(
-                  labelText: "Nome",
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 30,
-              height: 20,
-            ),
-            SizedBox(
-              width: 300,
-              height: 30,
-              child: TextFormField(
-                controller: _controllerContato,
-                decoration: const InputDecoration(
-                  labelText: "Contato",
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 30,
-              height: 20,
-            ),
-            SizedBox(
-              width: 300,
-              height: 30,
-              child: TextFormField(
-                controller: _controllerTelefone,
-                decoration: const InputDecoration(
-                  labelText: "Telefone",
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 30,
-              height: 20,
-            ),
-            SizedBox(
-              width: 300,
-              height: 30,
-              child: TextFormField(
-                controller: _controllerEmail,
-                decoration: const InputDecoration(
-                  labelText: "Email",
-                  border: OutlineInputBorder(),
-                  isDense: true,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 30,
-              height: 20,
-            ),
-          ],
-        ),
-      ),
+      ],
     );
   }
 
@@ -208,13 +179,18 @@ class _EntidadesEditState extends State<EntidadesEdit> {
   }
 
   _onClickSalvar() async {
+    if (_controllerNome.text == "" || _controllerContato.text == "") {
+      _onClickDialog();
+      return;
+    }
+
     EntidadesApi entidadesApi = EntidadesApi();
 
     EntidadesModel oEnti = EntidadesModel(
       Id: oEntiModel.Id,
       Nome: _controllerNome.text,
       Contato: _controllerContato.text,
-      Telefone:  _controllerTelefone.text,
+      Telefone: _controllerTelefone.text,
       Email: _controllerEmail.text,
     );
 
@@ -225,7 +201,7 @@ class _EntidadesEditState extends State<EntidadesEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
 
       AppModel app = Provider.of<AppModel>(context, listen: false);
@@ -234,17 +210,13 @@ class _EntidadesEditState extends State<EntidadesEdit> {
   }
 
   _onClickAdd() async {
-    if (_controllerNome.text == "" ||
-        _controllerContato.text == "" ||
-        _controllerTelefone.text == "" ||
-        _controllerEmail.text == "" ) {
+    if (_controllerNome.text == "" || _controllerContato.text == "") {
       _onClickDialog();
       return;
     }
     EntidadesApi entidadesApi = EntidadesApi();
 
     EntidadesModel oEnti = EntidadesModel(
-     
       Nome: _controllerNome.text,
       Contato: _controllerContato.text,
       Telefone: _controllerTelefone.text,
@@ -258,7 +230,7 @@ class _EntidadesEditState extends State<EntidadesEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(EntidadesPage());
@@ -268,10 +240,8 @@ class _EntidadesEditState extends State<EntidadesEdit> {
           backgroundColor: Colors.redAccent,
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.TOP,
-          timeInSecForIosWeb: 5,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
-         
-      
     }
   }
 
@@ -279,9 +249,10 @@ class _EntidadesEditState extends State<EntidadesEdit> {
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
-            height: 200,
+            height: 60,
             child: Center(
-              child: Text("Preencher campos obrigatorios"),
+              child: Text(
+                  "Preencha os campos obrigatorios. \n\n                 Nome, Contato."),
             ),
           ),
           actions: [
@@ -294,70 +265,4 @@ class _EntidadesEditState extends State<EntidadesEdit> {
           ],
         ),
       );
-
-  // String? _validateNome(String? value) {
-  //    if (value!.isEmpty) {
-  //     return "Nome não";
-  //   }
-  // }
-
-  // String? _validateCnpj(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateXCoord(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateYCorrd(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPropriedade(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaTotal(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPlantada(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaEstimaConser(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaInfr(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaOutro(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateLocalizacao(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
 }

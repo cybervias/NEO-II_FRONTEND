@@ -3,9 +3,13 @@ import 'dart:convert';
 class ControleModel {
   int? ID;
   int? idFracao;
+  var fracao;
   int? idEntidade;
+  var entidades;
   int? idPropriedade;
+  var propriedades;
   int? idGrupo;
+  var grupos;
   String? DataEntrada;
   String? DataSaida;
   String? RequerenteSaida;
@@ -17,9 +21,13 @@ class ControleModel {
   ControleModel({
     this.ID,
     this.idFracao,
+    this.fracao,
     this.idEntidade,
+    this.entidades,
     this.idPropriedade,
+    this.propriedades,
     this.idGrupo,
+    this.grupos,
     this.DataEntrada,
     this.DataSaida,
     this.RequerenteSaida,
@@ -32,9 +40,13 @@ class ControleModel {
     return {
       'ID': ID,
       'idFracao': idFracao,
+      'fracao': fracao,
       'idEntidade': idEntidade,
+      'entidades': entidades,
       'idPropriedade': idPropriedade,
+      'propriedades': propriedades,
       'idGrupo': idGrupo,
+      'grupos': grupos,
       'DataEntrada': DataEntrada,
       'DataSaida': DataSaida,
       'RequerenteSaida': RequerenteSaida,
@@ -48,9 +60,13 @@ class ControleModel {
     return ControleModel(
       ID: map['ID']?.toInt(),
       idFracao: map['idFracao']?.toInt(),
+      fracao: map['fracao'],
       idEntidade: map['idEntidade']?.toInt(),
+      entidades: map['entidades'],
       idPropriedade: map['idPropriedade']?.toInt(),
+      propriedades: map['propriedades'],
       idGrupo: map['idGrupo']?.toInt(),
+      grupos: map['grupos'],
       DataEntrada: map['DataEntrada'],
       DataSaida: map['DataSaida'],
       RequerenteSaida: map['RequerenteSaida'],

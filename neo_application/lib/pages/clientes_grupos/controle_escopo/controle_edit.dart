@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_model.dart';
 import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_api.dart';
@@ -137,367 +138,353 @@ class _ControleEditState extends State<ControleEdit> {
           List<FracaoPropModel> listFracaoValue = [];
           List<GruposModel> listGruposValue = [];
 
-          //listEntidadesSelecionado.Nome = listEntidades[0].Nome;
-
-          /* if (oFracaoProp != null) {
-            listEntidadesValue = listEntidades
-                .where((entidades) => entidades.Id == oFracaoProp.IDEntidade)
-                .toList();
-            print(listEntidades);
-
-            listPropriedadeValue = listPropriedade
-                .where((propriedade) =>
-                    propriedade.idPropriedade == oFracaoProp.IDPropriedade)
-                .toList();
-            print(listPropriedade);
-          }*/
-
-          return SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(top: 50),
-              child: Card(
-                child: SafeArea(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return Column(
+          return ListView(
+            children: [
+              Card(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                  return Container(
+                    padding: EdgeInsets.all(50),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                   Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Fração da Propriedade"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listFracaoSelecionado.Id != null ? listFracaoSelecionado.Id.toString() : listFracao[0].ID.toString(),
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listFracaoSelecionado.Id = int.parse("$newValue");
-                                            }),
-                                          },
-                                          items: listFracao.map<DropdownMenuItem<String>>((value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.ID.toString(),
-                                              child: Text(value.Fracao.toString()),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Entidades Gestoras"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listEntidadesSelecionado.Id !=
-                                                  null
-                                              ? listEntidadesSelecionado.Id
-                                                  .toString()
-                                              : listEntidades[0].Id.toString(),
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listEntidadesSelecionado.Id =
-                                                  int.parse("$newValue");
-
-                                              print(newValue.toString());
-                                            }),
-                                          },
-                                          items: listEntidades
-                                              .map<DropdownMenuItem<String>>(
-                                                  (value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.Id.toString(),
-                                              child: Text(value.Nome!),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Propriedade"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listPropriedadeSelecionado
-                                                      .idPropriedade !=
-                                                  null
-                                              ? listPropriedadeSelecionado
-                                                  .idPropriedade
-                                                  .toString()
-                                              : listPropriedade[0]
-                                                  .idPropriedade
-                                                  .toString(),
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listPropriedadeSelecionado
-                                                      .idPropriedade =
-                                                  int.parse("$newValue");
-
-                                              print(newValue.toString());
-                                            }),
-                                          },
-                                          items: listPropriedade
-                                              .map<DropdownMenuItem<String>>(
-                                                  (value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.idPropriedade
-                                                  .toString(),
-                                              child: Text(value.Nome!),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                      width: 300,
-                                      height: 40,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(width: 1, color: Colors.grey),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: DropdownButtonHideUnderline(
-                                        child: ButtonTheme(
-                                          alignedDropdown: true,
-                                          child: DropdownButton<String>(
-                                            hint: Text("Grupos"),
-                                            isDense: true,
-                                            isExpanded: true,
-                                            value: listGrupoSelecionado.ID != null ? listGrupoSelecionado.ID.toString() : listGrupos[0].idGrupo.toString(),
-                                            onChanged: (newValue) => {
-                                              setState(() {
-                                                listGrupoSelecionado.ID = int.parse("$newValue");
-                                              }),
-                                            },
-                                            items: listGrupos.map<DropdownMenuItem<String>>((value) {
-                                              return DropdownMenuItem<String>(
-                                                value: value.idGrupo.toString(),
-                                                child: Text(value.Nome!),
-                                              );
-                                            }).toList(),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                     /* validator: (value) {
-                                        if (value == "" || value == 0) {
-                                          return "Campo obrigatorio";
-                                        }
-                                        return null;
-                                      },*/
-                                      controller: _controllerDataEntrada,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                      ),
-                                      decoration: InputDecoration(
-                                        border: const OutlineInputBorder(),
-                                        labelText: "Data Entrada",
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            Icons.date_range,
-                                            color: Color.fromARGB(96, 88, 87, 87),
-                                            size: 20,
-                                          ),
-                                          onPressed: () async {
-                                            final data = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
-                                            );
-                                            if (data != null)
-                                              setState(() => _valueEntrada = data.toString());
-
-                                            _controllerDataEntrada.text =  _valueEntrada.substring(8, 10) + '/' + _valueEntrada.substring(5, 7) +  '/' + _valueEntrada.substring(0, 4);
-                                      
-                                            print( _controllerDataEntrada.text);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      /*validator: ((value) {
-                                        if (value == "" || value == 0) {
-                                          return "Campo obrigatorio";
-                                        }
-                                        return null;
-                                      }),*/
-                                      controller: _controllerDataSaida,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 15,
-                                      ),
-                                      decoration: InputDecoration(
-                                        border: const OutlineInputBorder(),
-                                        labelText: "Data Saída",
-                                        suffixIcon: IconButton(
-                                          icon: Icon(
-                                            Icons.date_range,
-                                            color: Color.fromARGB(96, 88, 87, 87),
-                                            size: 20,
-                                          ),
-                                          onPressed: () async {
-                                            final data = await showDatePicker(
-                                              context: context,
-                                              initialDate: DateTime.now(),
-                                              firstDate: DateTime(2000),
-                                              lastDate: DateTime(2100),
-                                            );
-                                            if (data != null)
-                                              setState(() => _valueSaida = data.toString());
-
-                                            _controllerDataSaida.text =  _valueSaida.substring(8, 10) + '/' + _valueSaida.substring(5, 7) +  '/' + _valueSaida.substring(0, 4);
-                                      
-                                            print( _controllerDataSaida.text);
-                                          },
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                   const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerRequerenteSaida,
-                                      decoration: const InputDecoration(
-                                        labelText: "Requerente de Saída",
-                                        border: OutlineInputBorder(),
-                                        isDense: true,
-                                      ),
-                                    ),
-                                  ),
-                                   const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerAreaEscopo,
-                                      decoration: const InputDecoration(
-                                        labelText: "Área Escopo",
-                                        border: OutlineInputBorder(),
-                                        isDense: true,
-                                      ),
-                                    ),
-                                  ),
-                                   const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerAreaAuditada,
-                                      decoration: const InputDecoration(
-                                        labelText: "Área Auditada",
-                                        border: OutlineInputBorder(),
-                                        isDense: true,
-                                      ),
-                                    ),
-                                  ),
-                                   const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerCicloTrabalho,
-                                      decoration: const InputDecoration(
-                                        labelText: "Ciclo Trabalho",
-                                        border: OutlineInputBorder(),
-                                        isDense: true,
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                ],
+                         Container(
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                hint: Text("Fração da Propriedade"),
+                                isDense: true,
+                                isExpanded: true,
+                                value: listFracaoSelecionado.Id != null ? listFracaoSelecionado.Id.toString() : listFracao[0].ID.toString(),
+                                onChanged: (newValue) => {
+                                  setState(() {
+                                    listFracaoSelecionado.Id = int.parse("$newValue");
+                                  }),
+                                },
+                                items: listFracao.map<DropdownMenuItem<String>>((value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value.ID.toString(),
+                                    child: Text(value.Fracao.toString()),
+                                  );
+                                }).toList(),
                               ),
                             ),
                           ),
                         ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                hint: Text("Entidades Gestoras"),
+                                isDense: true,
+                                isExpanded: true,
+                                value: listEntidadesSelecionado.Id !=
+                                        null
+                                    ? listEntidadesSelecionado.Id
+                                        .toString()
+                                    : listEntidades[0].Id.toString(),
+                                onChanged: (newValue) => {
+                                  setState(() {
+                                    listEntidadesSelecionado.Id =
+                                        int.parse("$newValue");
+
+                                    print(newValue.toString());
+                                  }),
+                                },
+                                items: listEntidades
+                                    .map<DropdownMenuItem<String>>(
+                                        (value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value.Id.toString(),
+                                    child: Text(value.Nome!),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                                width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: DropdownButtonHideUnderline(
+                            child: ButtonTheme(
+                              alignedDropdown: true,
+                              child: DropdownButton<String>(
+                                hint: Text("Propriedade"),
+                                isDense: true,
+                                isExpanded: true,
+                                value: listPropriedadeSelecionado
+                                            .idPropriedade !=
+                                        null
+                                    ? listPropriedadeSelecionado
+                                        .idPropriedade
+                                        .toString()
+                                    : listPropriedade[0]
+                                        .idPropriedade
+                                        .toString(),
+                                onChanged: (newValue) => {
+                                  setState(() {
+                                    listPropriedadeSelecionado
+                                            .idPropriedade =
+                                        int.parse("$newValue");
+
+                                    print(newValue.toString());
+                                  }),
+                                },
+                                items: listPropriedade
+                                    .map<DropdownMenuItem<String>>(
+                                        (value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value.idPropriedade
+                                        .toString(),
+                                    child: Text(value.Nome!),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                            width: 300,
+                            height: 40,
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 1, color: Colors.grey),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: ButtonTheme(
+                                alignedDropdown: true,
+                                child: DropdownButton<String>(
+                                  hint: Text("Grupos"),
+                                  isDense: true,
+                                  isExpanded: true,
+                                  value: listGrupoSelecionado.ID != null ? listGrupoSelecionado.ID.toString() : listGrupos[0].idGrupo.toString(),
+                                  onChanged: (newValue) => {
+                                    setState(() {
+                                      listGrupoSelecionado.ID = int.parse("$newValue");
+                                    }),
+                                  },
+                                  items: listGrupos.map<DropdownMenuItem<String>>((value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value.idGrupo.toString(),
+                                      child: Text(value.Nome!),
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                           /* validator: (value) {
+                              if (value == "" || value == 0) {
+                                return "Campo obrigatorio";
+                              }
+                              return null;
+                            },*/
+                            controller: _controllerDataEntrada,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: "Data Entrada",
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.date_range,
+                                  color: Color.fromARGB(96, 88, 87, 87),
+                                  size: 20,
+                                ),
+                                onPressed: () async {
+                                  final data = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (data != null)
+                                    setState(() => _valueEntrada = data.toString());
+
+                                  _controllerDataEntrada.text =  _valueEntrada.substring(8, 10) + '/' + _valueEntrada.substring(5, 7) +  '/' + _valueEntrada.substring(0, 4);
+                            
+                                  print( _controllerDataEntrada.text);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                            /*validator: ((value) {
+                              if (value == "" || value == 0) {
+                                return "Campo obrigatorio";
+                              }
+                              return null;
+                            }),*/
+                            controller: _controllerDataSaida,
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 15,
+                            ),
+                            decoration: InputDecoration(
+                              border: const OutlineInputBorder(),
+                              labelText: "Data Saída",
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  Icons.date_range,
+                                  color: Color.fromARGB(96, 88, 87, 87),
+                                  size: 20,
+                                ),
+                                onPressed: () async {
+                                  final data = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime(2000),
+                                    lastDate: DateTime(2100),
+                                  );
+                                  if (data != null)
+                                    setState(() => _valueSaida = data.toString());
+
+                                  _controllerDataSaida.text =  _valueSaida.substring(8, 10) + '/' + _valueSaida.substring(5, 7) +  '/' + _valueSaida.substring(0, 4);
+                            
+                                  print( _controllerDataSaida.text);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                         const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                            controller: _controllerRequerenteSaida,
+                            decoration: const InputDecoration(
+                              labelText: "Requerente de Saída",
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                         const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+.?\d{0,2}'))
+                              ],
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                            controller: _controllerAreaEscopo,
+                            decoration: const InputDecoration(
+                              labelText: "Área Escopo",
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                         const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+.?\d{0,2}'))
+                              ],
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
+                            controller: _controllerAreaAuditada,
+                            decoration: const InputDecoration(
+                              labelText: "Área Auditada",
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                         const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                            controller: _controllerCicloTrabalho,
+                            decoration: const InputDecoration(
+                              labelText: "Ciclo Trabalho",
+                              border: OutlineInputBorder(),
+                              isDense: true,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
                         _Buttons()
                       ],
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                }),
               ),
-            ),
+            ],
           );
         }
         return Center(
@@ -538,15 +525,8 @@ class _ControleEditState extends State<ControleEdit> {
       return;
     }
 
-    /*if (!_formKey.currentState!.validate()) {
-      _onClickDialog();
-      return;
-    }*/
-
-    
-
     var listFrac = listFracao.where((element) => element.ID == listFracaoSelecionado.Id).toList();
-    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id) .toList();
+    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id).toList();
     var listProp = listPropriedade.where((element) =>element.idPropriedade == listPropriedadeSelecionado.idPropriedade).toList();
     var listGrup = listGrupos.where((element) => element.idGrupo == listGrupoSelecionado.ID).toList();
 
@@ -558,9 +538,22 @@ class _ControleEditState extends State<ControleEdit> {
     var DataEntrada =_controllerDataEntrada.text.substring(3, 5) + '/' + _controllerDataEntrada.text.substring(0, 2) +  '/' + _controllerDataEntrada.text.substring(6, 10);
     var DataSaida =_controllerDataSaida.text.substring(3, 5) + '/' + _controllerDataSaida.text.substring(0, 2) +  '/' + _controllerDataSaida.text.substring(6, 10);
 
-    double AreaEscopo = double.parse(_controllerAreaEscopo.text);
-    double AreaAuditada = double.parse(_controllerAreaAuditada.text);
     int CicloTrabalho = int.parse(_controllerCicloTrabalho.text);
+    
+    double AreaEscopo;
+    double AreaAuditada;
+
+    if (_controllerAreaEscopo.text.isEmpty) {
+      AreaEscopo = 0;
+    } else {
+      AreaEscopo = double.parse(_controllerAreaEscopo.text.replaceAll(",", "."));
+    }
+
+    if (_controllerAreaAuditada.text.isEmpty) {
+      AreaAuditada = 0;
+    } else {
+      AreaAuditada = double.parse(_controllerAreaAuditada.text.replaceAll(",", "."));
+    }
 
     ControleApi controleApi = ControleApi();
 
@@ -662,9 +655,10 @@ class _ControleEditState extends State<ControleEdit> {
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
-            height: 70,
+            height: 60,
             child: Center(
-              child: Text("Preencher campos obrigatorios"),
+              child: Text(
+                  "Preencha os campos obrigatorios. \n\n Data de entrada, Data de saida.."),
             ),
           ),
           actions: [
@@ -677,70 +671,4 @@ class _ControleEditState extends State<ControleEdit> {
           ],
         ),
       );
-
-  // String? _validateNome(String? value) {
-  //    if (value!.isEmpty) {
-  //     return "Nome não";
-  //   }
-  // }
-
-  // String? _validateCnpj(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateXCoord(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateYCorrd(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPropriedade(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaTotal(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPlantada(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaEstimaConser(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaInfr(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaOutro(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateLocalizacao(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
 }

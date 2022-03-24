@@ -4,6 +4,7 @@ import 'package:javascript/javascript.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_api.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_model.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_page.dart';
+import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/dropDownController_Entidades.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +25,9 @@ class _GruposEditState extends State<GruposEdit> {
   late GruposModel oGrupo;
   late String _value;
 
+  DropDownControllerEntidades dropDownControllerEntidades = DropDownControllerEntidades();
+
+
   final TextEditingController _controllerIdGrupo = TextEditingController();
   final TextEditingController _controllerNome = TextEditingController();
   final TextEditingController _controllerDataFormacao = TextEditingController();
@@ -33,11 +37,11 @@ class _GruposEditState extends State<GruposEdit> {
   late GruposModel oGrupoModel;
   EntidadesModel valueSelected = EntidadesModel();
 
-  EntidadesModel listEntidadesSelecionado = EntidadesModel();
+  EntidadesModel  listEntidadesSelecionado = EntidadesModel();
 
   List<EntidadesModel> listEntidades = [];
 
-final _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -68,8 +72,8 @@ final _formKey = GlobalKey<FormState>();
     _controllerNome.text = oGrupo.Nome ?? "";
     _controllerDataFormacao.text = oGrupo.DataFormacao.toString();
     _controllerIDGestor.text = oGrupo.IDGestor.toString();
-    /*listEntidadesSelecionado.Nome =
-        valueSelected.Nome != null ? valueSelected.Nome : oGrupo.IDGestor.toString();*/
+    
+    dropDownControllerEntidades.buscarEntidades();
   }
 
   _body() {
@@ -161,36 +165,31 @@ final _formKey = GlobalKey<FormState>();
                                 width: 1, color: Colors.grey),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                hint: Text("Entidades Gestoras"),
-                                isDense: true,
-                                isExpanded: true,
-                                value: listEntidadesSelecionado.Id !=
-                                        null
-                                    ? listEntidadesSelecionado.Id
-                                        .toString()
-                                    : listEntidades[0].Id.toString(),
-                                onChanged: (newValue) => {
-                                  setState(() {
-                                    listEntidadesSelecionado.Id =
-                                        int.parse("$newValue");
-
-                                    print(newValue.toString());
-                                  }),
-                                },
-                                items: listEntidades
-                                    .map<DropdownMenuItem<String>>(
-                                        (value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value.Id.toString(),
-                                    child: Text(value.Nome!),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerEntidades,
+                            builder: (context, child) {
+                              if (dropDownControllerEntidades.listEntidades.isEmpty) {
+                                return const CircularProgressIndicator();
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Entidades"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerEntidades.selecionadoEntidades,
+                                    onChanged: (value) =>
+                                        dropDownControllerEntidades.setSelecionadoEntidades(value),
+                                    items: dropDownControllerEntidades.listEntidades
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Nome!),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ));
+                              }
+                            },
                           ),
                         ),
                         _Buttons()
@@ -241,11 +240,11 @@ final _formKey = GlobalKey<FormState>();
     }
     GruposApi gruposApi = GruposApi();
 
-   var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id) .toList();
+    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id).toList();
 
     int? idEntidades = listEnti[0].Id;
 
-var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDataFormacao.text.substring(0, 2) +  '/' + _controllerDataFormacao.text.substring(6, 10);
+    var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDataFormacao.text.substring(0, 2) +  '/' + _controllerDataFormacao.text.substring(6, 10);
 
     GruposModel oGrupo = GruposModel(
       idGrupo: widget.grupoModel.idGrupo,
@@ -261,11 +260,17 @@ var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDa
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
-
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(GruposPage());
+    }else {
+      Fluttertoast.showToast(
+          msg: messageReturn["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 7,
+          fontSize: 16.0);
     }
   }
 
@@ -329,70 +334,4 @@ var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDa
           ],
         ),
       );
-
-  // String? _validateNome(String? value) {
-  //    if (value!.isEmpty) {
-  //     return "Nome não";
-  //   }
-  // }
-
-  // String? _validateCnpj(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateXCoord(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateYCorrd(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPropriedade(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaTotal(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPlantada(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaEstimaConser(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaInfr(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaOutro(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateLocalizacao(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
 }

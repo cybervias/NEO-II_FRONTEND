@@ -252,7 +252,7 @@ class _EntidadesEditState extends State<EntidadesEdit> {
             height: 60,
             child: Center(
               child: Text(
-                  "Preencha os campos obrigatorios. \n\n                 Nome, Contato."),
+                  "Preencha os campos obrigatorios. \n\n               Nome, Contato."),
             ),
           ),
           actions: [

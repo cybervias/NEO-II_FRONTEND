@@ -151,6 +151,12 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                             width: constWidth,
                             height: 30,
                             child: TextFormField(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+.?\d{0,2}'))
+                              ],
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
                               controller: _controllerXCoord,
                               decoration: const InputDecoration(
                                 labelText: "XCoord",
@@ -166,6 +172,12 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                             width: constWidth,
                             height: 30,
                             child: TextFormField(
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+.?\d{0,2}'))
+                              ],
+                              keyboardType: TextInputType.numberWithOptions(
+                                  decimal: true),
                               controller: _controllerYCoord,
                               decoration: const InputDecoration(
                                 labelText: "YCoord",
@@ -353,13 +365,13 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                             width: 30,
                             height: 20,
                           ),
+                           _Buttons(),
                         ],
                       ),
                     );
                   },
                 ),
               ),
-              _Buttons(),
             ],
           );
         }
@@ -401,8 +413,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
       return;
     }
 
-    int xCoord = int.parse(_controllerXCoord.text);
-    int yCoord = int.parse(_controllerYCoord.text);
+   
     double areaPropriedade;
     double areaTotal;
     double areaPlantada;
@@ -410,40 +421,44 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
     double areaInfraestrutura;
     double areaOutrosUsos;
 
+    double xCoord = double.parse(_controllerXCoord.text.replaceAll(",", "."));
+    
+    double yCoord = double.parse(_controllerYCoord.text.replaceAll(",", "."));
+
     if (_controllerAreaPropriedade.text.isEmpty) {
       areaPropriedade = 0;
     } else {
-      areaPropriedade = double.parse(_controllerAreaPropriedade.text);
+      areaPropriedade = double.parse(_controllerAreaPropriedade.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaTotal.text.isEmpty) {
       areaTotal = 0;
     } else {
-      areaTotal = double.parse(_controllerAreaTotal.text);
+      areaTotal = double.parse(_controllerAreaTotal.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaPlantada.text.isEmpty) {
       areaPlantada = 0;
     } else {
-      areaPlantada = double.parse(_controllerAreaPlantada.text);
+      areaPlantada = double.parse(_controllerAreaPlantada.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaEstimaConser.text.isEmpty) {
       areaEstimaConservacao = 0;
     } else {
-      areaEstimaConservacao = double.parse(_controllerAreaEstimaConser.text);
+      areaEstimaConservacao = double.parse(_controllerAreaEstimaConser.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaInfraestrutura.text.isEmpty) {
       areaInfraestrutura = 0;
     } else {
-      areaInfraestrutura = double.parse(_controllerAreaInfraestrutura.text);
+      areaInfraestrutura = double.parse(_controllerAreaInfraestrutura.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaOutro.text.isEmpty) {
       areaOutrosUsos = 0;
     } else {
-      areaOutrosUsos = double.parse(_controllerAreaOutro.text);
+      areaOutrosUsos = double.parse(_controllerAreaOutro.text.replaceAll(",", "."));
     }
 
     PropriedadesApi propriedadesApi = PropriedadesApi();

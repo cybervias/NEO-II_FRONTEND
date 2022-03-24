@@ -365,13 +365,13 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                                 width: 30,
                                 height: 20,
                               ),
+                              _Buttons(),
                             ],
                           ),
                         );
                       },
                     ),
                   ),
-                  _Buttons(),
                   // Card da Lisa de Manejo
                   Card(
                     child: Container(
@@ -397,7 +397,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  height: 300,
+                                  height: 200,
                                   child: ListView.builder(
                                     itemCount: snapshot
                                         .data[widget.indice].tipoManejo.length,
@@ -466,7 +466,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  height: 300,
+                                  height: 200,
                                   child: ListView.builder(
                                     itemCount: snapshot.data[widget.indice]
                                         .tipoFloresta.length,
@@ -533,7 +533,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                             children: [
                               Expanded(
                                 child: Container(
-                                  height: 300,
+                                  height: 200,
                                   child: ListView.builder(
                                     itemCount: snapshot
                                         .data[widget.indice].produtos.length,
@@ -577,7 +577,6 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                   ),
                 ],
               );
-              break;
           }
         }
         return const Center(
@@ -679,7 +678,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: result["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
@@ -690,7 +689,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: result["message"],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
     }
@@ -733,7 +732,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
@@ -744,7 +743,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
     }
@@ -844,7 +843,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: result["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
@@ -855,7 +854,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: result["message"],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
     }
@@ -898,7 +897,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
@@ -909,7 +908,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
     }
@@ -1008,7 +1007,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: result["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
@@ -1019,7 +1018,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: result["message"],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
     }
@@ -1062,7 +1061,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {
@@ -1073,7 +1072,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_LONG,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
     }
@@ -1089,11 +1088,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 primary: Color.fromARGB(246, 34, 37, 44)),
-            onPressed: () =>
-                widget.tipoAcao == "editar" ? _onClickSalvar() : _onClickAdd(),
-            child: widget.tipoAcao == "editar"
-                ? Text("Salvar Alterações")
-                : Text("Adicionar"),
+            onPressed: () => _onClickSalvar(),
+            child: Text("Salvar Alterações"),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -1107,24 +1103,61 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
   }
 
   _onClickSalvar() async {
-    if (_controllerNome.text == "" ||
+   if (_controllerNome.text == "" ||
         _controllerCNPJ.text == "" ||
         _controllerXCoord.text == "" ||
         _controllerYCoord.text == "") {
       _onClickDialog();
       return;
     }
+    
+    double areaPropriedade;
+    double areaTotal;
+    double areaPlantada;
+    double areaEstimaConservacao;
+    double areaInfraestrutura;
+    double areaOutrosUsos;
 
-    int xCoord = int.parse(_controllerXCoord.text);
-    int yCoord = int.parse(_controllerYCoord.text);
-    double areaPropriedade = double.parse(_controllerAreaPropriedade.text);
-    double areaTotal = double.parse(_controllerAreaTotal.text);
-    double areaPlantada = double.parse(_controllerAreaPlantada.text);
-    double areaEstimaConservacao =
-        double.parse(_controllerAreaEstimaConser.text);
-    double areaInfraestrutura =
-        double.parse(_controllerAreaInfraestrutura.text);
-    double areaOutrosUsos = double.parse(_controllerAreaOutro.text);
+    
+    double xCoord = double.parse(_controllerXCoord.text.replaceAll(",", "."));
+    
+    double yCoord = double.parse(_controllerYCoord.text.replaceAll(",", "."));
+    
+    if (_controllerAreaPropriedade.text.isEmpty) {
+      areaPropriedade = 0;
+    } else {
+      areaPropriedade = double.parse(_controllerAreaPropriedade.text.replaceAll(",", "."));
+    }
+
+    if (_controllerAreaTotal.text.isEmpty) {
+      areaTotal = 0;
+    } else {
+      areaTotal = double.parse(_controllerAreaTotal.text.replaceAll(",", "."));
+    }
+
+    if (_controllerAreaPlantada.text.isEmpty) {
+      areaPlantada = 0;
+    } else {
+      areaPlantada = double.parse(_controllerAreaPlantada.text.replaceAll(",", "."));
+    }
+
+    if (_controllerAreaEstimaConser.text.isEmpty) {
+      areaEstimaConservacao = 0;
+    } else {
+      areaEstimaConservacao = double.parse(_controllerAreaEstimaConser.text.replaceAll(",", "."));
+    }
+
+    if (_controllerAreaInfraestrutura.text.isEmpty) {
+      areaInfraestrutura = 0;
+    } else {
+      areaInfraestrutura = double.parse(_controllerAreaInfraestrutura.text.replaceAll(",", "."));
+    }
+
+    if (_controllerAreaOutro.text.isEmpty) {
+      areaOutrosUsos = 0;
+    } else {
+      areaOutrosUsos = double.parse(_controllerAreaOutro.text.replaceAll(",", "."));
+    }
 
     PropriedadesApi propriedadesApi = PropriedadesApi();
 
@@ -1140,8 +1173,9 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
         AreaEstimaConservacao: areaEstimaConservacao,
         AreaInfraestrutura: areaInfraestrutura,
         AreaOutrosUsos: areaOutrosUsos,
-        Localizacao: _controllerLocalizacao.text,
-        UF: listUfSelecionado);
+        Localizacao: _controllerLocalizacao.text ?? "",
+        UF: listUfSelecionado ?? "",
+        );
 
     var messageReturn = await propriedadesApi.updatePropriedade(oProp);
 
@@ -1150,62 +1184,17 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
-
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(PropriedadesPage());
-    }
-  }
-
-  _onClickAdd() async {
-    if (_controllerNome.text == "" ||
-        _controllerCNPJ.text == "" ||
-        _controllerXCoord.text == "" ||
-        _controllerYCoord.text == "") {
-      _onClickDialog();
-      return;
-    }
-
-    int xCoord = int.parse(_controllerXCoord.text);
-    int yCoord = int.parse(_controllerYCoord.text);
-    double areaPropriedade = double.parse(_controllerAreaPropriedade.text);
-    double areaTotal = double.parse(_controllerAreaTotal.text);
-    double areaPlantada = double.parse(_controllerAreaPlantada.text);
-    double areaEstimaConservacao =
-        double.parse(_controllerAreaEstimaConser.text);
-    double areaInfraestrutura =
-        double.parse(_controllerAreaInfraestrutura.text);
-    double areaOutrosUsos = double.parse(_controllerAreaOutro.text);
-
-    PropriedadesApi propriedadesApi = PropriedadesApi();
-
-    PropriedadesModel oProp = PropriedadesModel(
-        idPropriedade: oPropModel.idPropriedade,
-        Nome: _controllerNome.text,
-        CNPJ: _controllerCNPJ.text,
-        XCoord: xCoord,
-        yCoord: yCoord,
-        AreaPropriedade: areaPropriedade,
-        AreaTotal: areaTotal,
-        AreaPlantada: areaPlantada,
-        AreaEstimaConservacao: areaEstimaConservacao,
-        AreaInfraestrutura: areaInfraestrutura,
-        AreaOutrosUsos: areaOutrosUsos,
-        Localizacao: _controllerLocalizacao.text,
-        UF: listUfSelecionado);
-
-    var messageReturn = await propriedadesApi.createPropriedade(oProp);
-
-    if (messageReturn["type"] == "S") {
-      Fluttertoast.showToast(
+    } else {
+       Fluttertoast.showToast(
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 10,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
-      AppModel app = Provider.of<AppModel>(context, listen: false);
-      app.setPage(PropriedadesPage());
     }
   }
 

@@ -121,7 +121,7 @@ class _GruposPageState extends State<GruposPage> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       Navigator.pop(context);
       setState(() {

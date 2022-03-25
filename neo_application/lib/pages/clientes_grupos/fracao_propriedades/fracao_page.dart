@@ -75,7 +75,7 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
                 return Card(
                   child: ListTile(
                     
-                    title: Text("Entidade: " + "${Map.from(listFracaoProp[index].entidades)['Nome']}" + " - " + "Propriedade: " +  "${Map.from(listFracaoProp[index].propriedades)['Nome']}" + " - " + "Fração: " +  "${listFracaoProp[index].Fracao}"
+                    title: Text("Entidade: " + listFracaoProp[index].entidades!.Nome.toString() + " - " + "Propriedade: " +  listFracaoProp[index].propriedades!.Nome.toString() + " - " + "Fração: " +  "${listFracaoProp[index].Fracao}"
                         ),
                         
                     trailing: Row(

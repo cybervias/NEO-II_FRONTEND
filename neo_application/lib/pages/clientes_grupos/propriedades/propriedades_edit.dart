@@ -1245,15 +1245,23 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           fontSize: 16.0);
     }
   }
-
-  _onClickDialog() => showDialog(
+      _onClickDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
             height: 60,
             child: Center(
-              child: Text(
-                  "Preencha os campos obrigatorios. \n\n    Nome, CNPJ, XCoord, YCoord."),
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Nome, CNPJ, XCoord, YCoord.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
             ),
           ),
           actions: [

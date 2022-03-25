@@ -77,7 +77,7 @@ class _ControlePageState extends State<ControlePage> {
               itemBuilder: (context, index) {
                 return Card(
                   child: ListTile(
-                    title: Text("Fração: " + "${Map.from(listControle[index].fracao)['Fracao']}" + " - " "Entidades: " + "${Map.from(listControle[index].entidades)['Nome']}" + " - " "Propriedades: " + "${Map.from(listControle[index].propriedades)['Nome']}" + " - " "Grupos: " + "${Map.from(listControle[index].grupos)['Nome']}" + " - " "Data Entrada: " + "${listControle[index].DataEntrada}" + " - " "Data Saída: " + "${listControle[index].DataSaida}" + " - " "Requerente Saída: " + "${listControle[index].RequerenteSaida}" + " - " "Área do Escopo: " + "${listControle[index].AreaEscopo}" + " - " "Área Auditada: " + "${listControle[index].AreaAuditada}" + " - " "Cicli de Trabalho: " + "${listControle[index].CicloTrabalho}"
+                    title: Text("Fração: " + listControle[index].fracao!.Fracao.toString() + " - " "Entidade: " + listControle[index].entidades!.Nome.toString() + " - " + "Propriedade: " +  listControle[index].propriedades!.Nome.toString() + " - " "Grupos: " + listControle[index].grupos!.Nome.toString() + " - " "Data Entrada: " + "${listControle[index].DataEntrada}" + " - " "Data Saída: " + "${listControle[index].DataSaida}" + " - " "Requerente Saída: " + "${listControle[index].RequerenteSaida}" + " - " "Área do Escopo: " + "${listControle[index].AreaEscopo}" + " - " "Área Auditada: " + "${listControle[index].AreaAuditada}" + " - " "Ciclo de Trabalho: " + "${listControle[index].CicloTrabalho}"
                         ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,

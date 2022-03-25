@@ -9,7 +9,6 @@ import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_
 import 'package:neo_application/pages/clientes_grupos/propriedades/tipoManejo/dropDownController.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/tipoProduto/dropDownController.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
-import 'package:neo_application/pages/utils/DecimalText.dart';
 import 'package:neo_application/pages/utils/list_uf.dart';
 import 'package:provider/provider.dart';
 import 'tipoFloresta/dropDownController.dart';
@@ -505,8 +504,17 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           content: Container(
             height: 60,
             child: Center(
-              child: Text(
-                  "Preencha os campos obrigatorios. \n\n    Nome, CNPJ, XCoord, YCoord."),
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Nome, CNPJ, XCoord, YCoord.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
             ),
           ),
           actions: [

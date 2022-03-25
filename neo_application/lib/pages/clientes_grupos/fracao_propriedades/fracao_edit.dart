@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:neo_application/pages/clientes_grupos/adm_grupos/dropDownController_Grupo.dart';
+import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/dropDownController_Entidades.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
+import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/dropDownController_Fracao.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_api.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/dropDownController_Propriedades.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
@@ -24,6 +28,12 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
   Size get size => MediaQuery.of(context).size;
   late FracaoPropModel oFracaoProp;
   late String _value;
+
+  DropDownControllerEntidades dropDownControllerEntidades =
+      DropDownControllerEntidades();
+  DropDownControllerPropriedades dropDownControllerPropriedades =
+      DropDownControllerPropriedades();
+  
 
   final TextEditingController _controllerID = TextEditingController();
   final TextEditingController _controllerIDEntidade = TextEditingController();
@@ -67,20 +77,40 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
     );
   }
 
-  _setText() {
+  _setText() async {
     oFracaoProp = widget.fracaoPropModel;
     _controllerID.text = oFracaoProp.ID.toString();
     _controllerIDEntidade.text = oFracaoProp.IDEntidade.toString();
     _controllerIDPropriedade.text = oFracaoProp.IDPropriedade.toString();
     _controllerFracao.text = oFracaoProp.Fracao.toString();
-    if (listPropriedadeSelecionado.idPropriedade == null && oFracaoProp.IDPropriedade != 0) {
+    /*if (listPropriedadeSelecionado.idPropriedade == null && oFracaoProp.IDPropriedade != 0) {
       listPropriedadeSelecionado.idPropriedade = oFracaoProp.IDPropriedade;
     }
     if (listEntidadesSelecionado.Id == null && oFracaoProp.IDEntidade != 0) {
       listEntidadesSelecionado.Id = oFracaoProp.IDEntidade;
+    }*/
+    await dropDownControllerEntidades.buscarEntidades();
+    var listEntidades = dropDownControllerEntidades.listEntidades;
+
+    if (oFracaoProp.entidades != null) {
+      var listEntidadeFiltrado = listEntidades
+          .where((element) => element.Id == oFracaoProp.entidades!.Id)
+          .toList();
+      dropDownControllerEntidades
+          .setSelecionadoEntidades(listEntidadeFiltrado[0]);
     }
-    /*listEntidadesSelecionado.Nome =
-        valueSelected.Nome != null ? valueSelected.Nome : oGrupo.IDGestor.toString();*/
+
+    await dropDownControllerPropriedades.buscarPropriedades();
+    var listPropriedades = dropDownControllerPropriedades.listPropriedades;
+
+    if (oFracaoProp.propriedades != null) {
+      var listPropriedadesFiltrado = listPropriedades
+          .where((element) =>
+              element.idPropriedade == oFracaoProp.propriedades!.idPropriedade)
+          .toList();
+      dropDownControllerPropriedades
+          .setSelecionadoPropriedades(listPropriedadesFiltrado[0]);
+    }
   }
 
   _body() {
@@ -98,178 +128,120 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
           listPropriedade = todasTabelas.propriedades!;
           List<EntidadesModel> listEntidadesValue = [];
           List<PropriedadesModel> listPropriedadeValue = [];
-          //listEntidadesSelecionado.Nome = listEntidades[0].Nome;
-
-         /* if (oFracaoProp != null) {
-            listEntidadesValue = listEntidades
-                .where((entidades) => entidades.Id == oFracaoProp.IDEntidade)
-                .toList();
-            print(listEntidades);
-
-            listPropriedadeValue = listPropriedade
-                .where((propriedade) =>
-                    propriedade.idPropriedade == oFracaoProp.IDPropriedade)
-                .toList();
-            print(listPropriedade);
-          }*/
-
-          return SingleChildScrollView(
-            child: Container(
-              padding: EdgeInsets.only(top: 50),
-              child: Card(
-                child: SafeArea(
-                  child: LayoutBuilder(builder: (context, constraints) {
-                    return Column(
+          return ListView(
+            children: [
+              Card(
+                child: LayoutBuilder(builder: (context, constraints) {
+                  return Container(
+                    padding: EdgeInsets.all(50),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Container(
-                          child: Container(
-                            padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Entidades Gestoras"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listEntidadesSelecionado.Id != null ? listEntidadesSelecionado.Id.toString() : listEntidades[0].Id.toString(),
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listEntidadesSelecionado.Id =
-                                                  int.parse("$newValue");
-
-                                              print(newValue.toString());
-                                            }),
-                                          },
-                                          items: listEntidades.map<DropdownMenuItem<String>>(
-                                                  (value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.Id.toString(), 
-                                              child: Text(value.Nome!),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerEntidades,
+                            builder: (context, child) {
+                              if (dropDownControllerEntidades
+                                  .listEntidades.isEmpty) {
+                                return Center(
+                                    child: const CircularProgressIndicator());
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Entidades"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerEntidades
+                                        .selecionadoEntidades,
+                                    onChanged: (value) =>
+                                        dropDownControllerEntidades
+                                            .setSelecionadoEntidades(value),
+                                    items: dropDownControllerEntidades
+                                        .listEntidades
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Nome!),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
                                   ),
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
+                                ));
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        Container(
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerPropriedades,
+                            builder: (context, child) {
+                              if (dropDownControllerPropriedades
+                                  .listPropriedades.isEmpty) {
+                                return Center(
+                                    child: const CircularProgressIndicator());
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Propriedades"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerPropriedades
+                                        .selecionadoPropriedades,
+                                    onChanged: (value) =>
+                                        dropDownControllerPropriedades
+                                            .setSelecionadoPropriedades(value),
+                                    items: dropDownControllerPropriedades
+                                        .listPropriedades
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Nome!),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
                                   ),
-                                 Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Propriedade"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listPropriedadeSelecionado.idPropriedade != null 
-                                          ? listPropriedadeSelecionado.idPropriedade.toString() 
-                                          : listPropriedade[0].idPropriedade.toString(),
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listPropriedadeSelecionado.idPropriedade = int.parse("$newValue");
-
-                                              print(newValue.toString());
-                                            }),
-                                          },
-                                          items: listPropriedade
-                                              .map<DropdownMenuItem<String>>(
-                                                  (value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.idPropriedade.toString(), 
-                                              child: Text(value.Nome!),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  /*Container(
-                                    width: 300,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1, color: Colors.grey),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: DropdownButtonHideUnderline(
-                                      child: ButtonTheme(
-                                        alignedDropdown: true,
-                                        child: DropdownButton<String>(
-                                          hint: Text("Propriedade"),
-                                          isDense: true,
-                                          isExpanded: true,
-                                          value: listEntidadesSelecionado.Nome,
-                                          onChanged: (newValue) => {
-                                            setState(() {
-                                              listEntidadesSelecionado.Nome =
-                                                  "";
-                                              listEntidadesSelecionado.Nome =
-                                                  newValue;
-                                              print(newValue);
-                                            }),
-                                          },
-                                          items: listEntidades
-                                              .map<DropdownMenuItem<String>>(
-                                                  (value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value.Id.toString(),
-                                              child: Text(value.Nome!),
-                                            );
-                                          }).toList(),
-                                        ),
-                                      ),
-                                    ),
-                                  ),*/
-                                  const SizedBox(
-                                    width: 30,
-                                    height: 20,
-                                  ),
-                                  SizedBox(
-                                    width: 300,
-                                    height: 40,
-                                    child: TextFormField(
-                                      controller: _controllerFracao,
-                                      decoration: const InputDecoration(
-                                        labelText: "Fração da Propriedade",
-                                        border: OutlineInputBorder(),
-                                        isDense: true,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ));
+                              }
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 30,
+                          height: 20,
+                        ),
+                        SizedBox(
+                          width: 300,
+                          height: 40,
+                          child: TextFormField(
+                            controller: _controllerFracao,
+                            decoration: const InputDecoration(
+                              labelText: "Fração da Propriedade",
+                              border: OutlineInputBorder(),
+                              isDense: true,
                             ),
                           ),
                         ),
                         _Buttons()
                       ],
-                    );
-                  }),
-                ),
+                    ),
+                  );
+                }),
               ),
-            ),
+            ],
           );
         }
         return Center(
@@ -305,15 +277,18 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
   }
 
   _onClickSalvar() async {
+     if (_controllerFracao.text == 0 || _controllerFracao.text == null || _controllerFracao.text == "") {
+      _onClickDialog();
+      return;
+    }
     FracaoPropApi fracaoPropApi = FracaoPropApi();
 
     int Fracao = int.parse(_controllerFracao.text);
 // int IDEntidade = int.parse(_controllerIDEntidade.text);
     //int Fracao = int.parse(_controllerFracao.text);
 
-    var listEnti = listEntidades
-        .where(
-            (element) => element.Id == listEntidadesSelecionado.Id)
+    /* var listEnti = listEntidades
+        .where((element) => element.Id == listEntidadesSelecionado.Id)
         .toList();
     var listPropriedades = listPropriedade
         .where((element) =>
@@ -321,12 +296,12 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
         .toList();
 
     int? idEntidades = listEnti[0].Id;
-    int? idPropriedades = listPropriedades[0].idPropriedade;
+    int? idPropriedades = listPropriedades[0].idPropriedade;*/
 
     FracaoPropModel oFracaoProp = FracaoPropModel(
       ID: widget.fracaoPropModel.ID,
-      IDEntidade: idEntidades,
-      IDPropriedade: idPropriedades,
+      IDEntidade: dropDownControllerEntidades.selecionadoEntidades!.Id,
+      IDPropriedade:dropDownControllerPropriedades.selecionadoPropriedades!.idPropriedade,
       Fracao: Fracao,
     );
 
@@ -337,16 +312,22 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
-
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(FracaoPropPage());
+    } else {
+      Fluttertoast.showToast(
+          msg: messageReturn["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 7,
+          fontSize: 16.0);
     }
   }
 
   _onClickAdd() async {
-    if (_controllerFracao.text == "" || _controllerFracao.text == "0") {
+     if (_controllerFracao.text == "0" || _controllerFracao.text == null || _controllerFracao.text == "") {
       _onClickDialog();
       return;
     }
@@ -355,9 +336,8 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
     int Fracao = int.parse(_controllerFracao.text);
 //int IDEntidade = int.parse(_controllerIDEntidade.text);
 
-    var listEnti = listEntidades
-        .where(
-            (element) => element.Id == listEntidadesSelecionado.Id)
+    /*var listEnti = listEntidades
+        .where((element) => element.Id == listEntidadesSelecionado.Id)
         .toList();
     var listPropriedades = listPropriedade
         .where((element) =>
@@ -365,12 +345,12 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
         .toList();
 
     int? idEntidades = listEnti[0].Id;
-    int? idPropriedades = listPropriedades[0].idPropriedade;
+    int? idPropriedades = listPropriedades[0].idPropriedade;*/
 
     FracaoPropModel oFracaoProp = FracaoPropModel(
       ID: widget.fracaoPropModel.ID,
-      IDEntidade: idEntidades,
-      IDPropriedade: idPropriedades,
+      IDEntidade: dropDownControllerEntidades.selecionadoEntidades!.Id,
+      IDPropriedade: dropDownControllerPropriedades.selecionadoPropriedades!.idPropriedade,
       Fracao: Fracao,
     );
 
@@ -381,7 +361,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(FracaoPropPage());
@@ -390,7 +370,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
     }
   }
@@ -399,9 +379,19 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
-            height: 200,
+            height: 60,
             child: Center(
-              child: Text("Preencher campos obrigatorios"),
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Entidades, Propriedades, Fração.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
             ),
           ),
           actions: [

@@ -4,7 +4,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/clientes_grupos/colaborador/colaborador_api.dart';
 import 'package:neo_application/pages/clientes_grupos/colaborador/colaborador_model.dart';
 import 'package:neo_application/pages/clientes_grupos/colaborador/colaborador_page.dart';
-import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_page.dart';
 import 'package:neo_application/pages/login_page/login_page.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
@@ -386,6 +385,36 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
     }
   }
 
+  _onClickDialog() => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          content: Container(
+            height: 60,
+            child: Center(
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Nome, Especialidade.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
+            ),
+          ),
+          actions: [
+            ElevatedButton(
+              onPressed: () => {Navigator.pop(context)},
+              style: ElevatedButton.styleFrom(
+                  primary: Color.fromRGBO(75, 171, 143, 30)),
+              child: Text("Ok"),
+            )
+          ],
+        ),
+      );
+
   /*_onClickAdd() async {
     if (_controllerNome.text == "" || _controllerEspecialidade.text == "") {
       _onClickDialog();
@@ -434,26 +463,6 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
           fontSize: 16.0);
     }
   }*/
-
-  _onClickDialog() => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Container(
-            height: 70,
-            child: Center(
-              child: Text("Preencher campos obrigatorios"),
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => {Navigator.pop(context)},
-              style: ElevatedButton.styleFrom(
-                  primary: Color.fromRGBO(75, 171, 143, 30)),
-              child: Text("Ok"),
-            )
-          ],
-        ),
-      );
 
   // String? _validateNome(String? value) {
   //    if (value!.isEmpty) {

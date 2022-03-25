@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:neo_application/pages/clientes_grupos/adm_grupos/dropDownController_Grupo.dart';
 import 'package:neo_application/pages/clientes_grupos/adm_grupos/grupos_model.dart';
 import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_api.dart';
 import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_model.dart';
 import 'package:neo_application/pages/clientes_grupos/controle_escopo/controle_page.dart';
+import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/dropDownController_Entidades.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
+import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/dropDownController_Fracao.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
+import 'package:neo_application/pages/clientes_grupos/propriedades/dropDownController_Propriedades.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:provider/provider.dart';
@@ -29,6 +33,15 @@ class _ControleEditState extends State<ControleEdit> {
   late ControleModel oControle;
   late String _valueEntrada;
   late String _valueSaida;
+
+  DropDownControllerEntidades dropDownControllerEntidades =
+      DropDownControllerEntidades();
+  DropDownControllerPropriedades dropDownControllerPropriedades =
+      DropDownControllerPropriedades();
+  DropDownControllerGrupos dropDownControllerGrupos =
+      DropDownControllerGrupos();
+  DropDownControllerFracao dropDownControllerFracao =
+      DropDownControllerFracao();
 
   final TextEditingController _controllerID = TextEditingController();
   final TextEditingController _controlleridFracao = TextEditingController();
@@ -86,7 +99,7 @@ class _ControleEditState extends State<ControleEdit> {
     );
   }
 
-  _setText() {
+  _setText() async {
     oControle = widget.controleModel;
     _controllerID.text = oControle.ID.toString();
     _controlleridFracao.text = oControle.idFracao.toString();
@@ -100,7 +113,7 @@ class _ControleEditState extends State<ControleEdit> {
     _controllerAreaAuditada.text = oControle.AreaAuditada.toString();
     _controllerCicloTrabalho.text = oControle.CicloTrabalho.toString();
 
-    if (listPropriedadeSelecionado.idPropriedade == null &&
+    /*if (listPropriedadeSelecionado.idPropriedade == null &&
         oControle.idPropriedade != 0) {
       listPropriedadeSelecionado.idPropriedade = oControle.idPropriedade;
     }
@@ -112,9 +125,52 @@ class _ControleEditState extends State<ControleEdit> {
     }
     if (listGrupoSelecionado.ID == null && oControle.idGrupo != 0) {
       listGrupoSelecionado.ID = oControle.idGrupo;
-    }
+    }*/
     /*listEntidadesSelecionado.Nome =
         valueSelected.Nome != null ? valueSelected.Nome : oGrupo.IDGestor.toString();*/
+
+    await dropDownControllerEntidades.buscarEntidades();
+    var listEntidades = dropDownControllerEntidades.listEntidades;
+
+    if (oControle.entidades != null) {
+      var listEntidadeFiltrado = listEntidades
+          .where((element) => element.Id == oControle.entidades!.Id)
+          .toList();
+      dropDownControllerEntidades
+          .setSelecionadoEntidades(listEntidadeFiltrado[0]);
+    }
+
+    await dropDownControllerPropriedades.buscarPropriedades();
+    var listPropriedades = dropDownControllerPropriedades.listPropriedades;
+
+    if (oControle.propriedades != null) {
+      var listPropriedadesFiltrado = listPropriedades
+          .where((element) =>
+              element.idPropriedade == oControle.propriedades!.idPropriedade)
+          .toList();
+      dropDownControllerPropriedades
+          .setSelecionadoPropriedades(listPropriedadesFiltrado[0]);
+    }
+
+    await dropDownControllerGrupos.buscarGrupos();
+    var listGrupos = dropDownControllerGrupos.listGrupos;
+
+    if (oControle.grupos != null) {
+      var listGruposFiltrado = listGrupos
+          .where((element) => element.idGrupo == oControle.grupos!.idGrupo)
+          .toList();
+      dropDownControllerGrupos.setSelecionadoGrupos(listGruposFiltrado[0]);
+    }
+
+    await dropDownControllerFracao.buscarFracao();
+    var listFracao = dropDownControllerFracao.listFracao;
+
+    if (oControle.fracao != null) {
+      var listFracaoFiltrado = listFracao
+          .where((element) => element.ID == oControle.fracao!.ID)
+          .toList();
+      dropDownControllerFracao.setSelecionadoFracao(listFracaoFiltrado[0]);
+    }
   }
 
   _body() {
@@ -138,44 +194,62 @@ class _ControleEditState extends State<ControleEdit> {
           List<FracaoPropModel> listFracaoValue = [];
           List<GruposModel> listGruposValue = [];
 
+
+           switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              CircularProgressIndicator();
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
           return ListView(
             children: [
               Card(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
+                child: LayoutBuilder(builder: (context, constraints) {
                   return Container(
                     padding: EdgeInsets.all(50),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                         Container(
+                        Container(
                           width: 300,
                           height: 40,
                           decoration: BoxDecoration(
                             border: Border.all(width: 1, color: Colors.grey),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                hint: Text("Fração da Propriedade"),
-                                isDense: true,
-                                isExpanded: true,
-                                value: listFracaoSelecionado.Id != null ? listFracaoSelecionado.Id.toString() : listFracao[0].ID.toString(),
-                                onChanged: (newValue) => {
-                                  setState(() {
-                                    listFracaoSelecionado.Id = int.parse("$newValue");
-                                  }),
-                                },
-                                items: listFracao.map<DropdownMenuItem<String>>((value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value.ID.toString(),
-                                    child: Text(value.Fracao.toString()),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerEntidades,
+                            builder: (context, child) {
+                              if (dropDownControllerEntidades
+                                  .listEntidades.isEmpty) {
+                                return Center(
+                                    child: const CircularProgressIndicator());
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Entidades"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerEntidades
+                                        .selecionadoEntidades,
+                                    onChanged: (value) =>
+                                        dropDownControllerEntidades
+                                            .setSelecionadoEntidades(value),
+                                    items: dropDownControllerEntidades
+                                        .listEntidades
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Nome!),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ));
+                              }
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -186,40 +260,39 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1, color: Colors.grey),
+                            border: Border.all(width: 1, color: Colors.grey),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                hint: Text("Entidades Gestoras"),
-                                isDense: true,
-                                isExpanded: true,
-                                value: listEntidadesSelecionado.Id !=
-                                        null
-                                    ? listEntidadesSelecionado.Id
-                                        .toString()
-                                    : listEntidades[0].Id.toString(),
-                                onChanged: (newValue) => {
-                                  setState(() {
-                                    listEntidadesSelecionado.Id =
-                                        int.parse("$newValue");
-
-                                    print(newValue.toString());
-                                  }),
-                                },
-                                items: listEntidades
-                                    .map<DropdownMenuItem<String>>(
-                                        (value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value.Id.toString(),
-                                    child: Text(value.Nome!),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerPropriedades,
+                            builder: (context, child) {
+                              if (dropDownControllerPropriedades
+                                  .listPropriedades.isEmpty) {
+                                return Center(
+                                    child: const CircularProgressIndicator());
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Propriedades"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerPropriedades
+                                        .selecionadoPropriedades,
+                                    onChanged: (value) =>
+                                        dropDownControllerPropriedades
+                                            .setSelecionadoPropriedades(value),
+                                    items: dropDownControllerPropriedades
+                                        .listPropriedades
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Nome!),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ));
+                              }
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -230,46 +303,39 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           decoration: BoxDecoration(
-                            border: Border.all(
-                                width: 1, color: Colors.grey),
+                            border: Border.all(width: 1, color: Colors.grey),
                             borderRadius: BorderRadius.circular(5),
                           ),
-                          child: DropdownButtonHideUnderline(
-                            child: ButtonTheme(
-                              alignedDropdown: true,
-                              child: DropdownButton<String>(
-                                hint: Text("Propriedade"),
-                                isDense: true,
-                                isExpanded: true,
-                                value: listPropriedadeSelecionado
-                                            .idPropriedade !=
-                                        null
-                                    ? listPropriedadeSelecionado
-                                        .idPropriedade
-                                        .toString()
-                                    : listPropriedade[0]
-                                        .idPropriedade
-                                        .toString(),
-                                onChanged: (newValue) => {
-                                  setState(() {
-                                    listPropriedadeSelecionado
-                                            .idPropriedade =
-                                        int.parse("$newValue");
-
-                                    print(newValue.toString());
-                                  }),
-                                },
-                                items: listPropriedade
-                                    .map<DropdownMenuItem<String>>(
-                                        (value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value.idPropriedade
-                                        .toString(),
-                                    child: Text(value.Nome!),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerGrupos,
+                            builder: (context, child) {
+                              if (dropDownControllerGrupos
+                                  .listGrupos.isEmpty) {
+                                return Center(
+                                    child: const CircularProgressIndicator());
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Grupos"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerGrupos
+                                        .selecionadoGrupos,
+                                    onChanged: (value) =>
+                                        dropDownControllerGrupos
+                                            .setSelecionadoGrupos(value),
+                                    items: dropDownControllerGrupos
+                                        .listGrupos
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Nome!),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ));
+                              }
+                            },
                           ),
                         ),
                         const SizedBox(
@@ -277,35 +343,44 @@ class _ControleEditState extends State<ControleEdit> {
                           height: 20,
                         ),
                         Container(
-                            width: 300,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                alignedDropdown: true,
-                                child: DropdownButton<String>(
-                                  hint: Text("Grupos"),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  value: listGrupoSelecionado.ID != null ? listGrupoSelecionado.ID.toString() : listGrupos[0].idGrupo.toString(),
-                                  onChanged: (newValue) => {
-                                    setState(() {
-                                      listGrupoSelecionado.ID = int.parse("$newValue");
-                                    }),
-                                  },
-                                  items: listGrupos.map<DropdownMenuItem<String>>((value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value.idGrupo.toString(),
-                                      child: Text(value.Nome!),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
+                          width: 300,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            border: Border.all(width: 1, color: Colors.grey),
+                            borderRadius: BorderRadius.circular(5),
                           ),
+                          child: AnimatedBuilder(
+                            animation: dropDownControllerFracao,
+                            builder: (context, child) {
+                              if (dropDownControllerFracao
+                                  .listFracao.isEmpty) {
+                                return Center(
+                                    child: const CircularProgressIndicator());
+                              } else {
+                                return DropdownButtonHideUnderline(
+                                    child: ButtonTheme(
+                                  child: DropdownButton(
+                                    hint: Text("Fração"),
+                                    isDense: true,
+                                    isExpanded: true,
+                                    value: dropDownControllerFracao
+                                        .selecionadoFracao,
+                                    onChanged: (value) =>
+                                        dropDownControllerFracao
+                                            .setSelecionadoFracao(value),
+                                    items: dropDownControllerFracao
+                                        .listFracao
+                                        .map((tipos) => DropdownMenuItem(
+                                              child: Text(tipos.Fracao.toString()),
+                                              value: tipos,
+                                            ))
+                                        .toList(),
+                                  ),
+                                ));
+                              }
+                            },
+                          ),
+                        ),
                         const SizedBox(
                           width: 30,
                           height: 20,
@@ -314,7 +389,7 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           child: TextFormField(
-                           /* validator: (value) {
+                            /* validator: (value) {
                               if (value == "" || value == 0) {
                                 return "Campo obrigatorio";
                               }
@@ -342,11 +417,17 @@ class _ControleEditState extends State<ControleEdit> {
                                     lastDate: DateTime(2100),
                                   );
                                   if (data != null)
-                                    setState(() => _valueEntrada = data.toString());
+                                    setState(
+                                        () => _valueEntrada = data.toString());
 
-                                  _controllerDataEntrada.text =  _valueEntrada.substring(8, 10) + '/' + _valueEntrada.substring(5, 7) +  '/' + _valueEntrada.substring(0, 4);
-                            
-                                  print( _controllerDataEntrada.text);
+                                  _controllerDataEntrada.text =
+                                      _valueEntrada.substring(8, 10) +
+                                          '/' +
+                                          _valueEntrada.substring(5, 7) +
+                                          '/' +
+                                          _valueEntrada.substring(0, 4);
+
+                                  print(_controllerDataEntrada.text);
                                 },
                               ),
                             ),
@@ -388,17 +469,23 @@ class _ControleEditState extends State<ControleEdit> {
                                     lastDate: DateTime(2100),
                                   );
                                   if (data != null)
-                                    setState(() => _valueSaida = data.toString());
+                                    setState(
+                                        () => _valueSaida = data.toString());
 
-                                  _controllerDataSaida.text =  _valueSaida.substring(8, 10) + '/' + _valueSaida.substring(5, 7) +  '/' + _valueSaida.substring(0, 4);
-                            
-                                  print( _controllerDataSaida.text);
+                                  _controllerDataSaida.text =
+                                      _valueSaida.substring(8, 10) +
+                                          '/' +
+                                          _valueSaida.substring(5, 7) +
+                                          '/' +
+                                          _valueSaida.substring(0, 4);
+
+                                  print(_controllerDataSaida.text);
                                 },
                               ),
                             ),
                           ),
                         ),
-                         const SizedBox(
+                        const SizedBox(
                           width: 30,
                           height: 20,
                         ),
@@ -414,7 +501,7 @@ class _ControleEditState extends State<ControleEdit> {
                             ),
                           ),
                         ),
-                         const SizedBox(
+                        const SizedBox(
                           width: 30,
                           height: 20,
                         ),
@@ -422,12 +509,12 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+.?\d{0,2}'))
+                            ],
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
                             controller: _controllerAreaEscopo,
                             decoration: const InputDecoration(
                               labelText: "Área Escopo",
@@ -436,7 +523,7 @@ class _ControleEditState extends State<ControleEdit> {
                             ),
                           ),
                         ),
-                         const SizedBox(
+                        const SizedBox(
                           width: 30,
                           height: 20,
                         ),
@@ -444,12 +531,12 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.allow(
+                                  RegExp(r'^\d+.?\d{0,2}'))
+                            ],
+                            keyboardType:
+                                TextInputType.numberWithOptions(decimal: true),
                             controller: _controllerAreaAuditada,
                             decoration: const InputDecoration(
                               labelText: "Área Auditada",
@@ -458,7 +545,7 @@ class _ControleEditState extends State<ControleEdit> {
                             ),
                           ),
                         ),
-                         const SizedBox(
+                        const SizedBox(
                           width: 30,
                           height: 20,
                         ),
@@ -486,6 +573,7 @@ class _ControleEditState extends State<ControleEdit> {
               ),
             ],
           );
+           }
         }
         return Center(
           child: CircularProgressIndicator(),
@@ -525,44 +613,63 @@ class _ControleEditState extends State<ControleEdit> {
       return;
     }
 
-    var listFrac = listFracao.where((element) => element.ID == listFracaoSelecionado.Id).toList();
-    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id).toList();
-    var listProp = listPropriedade.where((element) =>element.idPropriedade == listPropriedadeSelecionado.idPropriedade).toList();
-    var listGrup = listGrupos.where((element) => element.idGrupo == listGrupoSelecionado.ID).toList();
+    /*var listFrac = listFracao
+        .where((element) => element.ID == listFracaoSelecionado.Id)
+        .toList();
+    var listEnti = listEntidades
+        .where((element) => element.Id == listEntidadesSelecionado.Id)
+        .toList();
+    var listProp = listPropriedade
+        .where((element) =>
+            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
+        .toList();
+    var listGrup = listGrupos
+        .where((element) => element.idGrupo == listGrupoSelecionado.ID)
+        .toList();
 
     int? idFracao = listFrac[0].ID;
     int? idEntidades = listEnti[0].Id;
     int? idPropriedades = listProp[0].idPropriedade;
-    int? idGrupos = listGrup[0].idGrupo;
+    int? idGrupos = listGrup[0].idGrupo;*/
 
-    var DataEntrada =_controllerDataEntrada.text.substring(3, 5) + '/' + _controllerDataEntrada.text.substring(0, 2) +  '/' + _controllerDataEntrada.text.substring(6, 10);
-    var DataSaida =_controllerDataSaida.text.substring(3, 5) + '/' + _controllerDataSaida.text.substring(0, 2) +  '/' + _controllerDataSaida.text.substring(6, 10);
+    var DataEntrada = _controllerDataEntrada.text.substring(3, 5) +
+        '/' +
+        _controllerDataEntrada.text.substring(0, 2) +
+        '/' +
+        _controllerDataEntrada.text.substring(6, 10);
+    var DataSaida = _controllerDataSaida.text.substring(3, 5) +
+        '/' +
+        _controllerDataSaida.text.substring(0, 2) +
+        '/' +
+        _controllerDataSaida.text.substring(6, 10);
 
     int CicloTrabalho = int.parse(_controllerCicloTrabalho.text);
-    
+
     double AreaEscopo;
     double AreaAuditada;
 
     if (_controllerAreaEscopo.text.isEmpty) {
       AreaEscopo = 0;
     } else {
-      AreaEscopo = double.parse(_controllerAreaEscopo.text.replaceAll(",", "."));
+      AreaEscopo =
+          double.parse(_controllerAreaEscopo.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaAuditada.text.isEmpty) {
       AreaAuditada = 0;
     } else {
-      AreaAuditada = double.parse(_controllerAreaAuditada.text.replaceAll(",", "."));
+      AreaAuditada =
+          double.parse(_controllerAreaAuditada.text.replaceAll(",", "."));
     }
 
     ControleApi controleApi = ControleApi();
 
     ControleModel oControle = ControleModel(
       ID: widget.controleModel.ID,
-      idFracao: idFracao,
-      idEntidade: idEntidades,
-      idPropriedade: idPropriedades,
-      idGrupo: idGrupos,
+      idFracao: dropDownControllerFracao.selecionadoFracao!.ID,
+      idEntidade: dropDownControllerEntidades.selecionadoEntidades!.Id,
+      idPropriedade:dropDownControllerPropriedades.selecionadoPropriedades!.idPropriedade,
+      idGrupo: dropDownControllerGrupos.selecionadoGrupos!.idGrupo,
       DataEntrada: DataEntrada.toString(),
       DataSaida: DataSaida.toString(),
       RequerenteSaida: _controllerRequerenteSaida.text.toString(),
@@ -596,19 +703,36 @@ class _ControleEditState extends State<ControleEdit> {
       _onClickDialog();
       return;
     }*/
-    
-    var listFrac = listFracao.where((element) => element.ID == listFracaoSelecionado.Id).toList();
-    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id) .toList();
-    var listProp = listPropriedade.where((element) =>element.idPropriedade == listPropriedadeSelecionado.idPropriedade).toList();
-    var listGrup = listGrupos.where((element) => element.idGrupo == listGrupoSelecionado.ID).toList();
+
+    /*var listFrac = listFracao
+        .where((element) => element.ID == listFracaoSelecionado.Id)
+        .toList();
+    var listEnti = listEntidades
+        .where((element) => element.Id == listEntidadesSelecionado.Id)
+        .toList();
+    var listProp = listPropriedade
+        .where((element) =>
+            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
+        .toList();
+    var listGrup = listGrupos
+        .where((element) => element.idGrupo == listGrupoSelecionado.ID)
+        .toList();
 
     int? idFracao = listFrac[0].ID;
     int? idEntidades = listEnti[0].Id;
     int? idPropriedades = listProp[0].idPropriedade;
-    int? idGrupos = listGrup[0].idGrupo;
+    int? idGrupos = listGrup[0].idGrupo;*/
 
-    var DataEntrada =_controllerDataEntrada.text.substring(3, 5) + '/' + _controllerDataEntrada.text.substring(0, 2) +  '/' + _controllerDataEntrada.text.substring(6, 10);
-    var DataSaida =_controllerDataSaida.text.substring(3, 5) + '/' + _controllerDataSaida.text.substring(0, 2) +  '/' + _controllerDataSaida.text.substring(6, 10);
+    var DataEntrada = _controllerDataEntrada.text.substring(3, 5) +
+        '/' +
+        _controllerDataEntrada.text.substring(0, 2) +
+        '/' +
+        _controllerDataEntrada.text.substring(6, 10);
+    var DataSaida = _controllerDataSaida.text.substring(3, 5) +
+        '/' +
+        _controllerDataSaida.text.substring(0, 2) +
+        '/' +
+        _controllerDataSaida.text.substring(6, 10);
 
     double AreaEscopo = double.parse(_controllerAreaEscopo.text);
     double AreaAuditada = double.parse(_controllerAreaAuditada.text);
@@ -618,10 +742,10 @@ class _ControleEditState extends State<ControleEdit> {
 
     ControleModel oControle = ControleModel(
       ID: widget.controleModel.ID,
-      idFracao: idFracao,
-      idEntidade: idEntidades,
-      idPropriedade: idPropriedades,
-      idGrupo: idGrupos,
+      idFracao: dropDownControllerFracao.selecionadoFracao!.ID,
+      idEntidade: dropDownControllerEntidades.selecionadoEntidades!.Id,
+      idPropriedade:dropDownControllerPropriedades.selecionadoPropriedades!.idPropriedade,
+      idGrupo: dropDownControllerGrupos.selecionadoGrupos!.idGrupo,
       DataEntrada: DataEntrada.toString(),
       DataSaida: DataSaida.toString(),
       RequerenteSaida: _controllerRequerenteSaida.text.toString(),
@@ -657,8 +781,17 @@ class _ControleEditState extends State<ControleEdit> {
           content: Container(
             height: 60,
             child: Center(
-              child: Text(
-                  "Preencha os campos obrigatorios. \n\n Data de entrada, Data de saida.."),
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Entidades, Propriedades, Grupos, Fração, Data Entrada e Data Saida.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
             ),
           ),
           actions: [

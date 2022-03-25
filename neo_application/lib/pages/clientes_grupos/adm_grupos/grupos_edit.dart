@@ -66,14 +66,20 @@ class _GruposEditState extends State<GruposEdit> {
     );
   }
 
-  _setText() {
+  _setText() async {
     oGrupo = widget.grupoModel;
     _controllerIdGrupo.text = oGrupo.idGrupo.toString();
     _controllerNome.text = oGrupo.Nome ?? "";
     _controllerDataFormacao.text = oGrupo.DataFormacao.toString();
     _controllerIDGestor.text = oGrupo.IDGestor.toString();
     
-    dropDownControllerEntidades.buscarEntidades();
+    await dropDownControllerEntidades.buscarEntidades();
+    var listEntidades = dropDownControllerEntidades.listEntidades;
+
+    if(oGrupo.gestor != null) {
+     var listEntidadeFiltrado = listEntidades.where((element) => element.Id == oGrupo.gestor!.Id).toList();
+      dropDownControllerEntidades.setSelecionadoEntidades(listEntidadeFiltrado[0]);
+     }
   }
 
   _body() {
@@ -169,7 +175,7 @@ class _GruposEditState extends State<GruposEdit> {
                             animation: dropDownControllerEntidades,
                             builder: (context, child) {
                               if (dropDownControllerEntidades.listEntidades.isEmpty) {
-                                return const CircularProgressIndicator();
+                                return Center(child: const CircularProgressIndicator());
                               } else {
                                 return DropdownButtonHideUnderline(
                                     child: ButtonTheme(
@@ -178,10 +184,8 @@ class _GruposEditState extends State<GruposEdit> {
                                     isDense: true,
                                     isExpanded: true,
                                     value: dropDownControllerEntidades.selecionadoEntidades,
-                                    onChanged: (value) =>
-                                        dropDownControllerEntidades.setSelecionadoEntidades(value),
-                                    items: dropDownControllerEntidades.listEntidades
-                                        .map((tipos) => DropdownMenuItem(
+                                    onChanged: (value) => dropDownControllerEntidades.setSelecionadoEntidades(value),
+                                    items: dropDownControllerEntidades.listEntidades.map((tipos) => DropdownMenuItem(
                                               child: Text(tipos.Nome!),
                                               value: tipos,
                                             ))
@@ -240,17 +244,13 @@ class _GruposEditState extends State<GruposEdit> {
     }
     GruposApi gruposApi = GruposApi();
 
-    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id).toList();
-
-    int? idEntidades = listEnti[0].Id;
-
     var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDataFormacao.text.substring(0, 2) +  '/' + _controllerDataFormacao.text.substring(6, 10);
 
     GruposModel oGrupo = GruposModel(
       idGrupo: widget.grupoModel.idGrupo,
       Nome: _controllerNome.text,
       DataFormacao: dataForm,
-      IDGestor: idEntidades,
+      IDGestor:  dropDownControllerEntidades.selecionadoEntidades!.Id,
     );
 
     var messageReturn = await gruposApi.updateGrupo(oGrupo);
@@ -281,16 +281,12 @@ class _GruposEditState extends State<GruposEdit> {
     }
     GruposApi gruposApi = GruposApi();
 
-    var listEnti = listEntidades.where((element) => element.Id == listEntidadesSelecionado.Id) .toList();
-
-    int? idEntidades = listEnti[0].Id;
-
     var dataForm =_controllerDataFormacao.text.substring(3, 5) + '/' + _controllerDataFormacao.text.substring(0, 2) +  '/' + _controllerDataFormacao.text.substring(6, 10);
 
     GruposModel oGrupo = GruposModel(
       Nome: _controllerNome.text,
       DataFormacao: dataForm,
-      IDGestor: idEntidades,
+      IDGestor: dropDownControllerEntidades.selecionadoEntidades!.Id ?? 0,
     );
 
     var messageReturn = await gruposApi.createGrupo(oGrupo);
@@ -300,7 +296,7 @@ class _GruposEditState extends State<GruposEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(GruposPage());
@@ -309,7 +305,7 @@ class _GruposEditState extends State<GruposEdit> {
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
     }
   }
@@ -320,8 +316,17 @@ class _GruposEditState extends State<GruposEdit> {
           content: Container(
             height: 60,
             child: Center(
-              child: Text(
-                  "Preencha os campos obrigatorios. \n\n      Nome, Data da Formatação."),
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Nome, Data da Formatação, Entidade.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
             ),
           ),
           actions: [

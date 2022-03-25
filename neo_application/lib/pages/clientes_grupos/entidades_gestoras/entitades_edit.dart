@@ -245,14 +245,23 @@ class _EntidadesEditState extends State<EntidadesEdit> {
     }
   }
 
-  _onClickDialog() => showDialog(
+   _onClickDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
             height: 60,
             child: Center(
-              child: Text(
-                  "Preencha os campos obrigatorios. \n\n               Nome, Contato."),
+              child: ListTile(
+              leading: Icon(Icons.warning,
+              color: Colors.orange,
+              size: 30,),
+              title: Text('Preencha os campos obrigatorios.',
+             style: TextStyle(fontSize: 20),
+             ),
+              subtitle: Text('Nome, Contato.',
+              style: TextStyle(fontSize: 18),
+              ),
+            ),
             ),
           ),
           actions: [

@@ -28,7 +28,7 @@ class _ControlePageState extends State<ControlePage> {
       body: _body(),
       appBar: AppBar(
         title: Text("Lista de Controle de Escopos"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),

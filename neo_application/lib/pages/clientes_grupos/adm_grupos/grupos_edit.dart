@@ -59,7 +59,7 @@ class _GruposEditState extends State<GruposEdit> {
         title: Text(widget.tipoAcao == "editar"
             ? "Editar Grupos (${widget.grupoModel.idGrupo})"
             : "Criar Novo Grupos"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),

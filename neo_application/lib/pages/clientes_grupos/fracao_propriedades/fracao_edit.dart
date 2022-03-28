@@ -70,7 +70,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
         title: Text(widget.tipoAcao == "editar"
             ? "Editar Fração (${widget.fracaoPropModel.ID})"
             : "Criar Nova Fração"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),

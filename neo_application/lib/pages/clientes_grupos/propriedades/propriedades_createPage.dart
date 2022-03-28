@@ -72,7 +72,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
   final TextEditingController _controllerLocalizacao = TextEditingController();
 
   late AppModel appRepository;
-  double constWidth = 300;
+  double constWidth = 600;
   String? listUfSelecionado;
   String? valueSelected;
 
@@ -84,7 +84,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
       body: _body(),
       appBar: AppBar(
         title: Text("Criar Nova Propriedade"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
@@ -109,268 +109,44 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           return ListView(
             children: [
               Card(
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return Container(
-                      padding: EdgeInsets.all(50),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerNome,
-                              decoration: const InputDecoration(
-                                labelText: "Nome",
-                                border: OutlineInputBorder(),
-                                isDense: true,
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      if (constraints.maxWidth < 786) {
+                        return Container(
+                          padding: EdgeInsets.all(25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              _formEsq(),
+                              _formDir(),
+                              _Buttons(),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Container(
+                          padding: EdgeInsets.all(25),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Expanded(child: _formEsq()),
+                                  const SizedBox(
+                                    width:20,
+                                    height: 20,
+                                  ),
+                                  Expanded(child: _formDir()),
+                                ],
                               ),
-                            ),
+                              _Buttons()
+                            ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerCNPJ,
-                              decoration: const InputDecoration(
-                                labelText: "CNPJ",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerXCoord,
-                              decoration: const InputDecoration(
-                                labelText: "XCoord",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerYCoord,
-                              decoration: const InputDecoration(
-                                labelText: "YCoord",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaPropriedade,
-                              decoration: const InputDecoration(
-                                labelText: "Área da Propriedade",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerAreaTotal,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              decoration: const InputDecoration(
-                                labelText: "Área Total",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaPlantada,
-                              decoration: const InputDecoration(
-                                labelText: "Área Plantada",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaEstimaConser,
-                              decoration: const InputDecoration(
-                                labelText: "Área Estimada de Conservação",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaInfraestrutura,
-                              decoration: const InputDecoration(
-                                labelText: "Área de Infraestrutura",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaOutro,
-                              decoration: const InputDecoration(
-                                labelText: " Outras Áreas",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerLocalizacao,
-                              decoration: const InputDecoration(
-                                labelText: "Localização",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            width: constWidth,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                alignedDropdown: true,
-                                child: DropdownButton<String>(
-                                  hint: Text("UF"),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  value: listUfSelecionado,
-                                  onChanged: (newValue) => {
-                                    setState(() {
-                                      valueSelected = newValue;
-                                      listUfSelecionado = valueSelected;
-                                    })
-                                  },
-                                  items: listUfs.map((String value) {
-                                    return DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                            height: 20,
-                          ),
-                           _Buttons(),
-                        ],
-                      ),
-                    );
-                  },
+                        );
+                      }
+                    },
+                  ),
                 ),
-              ),
             ],
           );
         }
@@ -378,6 +154,279 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           child: CircularProgressIndicator(),
         );
       },
+    );
+  }
+
+   _formEsq(){
+   return Column(
+            children: [
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  controller: _controllerNome,
+                  decoration: const InputDecoration(
+                    labelText: "Nome",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  controller: _controllerCNPJ,
+                  decoration: const InputDecoration(
+                    labelText: "CNPJ",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  controller: _controllerXCoord,
+                  decoration: const InputDecoration(
+                    labelText: "XCoord",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  controller: _controllerYCoord,
+                  decoration: const InputDecoration(
+                    labelText: "YCoord",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  controller: _controllerAreaPropriedade,
+                  decoration: const InputDecoration(
+                    labelText: "Área da Propriedade",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  controller: _controllerAreaTotal,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  decoration: const InputDecoration(
+                    labelText: "Área Total",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          );
+  }
+
+  _formDir(){
+    List<String> listUfs = Uf().listUfs();
+    return Column(
+      children: [
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaPlantada,
+            decoration: const InputDecoration(
+              labelText: "Área Plantada",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaEstimaConser,
+            decoration: const InputDecoration(
+              labelText:
+                  "Área Estimada de Conservação",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaInfraestrutura,
+            decoration: const InputDecoration(
+              labelText: "Área de Infraestrutura",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaOutro,
+            decoration: const InputDecoration(
+              labelText: " Outras Áreas",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            controller: _controllerLocalizacao,
+            decoration: const InputDecoration(
+              labelText: "Localização",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          width: constWidth,
+          height: 30,
+          decoration: BoxDecoration(
+            border: Border.all(
+                width: 1, color: Colors.grey),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+              alignedDropdown: true,
+              child: DropdownButton<String>(
+                hint: Text("UF"),
+                isDense: true,
+                isExpanded: true,
+                value: listUfSelecionado,
+                onChanged: (newValue) => {
+                  setState(() {
+                    valueSelected = newValue;
+                    listUfSelecionado = valueSelected;
+                  })
+                },
+                items: listUfs.map((String value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 30,
+          height: 20,
+        ),
+      ],
     );
   }
 

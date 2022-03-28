@@ -31,7 +31,7 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
       body: _body(),
       appBar: AppBar(
         title: Text("Lista de Fração de Propriedade"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
@@ -127,12 +127,19 @@ class _FracaoPropPageState extends State<FracaoPropPage> {
           msg: resposta["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
+          timeInSecForIosWeb: 7,
           fontSize: 16.0);
-      Navigator.pop(context);
-      setState(() {
-         FracaoPropApi().getListFracaoProp();
-      });
+          Navigator.pop(context);
+          setState(() {
+            FracaoPropApi().getListFracaoProp();
+          });
+    } else {
+       Fluttertoast.showToast(
+          msg: resposta["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 7,
+          fontSize: 16.0);
     }
   }
 

@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/tipoManejo/dropDownController.dart';
-import 'package:neo_application/pages/home_page/home_page.dart';
- 
 import 'package:neo_application/pages/login_page/login_page.dart';
-
 import 'package:neo_application/pages/provider/app_provider.dart';
 import 'package:neo_application/pages/provider/drawer_provider.dart';
 import 'package:neo_application/pages/utils/list_uf.dart';
 import 'package:provider/provider.dart';
-
 import 'pages/clientes_grupos/propriedades/propriedades_busy.dart';
 
 void main() {

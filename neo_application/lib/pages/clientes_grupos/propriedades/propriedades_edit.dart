@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:neo_application/main.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propFloresta/propFloresta_Model.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propManejo/propManejo_api.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propManejo/propManejo_model.dart';
@@ -35,7 +36,8 @@ class PropriedadesEdit extends StatefulWidget {
   State<PropriedadesEdit> createState() => _PropriedadesEditState();
 }
 
-class _PropriedadesEditState extends State<PropriedadesEdit> {
+class _PropriedadesEditState extends State<PropriedadesEdit>
+    with TickerProviderStateMixin {
   Size get size => MediaQuery.of(context).size;
 
   var listIndice;
@@ -46,15 +48,13 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     {"ID": 3, "Descricao": "tipo manejo 2"},
     {"ID": 4, "Descricao": "tipo manejo 3"}
   ];
-  
+
   List<PropManejoModel> listPropManejo = [];
   List<PropriedadesModel> listProp = [];
 
   DropDownController dropDownController = DropDownController();
-
   DropDownControllerFloresta dropDownControllerFloresta =
       DropDownControllerFloresta();
-
   DropDownControllerProduto dropDownControllerProduto =
       DropDownControllerProduto();
 
@@ -80,7 +80,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
   final TextEditingController _controllerLocalizacao = TextEditingController();
 
   late AppModel appRepository;
-  double constWidth = 300;
+  double constWidth = 600;
   late PropriedadesModel oPropModel;
   String? listUfSelecionado;
   String? valueSelected;
@@ -96,7 +96,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
         title: Text(widget.tipoAcao == "editar"
             ? "Editar Propriedade (${widget.propModel.idPropriedade})"
             : "Criar Nova Propriedade"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
@@ -144,6 +144,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
             _setText();
           }
 
+          TabController _tabController = TabController(length: 3, vsync: this);
+
           List<String> listUfs = Uf().listUfs();
 
           switch (snapshot.connectionState) {
@@ -160,467 +162,285 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
                   Card(
                     child: LayoutBuilder(
                       builder: (context, constraints) {
-                        return Container(
-                          padding: EdgeInsets.all(50),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                               SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerNome,
-                              decoration: const InputDecoration(
-                                labelText: "Nome",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerCNPJ,
-                              decoration: const InputDecoration(
-                                labelText: "CNPJ",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
+                        if (constraints.maxWidth < 786) {
+                          return Container(
+                            padding: EdgeInsets.all(25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _formEsq(),
+                                _formDir(),
+                                _Buttons(),
                               ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerXCoord,
-                              decoration: const InputDecoration(
-                                labelText: "XCoord",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerYCoord,
-                              decoration: const InputDecoration(
-                                labelText: "YCoord",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaPropriedade,
-                              decoration: const InputDecoration(
-                                labelText: "Área da Propriedade",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerAreaTotal,
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              decoration: const InputDecoration(
-                                labelText: "Área Total",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaPlantada,
-                              decoration: const InputDecoration(
-                                labelText: "Área Plantada",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaEstimaConser,
-                              decoration: const InputDecoration(
-                                labelText: "Área Estimada de Conservação",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaInfraestrutura,
-                              decoration: const InputDecoration(
-                                labelText: "Área de Infraestrutura",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              inputFormatters: <TextInputFormatter>[
-                                FilteringTextInputFormatter.allow(
-                                    RegExp(r'^\d+.?\d{0,2}'))
-                              ],
-                              keyboardType: TextInputType.numberWithOptions(
-                                  decimal: true),
-                              controller: _controllerAreaOutro,
-                              decoration: const InputDecoration(
-                                labelText: " Outras Áreas",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: constWidth,
-                            height: 30,
-                            child: TextFormField(
-                              controller: _controllerLocalizacao,
-                              decoration: const InputDecoration(
-                                labelText: "Localização",
-                                border: OutlineInputBorder(),
-                                isDense: true,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            width: constWidth,
-                            height: 30,
-                            decoration: BoxDecoration(
-                              border: Border.all(width: 1, color: Colors.grey),
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: ButtonTheme(
-                                alignedDropdown: true,
-                                child: DropdownButton<String>(
-                                  hint: Text("UF"),
-                                  isDense: true,
-                                  isExpanded: true,
-                                  value: listUfSelecionado,
-                                  onChanged: (newValue) => {
-                                    setState(() {
-                                      valueSelected = newValue;
-                                      listUfSelecionado = valueSelected;
-                                    })
-                                  },
-                                  items: listUfs.map((String value) {
-                                    return DropdownMenuItem(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
+                          );
+                        } else {
+                          return Container(
+                            padding: EdgeInsets.all(25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(child: _formEsq()),
+                                    const SizedBox(
+                                      width:20,
+                                      height: 20,
+                                    ),
+                                    Expanded(child: _formDir()),
+                                  ],
                                 ),
-                              ),
+                                _Buttons()
+                              ],
                             ),
-                          ),
-                          const SizedBox(
-                            width: 30,
-                            height: 20,
-                          ),
-                              _Buttons(),
-                            ],
-                          ),
-                        );
+                          );
+                        }
                       },
                     ),
                   ),
-                  // Card da Lisa de Manejo
                   Card(
-                    child: Container(
-                      padding: EdgeInsets.all(50),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Color.fromRGBO(68, 76, 87, 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text("Tipos de Manejo",
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                    )),
-                              ],
+                    child: Column(
+                      children: [
+                        Container(
+                          child: TabBar(
+                            controller: _tabController,
+                            labelColor: Colors.white,
+                            unselectedLabelColor: Color.fromRGBO(68, 76, 87, 2),
+                            indicatorColor: Color.fromRGBO(68, 76, 87, 2),
+                            indicator: BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(15),
+                                topRight: Radius.circular(15),
+                              ),
+                              color: Color.fromRGBO(78, 204, 196,
+                                  2), //Color.fromRGBO(68, 76, 87, 2),
                             ),
+                            tabs: [
+                              Tab(text: "Tipos de Manejo"),
+                              Tab(text: "Tipos de Floresta"),
+                              Tab(text: "Produtos"),
+                            ],
                           ),
-                          Row(
+                        ),
+                        Container(
+                          width: double.maxFinite,
+                          height: 400,
+                          child: TabBarView(
+                            controller: _tabController,
                             children: [
-                              Expanded(
-                                child: Container(
-                                  height: 200,
-                                  child: ListView.builder(
-                                    itemCount: snapshot
-                                        .data[widget.indice].tipoManejo.length,
-                                    itemBuilder: (context, index) {
-                                      return Card(
-                                        child: ListTile(
-                                          title: Text(
-                                              "${Map.from(listProp[listIndice].tipoManejo[index])['Descricao']}"),
-                                          trailing: Row(
-                                            mainAxisSize: MainAxisSize.min,
+                              //Manejo
+                              ListView(
+                                children: [
+                                  Card(
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Row(
                                             children: [
-                                              IconButton(
-                                                onPressed: () async {
-                                                  await _dialogDeleteManejo(
-                                                      index, context);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.delete,
-                                                  color: Color.fromARGB(
-                                                      246, 34, 37, 44),
+                                              Expanded(
+                                                child: Container(
+                                                  height: 300,
+                                                  child: ListView.builder(
+                                                    itemCount: snapshot
+                                                        .data[widget.indice]
+                                                        .tipoManejo
+                                                        .length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Card(
+                                                        child: ListTile(
+                                                          title: Text(
+                                                              "${Map.from(listProp[listIndice].tipoManejo[index])['Descricao']}"),
+                                                          trailing: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await _dialogDeleteManejo(
+                                                                      index,
+                                                                      context);
+                                                                },
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons.delete,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          246,
+                                                                          34,
+                                                                          37,
+                                                                          44),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              _ButtonsManejo(),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  //Floresta
-                  Card(
-                    child: Container(
-                      padding: EdgeInsets.all(50),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Color.fromRGBO(68, 76, 87, 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text("Tipos de Floresta",
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                    )),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 200,
-                                  child: ListView.builder(
-                                    itemCount: snapshot.data[widget.indice]
-                                        .tipoFloresta.length,
-                                    itemBuilder: (context, index) {
-                                      return Card(
-                                        child: ListTile(
-                                          title: Text(
-                                              "${Map.from(listProp[listIndice].tipoFloresta[index])['Descricao']}"),
-                                          trailing: Row(
-                                            mainAxisSize: MainAxisSize.min,
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            mainAxisSize: MainAxisSize.max,
                                             children: [
-                                              IconButton(
-                                                onPressed: () async {
-                                                  await _dialogDeleteFloresta(
-                                                      index, context);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.delete,
-                                                  color: Color.fromARGB(
-                                                      246, 34, 37, 44),
+                                              _ButtonsManejo(),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              //Floresta
+                              ListView(
+                                children: [
+                                  Card(
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  height: 300,
+                                                  child: ListView.builder(
+                                                    itemCount: snapshot
+                                                        .data[widget.indice]
+                                                        .tipoFloresta
+                                                        .length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Card(
+                                                        child: ListTile(
+                                                          title: Text(
+                                                              "${Map.from(listProp[listIndice].tipoFloresta[index])['Descricao']}"),
+                                                          trailing: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await _dialogDeleteFloresta(
+                                                                      index,
+                                                                      context);
+                                                                },
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons.delete,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          246,
+                                                                          34,
+                                                                          37,
+                                                                          44),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      );
-                                    },
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [_ButtonsFloresta()],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [_ButtonsFloresta()],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  //Produto
-                  Card(
-                    child: Container(
-                      padding: EdgeInsets.all(50),
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10),
-                            color: Color.fromRGBO(68, 76, 87, 2),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.max,
-                              children: [
-                                Text("Produtos",
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Colors.white,
-                                    )),
-                              ],
-                            ),
-                          ),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Container(
-                                  height: 200,
-                                  child: ListView.builder(
-                                    itemCount: snapshot
-                                        .data[widget.indice].produtos.length,
-                                    itemBuilder: (context, index) {
-                                      return Card(
-                                        child: ListTile(
-                                          title: Text(
-                                              "${Map.from(listProp[listIndice].produtos[index])['Descricao']}"),
-                                          trailing: Row(
-                                            mainAxisSize: MainAxisSize.min,
+                              //Produto
+                              ListView(
+                                children: [
+                                  Card(
+                                    child: Container(
+                                      padding: EdgeInsets.all(10),
+                                      child: Column(
+                                        children: [
+                                          Row(
                                             children: [
-                                              IconButton(
-                                                onPressed: () async {
-                                                  await _dialogDeleteProduto(
-                                                      index, context);
-                                                },
-                                                icon: const Icon(
-                                                  Icons.delete,
-                                                  color: Color.fromARGB(
-                                                      246, 34, 37, 44),
+                                              Expanded(
+                                                child: Container(
+                                                  height: 300,
+                                                  child: ListView.builder(
+                                                    itemCount: snapshot
+                                                        .data[widget.indice]
+                                                        .produtos
+                                                        .length,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      return Card(
+                                                        child: ListTile(
+                                                          title: Text(
+                                                              "${Map.from(listProp[listIndice].produtos[index])['Descricao']}"),
+                                                          trailing: Row(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              IconButton(
+                                                                onPressed:
+                                                                    () async {
+                                                                  await _dialogDeleteProduto(
+                                                                      index,
+                                                                      context);
+                                                                },
+                                                                icon:
+                                                                    const Icon(
+                                                                  Icons.delete,
+                                                                  color: Color
+                                                                      .fromARGB(
+                                                                          246,
+                                                                          34,
+                                                                          37,
+                                                                          44),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                             ],
                                           ),
-                                        ),
-                                      );
-                                    },
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.end,
+                                            mainAxisSize: MainAxisSize.max,
+                                            children: [_ButtonsProduto()],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                ],
                               ),
                             ],
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [_ButtonsProduto()],
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -631,6 +451,279 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           child: CircularProgressIndicator(),
         );
       },
+    );
+  }
+
+  _formEsq(){
+   return Column(
+            children: [
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  controller: _controllerNome,
+                  decoration: const InputDecoration(
+                    labelText: "Nome",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  controller: _controllerCNPJ,
+                  decoration: const InputDecoration(
+                    labelText: "CNPJ",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  controller: _controllerXCoord,
+                  decoration: const InputDecoration(
+                    labelText: "XCoord",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  controller: _controllerYCoord,
+                  decoration: const InputDecoration(
+                    labelText: "YCoord",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  controller: _controllerAreaPropriedade,
+                  decoration: const InputDecoration(
+                    labelText: "Área da Propriedade",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                width: constWidth,
+                height: 30,
+                child: TextFormField(
+                  controller: _controllerAreaTotal,
+                  inputFormatters: <TextInputFormatter>[
+                    FilteringTextInputFormatter.allow(
+                        RegExp(r'^\d+.?\d{0,2}'))
+                  ],
+                  keyboardType:
+                      TextInputType.numberWithOptions(
+                          decimal: true),
+                  decoration: const InputDecoration(
+                    labelText: "Área Total",
+                    border: OutlineInputBorder(),
+                    isDense: true,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+            ],
+          );
+  }
+
+  _formDir(){
+    List<String> listUfs = Uf().listUfs();
+    return Column(
+      children: [
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaPlantada,
+            decoration: const InputDecoration(
+              labelText: "Área Plantada",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaEstimaConser,
+            decoration: const InputDecoration(
+              labelText:
+                  "Área Estimada de Conservação",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaInfraestrutura,
+            decoration: const InputDecoration(
+              labelText: "Área de Infraestrutura",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(
+                  RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType:
+                TextInputType.numberWithOptions(
+                    decimal: true),
+            controller: _controllerAreaOutro,
+            decoration: const InputDecoration(
+              labelText: " Outras Áreas",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            controller: _controllerLocalizacao,
+            decoration: const InputDecoration(
+              labelText: "Localização",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        Container(
+          width: constWidth,
+          height: 30,
+          decoration: BoxDecoration(
+            border: Border.all(
+                width: 1, color: Colors.grey),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: DropdownButtonHideUnderline(
+            child: ButtonTheme(
+              alignedDropdown: true,
+              child: DropdownButton<String>(
+                hint: Text("UF"),
+                isDense: true,
+                isExpanded: true,
+                value: listUfSelecionado,
+                onChanged: (newValue) => {
+                  setState(() {
+                    valueSelected = newValue;
+                    listUfSelecionado = valueSelected;
+                  })
+                },
+                items: listUfs.map((String value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: 30,
+          height: 20,
+        ),
+      ],
     );
   }
 
@@ -1151,14 +1244,14 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
   }
 
   _onClickSalvar() async {
-   if (_controllerNome.text == "" ||
+    if (_controllerNome.text == "" ||
         _controllerCNPJ.text == "" ||
         _controllerXCoord.text == "" ||
         _controllerYCoord.text == "") {
       _onClickDialog();
       return;
     }
-    
+
     double areaPropriedade;
     double areaTotal;
     double areaPlantada;
@@ -1166,15 +1259,15 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     double areaInfraestrutura;
     double areaOutrosUsos;
 
-    
     double xCoord = double.parse(_controllerXCoord.text.replaceAll(",", "."));
-    
+
     double yCoord = double.parse(_controllerYCoord.text.replaceAll(",", "."));
-    
+
     if (_controllerAreaPropriedade.text.isEmpty) {
       areaPropriedade = 0;
     } else {
-      areaPropriedade = double.parse(_controllerAreaPropriedade.text.replaceAll(",", "."));
+      areaPropriedade =
+          double.parse(_controllerAreaPropriedade.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaTotal.text.isEmpty) {
@@ -1186,44 +1279,48 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
     if (_controllerAreaPlantada.text.isEmpty) {
       areaPlantada = 0;
     } else {
-      areaPlantada = double.parse(_controllerAreaPlantada.text.replaceAll(",", "."));
+      areaPlantada =
+          double.parse(_controllerAreaPlantada.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaEstimaConser.text.isEmpty) {
       areaEstimaConservacao = 0;
     } else {
-      areaEstimaConservacao = double.parse(_controllerAreaEstimaConser.text.replaceAll(",", "."));
+      areaEstimaConservacao =
+          double.parse(_controllerAreaEstimaConser.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaInfraestrutura.text.isEmpty) {
       areaInfraestrutura = 0;
     } else {
-      areaInfraestrutura = double.parse(_controllerAreaInfraestrutura.text.replaceAll(",", "."));
+      areaInfraestrutura =
+          double.parse(_controllerAreaInfraestrutura.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaOutro.text.isEmpty) {
       areaOutrosUsos = 0;
     } else {
-      areaOutrosUsos = double.parse(_controllerAreaOutro.text.replaceAll(",", "."));
+      areaOutrosUsos =
+          double.parse(_controllerAreaOutro.text.replaceAll(",", "."));
     }
 
     PropriedadesApi propriedadesApi = PropriedadesApi();
 
     PropriedadesModel oProp = PropriedadesModel(
-        idPropriedade: oPropModel.idPropriedade,
-        Nome: _controllerNome.text,
-        CNPJ: _controllerCNPJ.text,
-        XCoord: xCoord,
-        yCoord: yCoord,
-        AreaPropriedade: areaPropriedade,
-        AreaTotal: areaTotal,
-        AreaPlantada: areaPlantada,
-        AreaEstimaConservacao: areaEstimaConservacao,
-        AreaInfraestrutura: areaInfraestrutura,
-        AreaOutrosUsos: areaOutrosUsos,
-        Localizacao: _controllerLocalizacao.text ?? "",
-        UF: listUfSelecionado ?? "",
-        );
+      idPropriedade: oPropModel.idPropriedade,
+      Nome: _controllerNome.text,
+      CNPJ: _controllerCNPJ.text,
+      XCoord: xCoord,
+      yCoord: yCoord,
+      AreaPropriedade: areaPropriedade,
+      AreaTotal: areaTotal,
+      AreaPlantada: areaPlantada,
+      AreaEstimaConservacao: areaEstimaConservacao,
+      AreaInfraestrutura: areaInfraestrutura,
+      AreaOutrosUsos: areaOutrosUsos,
+      Localizacao: _controllerLocalizacao.text ?? "",
+      UF: listUfSelecionado ?? "",
+    );
 
     var messageReturn = await propriedadesApi.updatePropriedade(oProp);
 
@@ -1237,7 +1334,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(PropriedadesPage());
     } else {
-       Fluttertoast.showToast(
+      Fluttertoast.showToast(
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
@@ -1245,23 +1342,28 @@ class _PropriedadesEditState extends State<PropriedadesEdit> {
           fontSize: 16.0);
     }
   }
-      _onClickDialog() => showDialog(
+
+  _onClickDialog() => showDialog(
         context: context,
         builder: (context) => AlertDialog(
           content: Container(
             height: 60,
             child: Center(
               child: ListTile(
-              leading: Icon(Icons.warning,
-              color: Colors.orange,
-              size: 30,),
-              title: Text('Preencha os campos obrigatorios.',
-             style: TextStyle(fontSize: 20),
-             ),
-              subtitle: Text('Nome, CNPJ, XCoord, YCoord.',
-              style: TextStyle(fontSize: 18),
+                leading: Icon(
+                  Icons.warning,
+                  color: Colors.orange,
+                  size: 30,
+                ),
+                title: Text(
+                  'Preencha os campos obrigatorios.',
+                  style: TextStyle(fontSize: 20),
+                ),
+                subtitle: Text(
+                  'Nome, CNPJ, XCoord, YCoord.',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
-            ),
             ),
           ),
           actions: [

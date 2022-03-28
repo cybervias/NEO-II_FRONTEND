@@ -45,7 +45,7 @@ class _EntidadesEditState extends State<EntidadesEdit> {
         title: Text(widget.tipoAcao == "editar"
             ? "Editar Entidades (${widget.entiModel.Id})"
             : "Criar Nova Entidade"),
-        backgroundColor: Color.fromRGBO(68, 76, 87, 2),
+        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),

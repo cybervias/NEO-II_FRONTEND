@@ -43,6 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/build/app
+/build/fluttertoast
+/build/shared_preferences_android
+/build/75c1580631f847a4744d758fbeaf09d8
 
 pubspec.lock  # Except for application packages
 

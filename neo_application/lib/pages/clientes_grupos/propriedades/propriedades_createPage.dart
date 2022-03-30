@@ -71,6 +71,18 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
   final TextEditingController _controllerAreaOutro = TextEditingController();
   final TextEditingController _controllerLocalizacao = TextEditingController();
 
+  final _controllerCNPJFocus = FocusNode();
+  final _controllerXCoordFocus = FocusNode();
+  final _controllerYCoordFocus = FocusNode();
+  final _controllerAreaPropriedadeFocus = FocusNode();
+  final _controllerAreaTotalFocus = FocusNode();
+  final _controllerAreaPlantadaFocus = FocusNode();
+  final _controllerAreaEstimaConserFocus = FocusNode();
+  final _controllerAreaInfraestruturaFocus = FocusNode();
+  final _controllerAreaOutroFocus = FocusNode();
+  final _controllerLocalizacaoFocus = FocusNode();
+  final _controllerUfFocus = FocusNode();
+
   late AppModel appRepository;
   double constWidth = 600;
   String? listUfSelecionado;
@@ -158,12 +170,16 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
   }
 
    _formEsq(){
+   
    return Column(
             children: [
               SizedBox(
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  autofocus: true,
+                  onEditingComplete: () => _controllerCNPJFocus.requestFocus(),
                   controller: _controllerNome,
                   decoration: const InputDecoration(
                     labelText: "Nome",
@@ -177,9 +193,12 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
               ),
               SizedBox(
                 width: constWidth,
-                height: 30,
+                height: 50,
                 child: TextFormField(
+                  focusNode: _controllerCNPJFocus,
+                  onEditingComplete: () => _controllerXCoordFocus.requestFocus(),
                   controller: _controllerCNPJ,
+                  maxLength: 18,
                   decoration: const InputDecoration(
                     labelText: "CNPJ",
                     border: OutlineInputBorder(),
@@ -188,12 +207,14 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
               SizedBox(
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerXCoordFocus,
+                  onEditingComplete: () => _controllerYCoordFocus.requestFocus(),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+.?\d{0,2}'))
@@ -216,6 +237,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerYCoordFocus,
+                  onEditingComplete: () => _controllerAreaPropriedadeFocus.requestFocus(),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+.?\d{0,2}'))
@@ -238,6 +261,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerAreaPropriedadeFocus,
+                  onEditingComplete: () => _controllerAreaTotalFocus.requestFocus(),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+.?\d{0,2}'))
@@ -260,6 +285,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerAreaTotalFocus,
+                  onEditingComplete: () => _controllerAreaPlantadaFocus.requestFocus(),
                   controller: _controllerAreaTotal,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
@@ -290,6 +317,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaPlantadaFocus,
+            onEditingComplete: () => _controllerAreaEstimaConserFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -312,6 +341,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaEstimaConserFocus,
+            onEditingComplete: () => _controllerAreaInfraestruturaFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -335,6 +366,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaInfraestruturaFocus,
+            onEditingComplete: () => _controllerAreaOutroFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -357,6 +390,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaOutroFocus,
+            onEditingComplete: () => _controllerLocalizacaoFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -369,7 +404,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
               labelText: " Outras Áreas",
               border: OutlineInputBorder(),
               isDense: true,
-            ),
+                        ),
           ),
         ),
         const SizedBox(
@@ -379,6 +414,8 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerLocalizacaoFocus,
+            onEditingComplete: () => _controllerUfFocus.requestFocus(),
             controller: _controllerLocalizacao,
             decoration: const InputDecoration(
               labelText: "Localização",

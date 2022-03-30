@@ -79,6 +79,18 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
   final TextEditingController _controllerAreaOutro = TextEditingController();
   final TextEditingController _controllerLocalizacao = TextEditingController();
 
+  final _controllerCNPJFocus = FocusNode();
+  final _controllerXCoordFocus = FocusNode();
+  final _controllerYCoordFocus = FocusNode();
+  final _controllerAreaPropriedadeFocus = FocusNode();
+  final _controllerAreaTotalFocus = FocusNode();
+  final _controllerAreaPlantadaFocus = FocusNode();
+  final _controllerAreaEstimaConserFocus = FocusNode();
+  final _controllerAreaInfraestruturaFocus = FocusNode();
+  final _controllerAreaOutroFocus = FocusNode();
+  final _controllerLocalizacaoFocus = FocusNode();
+  final _controllerUfFocus = FocusNode();
+
   late AppModel appRepository;
   double constWidth = 600;
   late PropriedadesModel oPropModel;
@@ -128,6 +140,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
     dropDownControllerFloresta.buscarTipoFloresta();
 
     dropDownControllerProduto.buscarTipoProduto();
+
   }
 
   _body() {
@@ -231,70 +244,68 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                               //Manejo
                               ListView(
                                 children: [
-                                  Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  height: 300,
-                                                  child: ListView.builder(
-                                                    itemCount: snapshot
-                                                        .data[widget.indice]
-                                                        .tipoManejo
-                                                        .length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Card(
-                                                        child: ListTile(
-                                                          title: Text(
-                                                              "${Map.from(listProp[listIndice].tipoManejo[index])['Descricao']}"),
-                                                          trailing: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  await _dialogDeleteManejo(
-                                                                      index,
-                                                                      context);
-                                                                },
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons.delete,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          246,
-                                                                          34,
-                                                                          37,
-                                                                          44),
-                                                                ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: snapshot
+                                                      .data[widget.indice]
+                                                      .tipoManejo
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Card(
+                                                      child: ListTile(
+                                                        title: Text(
+                                                            "${Map.from(listProp[listIndice].tipoManejo[index])['Descricao']}"),
+                                                        trailing: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize
+                                                                  .min,
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await _dialogDeleteManejo(
+                                                                    index,
+                                                                    context);
+                                                              },
+                                                              icon:
+                                                                  const Icon(
+                                                                Icons.delete,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        246,
+                                                                        34,
+                                                                        37,
+                                                                        44),
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      );
-                                                    },
-                                                  ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              _ButtonsManejo(),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            _ButtonsManejo(),
+                                          ],
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -302,68 +313,66 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                               //Floresta
                               ListView(
                                 children: [
-                                  Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  height: 300,
-                                                  child: ListView.builder(
-                                                    itemCount: snapshot
-                                                        .data[widget.indice]
-                                                        .tipoFloresta
-                                                        .length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Card(
-                                                        child: ListTile(
-                                                          title: Text(
-                                                              "${Map.from(listProp[listIndice].tipoFloresta[index])['Descricao']}"),
-                                                          trailing: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  await _dialogDeleteFloresta(
-                                                                      index,
-                                                                      context);
-                                                                },
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons.delete,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          246,
-                                                                          34,
-                                                                          37,
-                                                                          44),
-                                                                ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: snapshot
+                                                      .data[widget.indice]
+                                                      .tipoFloresta
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Card(
+                                                      child: ListTile(
+                                                        title: Text(
+                                                            "${Map.from(listProp[listIndice].tipoFloresta[index])['Descricao']}"),
+                                                        trailing: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize
+                                                                  .min,
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await _dialogDeleteFloresta(
+                                                                    index,
+                                                                    context);
+                                                              },
+                                                              icon:
+                                                                  const Icon(
+                                                                Icons.delete,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        246,
+                                                                        34,
+                                                                        37,
+                                                                        44),
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      );
-                                                    },
-                                                  ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [_ButtonsFloresta()],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [_ButtonsFloresta()],
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -371,68 +380,66 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                               //Produto
                               ListView(
                                 children: [
-                                  Card(
-                                    child: Container(
-                                      padding: EdgeInsets.all(10),
-                                      child: Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  height: 300,
-                                                  child: ListView.builder(
-                                                    itemCount: snapshot
-                                                        .data[widget.indice]
-                                                        .produtos
-                                                        .length,
-                                                    itemBuilder:
-                                                        (context, index) {
-                                                      return Card(
-                                                        child: ListTile(
-                                                          title: Text(
-                                                              "${Map.from(listProp[listIndice].produtos[index])['Descricao']}"),
-                                                          trailing: Row(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              IconButton(
-                                                                onPressed:
-                                                                    () async {
-                                                                  await _dialogDeleteProduto(
-                                                                      index,
-                                                                      context);
-                                                                },
-                                                                icon:
-                                                                    const Icon(
-                                                                  Icons.delete,
-                                                                  color: Color
-                                                                      .fromARGB(
-                                                                          246,
-                                                                          34,
-                                                                          37,
-                                                                          44),
-                                                                ),
+                                  Container(
+                                    padding: EdgeInsets.all(10),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Container(
+                                                height: 300,
+                                                child: ListView.builder(
+                                                  itemCount: snapshot
+                                                      .data[widget.indice]
+                                                      .produtos
+                                                      .length,
+                                                  itemBuilder:
+                                                      (context, index) {
+                                                    return Card(
+                                                      child: ListTile(
+                                                        title: Text(
+                                                            "${Map.from(listProp[listIndice].produtos[index])['Descricao']}"),
+                                                        trailing: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize
+                                                                  .min,
+                                                          children: [
+                                                            IconButton(
+                                                              onPressed:
+                                                                  () async {
+                                                                await _dialogDeleteProduto(
+                                                                    index,
+                                                                    context);
+                                                              },
+                                                              icon:
+                                                                  const Icon(
+                                                                Icons.delete,
+                                                                color: Color
+                                                                    .fromARGB(
+                                                                        246,
+                                                                        34,
+                                                                        37,
+                                                                        44),
                                                               ),
-                                                            ],
-                                                          ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      );
-                                                    },
-                                                  ),
+                                                      ),
+                                                    );
+                                                  },
                                                 ),
                                               ),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.end,
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [_ButtonsProduto()],
-                                          ),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [_ButtonsProduto()],
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -455,12 +462,16 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
   }
 
   _formEsq(){
+   
    return Column(
             children: [
               SizedBox(
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  textInputAction: TextInputAction.next,
+                  autofocus: true,
+                  onEditingComplete: () => _controllerCNPJFocus.requestFocus(),
                   controller: _controllerNome,
                   decoration: const InputDecoration(
                     labelText: "Nome",
@@ -474,9 +485,12 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
               ),
               SizedBox(
                 width: constWidth,
-                height: 30,
+                height: 50,
                 child: TextFormField(
+                  focusNode: _controllerCNPJFocus,
+                  onEditingComplete: () => _controllerXCoordFocus.requestFocus(),
                   controller: _controllerCNPJ,
+                  maxLength: 18,
                   decoration: const InputDecoration(
                     labelText: "CNPJ",
                     border: OutlineInputBorder(),
@@ -485,12 +499,14 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
               SizedBox(
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerXCoordFocus,
+                  onEditingComplete: () => _controllerYCoordFocus.requestFocus(),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+.?\d{0,2}'))
@@ -513,6 +529,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerYCoordFocus,
+                  onEditingComplete: () => _controllerAreaPropriedadeFocus.requestFocus(),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+.?\d{0,2}'))
@@ -535,6 +553,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerAreaPropriedadeFocus,
+                  onEditingComplete: () => _controllerAreaTotalFocus.requestFocus(),
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
                         RegExp(r'^\d+.?\d{0,2}'))
@@ -557,6 +577,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                 width: constWidth,
                 height: 30,
                 child: TextFormField(
+                  focusNode: _controllerAreaTotalFocus,
+                  onEditingComplete: () => _controllerAreaPlantadaFocus.requestFocus(),
                   controller: _controllerAreaTotal,
                   inputFormatters: <TextInputFormatter>[
                     FilteringTextInputFormatter.allow(
@@ -587,6 +609,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaPlantadaFocus,
+            onEditingComplete: () => _controllerAreaEstimaConserFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -609,6 +633,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaEstimaConserFocus,
+            onEditingComplete: () => _controllerAreaInfraestruturaFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -632,6 +658,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaInfraestruturaFocus,
+            onEditingComplete: () => _controllerAreaOutroFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -654,6 +682,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerAreaOutroFocus,
+            onEditingComplete: () => _controllerLocalizacaoFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
               FilteringTextInputFormatter.allow(
                   RegExp(r'^\d+.?\d{0,2}'))
@@ -666,7 +696,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
               labelText: " Outras Áreas",
               border: OutlineInputBorder(),
               isDense: true,
-            ),
+                        ),
           ),
         ),
         const SizedBox(
@@ -676,6 +706,8 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
           width: constWidth,
           height: 30,
           child: TextFormField(
+            focusNode: _controllerLocalizacaoFocus,
+            onEditingComplete: () => _controllerUfFocus.requestFocus(),
             controller: _controllerLocalizacao,
             decoration: const InputDecoration(
               labelText: "Localização",

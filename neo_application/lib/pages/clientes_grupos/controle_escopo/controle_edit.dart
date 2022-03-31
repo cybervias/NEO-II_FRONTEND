@@ -11,7 +11,6 @@ import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidad
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/dropDownController_Fracao.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
-import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/dropDownController_Propriedades.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_model.dart';
 import 'package:neo_application/pages/provider/app_provider.dart';
@@ -60,7 +59,6 @@ class _ControleEditState extends State<ControleEdit> {
 
   late AppModel appRepository;
   late ControleModel oControleModel;
-  EntidadesModel valueSelected = EntidadesModel(); //TODO excluir
 
   EntidadesModel listEntidadesSelecionado = EntidadesModel();
   PropriedadesModel listPropriedadeSelecionado = PropriedadesModel();
@@ -113,22 +111,6 @@ class _ControleEditState extends State<ControleEdit> {
     _controllerAreaAuditada.text = oControle.AreaAuditada.toString();
     _controllerCicloTrabalho.text = oControle.CicloTrabalho.toString();
 
-    /*if (listPropriedadeSelecionado.idPropriedade == null &&
-        oControle.idPropriedade != 0) {
-      listPropriedadeSelecionado.idPropriedade = oControle.idPropriedade;
-    }
-    if (listEntidadesSelecionado.Id == null && oControle.idEntidade != 0) {
-      listEntidadesSelecionado.Id = oControle.idEntidade;
-    }
-    if (listFracaoSelecionado.Id == null && oControle.idFracao != 0) {
-      listFracaoSelecionado.Id = oControle.idFracao;
-    }
-    if (listGrupoSelecionado.ID == null && oControle.idGrupo != 0) {
-      listGrupoSelecionado.ID = oControle.idGrupo;
-    }*/
-    /*listEntidadesSelecionado.Nome =
-        valueSelected.Nome != null ? valueSelected.Nome : oGrupo.IDGestor.toString();*/
-
     await dropDownControllerEntidades.buscarEntidades();
     var listEntidades = dropDownControllerEntidades.listEntidades;
 
@@ -174,8 +156,6 @@ class _ControleEditState extends State<ControleEdit> {
   }
 
   _body() {
-//List _listEntidades = EntidadesApi().getListEntidades();
-
     return FutureBuilder(
       future: TodasTabelas().getTodasTabelas(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -389,12 +369,6 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           child: TextFormField(
-                            /* validator: (value) {
-                              if (value == "" || value == 0) {
-                                return "Campo obrigatorio";
-                              }
-                              return null;
-                            },*/
                             controller: _controllerDataEntrada,
                             style: TextStyle(
                               color: Colors.black,
@@ -441,12 +415,6 @@ class _ControleEditState extends State<ControleEdit> {
                           width: 300,
                           height: 40,
                           child: TextFormField(
-                            /*validator: ((value) {
-                              if (value == "" || value == 0) {
-                                return "Campo obrigatorio";
-                              }
-                              return null;
-                            }),*/
                             controller: _controllerDataSaida,
                             style: TextStyle(
                               color: Colors.black,
@@ -613,25 +581,6 @@ class _ControleEditState extends State<ControleEdit> {
       return;
     }
 
-    /*var listFrac = listFracao
-        .where((element) => element.ID == listFracaoSelecionado.Id)
-        .toList();
-    var listEnti = listEntidades
-        .where((element) => element.Id == listEntidadesSelecionado.Id)
-        .toList();
-    var listProp = listPropriedade
-        .where((element) =>
-            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
-        .toList();
-    var listGrup = listGrupos
-        .where((element) => element.idGrupo == listGrupoSelecionado.ID)
-        .toList();
-
-    int? idFracao = listFrac[0].ID;
-    int? idEntidades = listEnti[0].Id;
-    int? idPropriedades = listProp[0].idPropriedade;
-    int? idGrupos = listGrup[0].idGrupo;*/
-
     var DataEntrada = _controllerDataEntrada.text.substring(3, 5) +
         '/' +
         _controllerDataEntrada.text.substring(0, 2) +
@@ -699,30 +648,6 @@ class _ControleEditState extends State<ControleEdit> {
       return;
     }
 
-    /*if (!_formKey.currentState!.validate()) {
-      _onClickDialog();
-      return;
-    }*/
-
-    /*var listFrac = listFracao
-        .where((element) => element.ID == listFracaoSelecionado.Id)
-        .toList();
-    var listEnti = listEntidades
-        .where((element) => element.Id == listEntidadesSelecionado.Id)
-        .toList();
-    var listProp = listPropriedade
-        .where((element) =>
-            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
-        .toList();
-    var listGrup = listGrupos
-        .where((element) => element.idGrupo == listGrupoSelecionado.ID)
-        .toList();
-
-    int? idFracao = listFrac[0].ID;
-    int? idEntidades = listEnti[0].Id;
-    int? idPropriedades = listProp[0].idPropriedade;
-    int? idGrupos = listGrup[0].idGrupo;*/
-
     var DataEntrada = _controllerDataEntrada.text.substring(3, 5) +
         '/' +
         _controllerDataEntrada.text.substring(0, 2) +
@@ -785,10 +710,10 @@ class _ControleEditState extends State<ControleEdit> {
               leading: Icon(Icons.warning,
               color: Colors.orange,
               size: 30,),
-              title: Text('Preencha os campos obrigatorios.',
+              title: Text('Preencha os campos obrigatórios.',
              style: TextStyle(fontSize: 20),
              ),
-              subtitle: Text('Entidades, Propriedades, Grupos, Fração, Data Entrada e Data Saida.',
+              subtitle: Text('Entidades, Propriedades, Grupos, Fração, Data Entrada e Data Saída.',
               style: TextStyle(fontSize: 18),
               ),
             ),

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:neo_application/pages/home_page/home_page.dart';
 import 'package:neo_application/pages/login_page/login_api.dart';
-import 'package:neo_application/pages/login_page/user_token.dart';
 import 'package:neo_application/pages/utils/nav.dart';
 import 'package:neo_application/pages/widgets/app_button.dart';
 import 'package:neo_application/pages/widgets/app_text.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:neo_application/pages/utils/globals.dart' as globals;
 
 

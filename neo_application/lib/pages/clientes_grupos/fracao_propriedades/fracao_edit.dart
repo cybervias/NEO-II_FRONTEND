@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:neo_application/pages/clientes_grupos/adm_grupos/dropDownController_Grupo.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/dropDownController_Entidades.dart';
 import 'package:neo_application/pages/clientes_grupos/entidades_gestoras/entidades_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/Tabelas_model.dart';
-import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/dropDownController_Fracao.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_api.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_model.dart';
 import 'package:neo_application/pages/clientes_grupos/fracao_propriedades/fracao_page.dart';
@@ -83,12 +81,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
     _controllerIDEntidade.text = oFracaoProp.IDEntidade.toString();
     _controllerIDPropriedade.text = oFracaoProp.IDPropriedade.toString();
     _controllerFracao.text = oFracaoProp.Fracao.toString();
-    /*if (listPropriedadeSelecionado.idPropriedade == null && oFracaoProp.IDPropriedade != 0) {
-      listPropriedadeSelecionado.idPropriedade = oFracaoProp.IDPropriedade;
-    }
-    if (listEntidadesSelecionado.Id == null && oFracaoProp.IDEntidade != 0) {
-      listEntidadesSelecionado.Id = oFracaoProp.IDEntidade;
-    }*/
+
     await dropDownControllerEntidades.buscarEntidades();
     var listEntidades = dropDownControllerEntidades.listEntidades;
 
@@ -114,8 +107,6 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
   }
 
   _body() {
-//List _listEntidades = EntidadesApi().getListEntidades();
-
     return FutureBuilder(
       future: TodasTabelas().getTodasTabelas(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -284,19 +275,6 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
     FracaoPropApi fracaoPropApi = FracaoPropApi();
 
     int Fracao = int.parse(_controllerFracao.text);
-// int IDEntidade = int.parse(_controllerIDEntidade.text);
-    //int Fracao = int.parse(_controllerFracao.text);
-
-    /* var listEnti = listEntidades
-        .where((element) => element.Id == listEntidadesSelecionado.Id)
-        .toList();
-    var listPropriedades = listPropriedade
-        .where((element) =>
-            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
-        .toList();
-
-    int? idEntidades = listEnti[0].Id;
-    int? idPropriedades = listPropriedades[0].idPropriedade;*/
 
     FracaoPropModel oFracaoProp = FracaoPropModel(
       ID: widget.fracaoPropModel.ID,
@@ -334,18 +312,6 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
     FracaoPropApi fracaoPropApi = FracaoPropApi();
 
     int Fracao = int.parse(_controllerFracao.text);
-//int IDEntidade = int.parse(_controllerIDEntidade.text);
-
-    /*var listEnti = listEntidades
-        .where((element) => element.Id == listEntidadesSelecionado.Id)
-        .toList();
-    var listPropriedades = listPropriedade
-        .where((element) =>
-            element.idPropriedade == listPropriedadeSelecionado.idPropriedade)
-        .toList();
-
-    int? idEntidades = listEnti[0].Id;
-    int? idPropriedades = listPropriedades[0].idPropriedade;*/
 
     FracaoPropModel oFracaoProp = FracaoPropModel(
       ID: widget.fracaoPropModel.ID,
@@ -385,7 +351,7 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
               leading: Icon(Icons.warning,
               color: Colors.orange,
               size: 30,),
-              title: Text('Preencha os campos obrigatorios.',
+              title: Text('Preencha os campos obrigatórios.',
              style: TextStyle(fontSize: 20),
              ),
               subtitle: Text('Entidades, Propriedades, Fração.',
@@ -404,70 +370,4 @@ class _FracaoPropEditState extends State<FracaoPropEdit> {
           ],
         ),
       );
-
-  // String? _validateNome(String? value) {
-  //    if (value!.isEmpty) {
-  //     return "Nome não";
-  //   }
-  // }
-
-  // String? _validateCnpj(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateXCoord(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateYCorrd(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPropriedade(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaTotal(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPlantada(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaEstimaConser(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaInfr(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaOutro(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateLocalizacao(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
 }

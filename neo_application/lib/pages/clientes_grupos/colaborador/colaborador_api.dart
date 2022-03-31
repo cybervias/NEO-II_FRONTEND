@@ -141,24 +141,3 @@ class ColaboradorApi {
     return "";
   }
 }
-
-/*class TodasTabelas {
-  List<TodasTabelasModel> list = [];
-  Future<TodasTabelasModel> getTodasTabelas() async {
-    try {
-      var url = Uri.parse(
-          "https://neo-ii-back-end.azurewebsites.net/buscaTodasTabelas");
-
-      var response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        var responseMap = json.decode(response.body);
-        var todasTabelas = TodasTabelasModel.fromMap(responseMap);
-        return todasTabelas;
-      }
-    } catch (e) {
-      print(e);
-    }
-    throw "Erro ao carregar os dados";
-  }
-}*/

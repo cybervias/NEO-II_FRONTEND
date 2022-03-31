@@ -9,7 +9,7 @@ class DecimalTextInputFormatter extends TextInputFormatter {
 
   @override
   TextEditingValue formatEditUpdate(
-    TextEditingValue oldValue, // unused.
+    TextEditingValue oldValue, 
     TextEditingValue newValue,
   ) {
     TextSelection newSelection = newValue.selection;

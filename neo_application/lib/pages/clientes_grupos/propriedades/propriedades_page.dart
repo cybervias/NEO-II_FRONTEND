@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_api.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_createPage.dart';
 import 'package:neo_application/pages/clientes_grupos/propriedades/propriedades_edit.dart';
@@ -74,8 +72,8 @@ class _PropriedadesPageState extends State<PropriedadesPage> {
                   itemBuilder: (context, index) {
                     return Card(
                       child: ListTile(
-                        title: Text(listProp[index].Nome! +
-                            ' - ' +
+                        title: Text("Nome: " + listProp[index].Nome! +
+                            ' - ' + "CNPJ: " +
                             listProp[index].CNPJ!),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,

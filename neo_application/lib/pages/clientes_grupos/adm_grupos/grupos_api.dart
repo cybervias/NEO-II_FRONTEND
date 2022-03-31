@@ -51,27 +51,6 @@ class GruposApi {
     throw "Erro ao carregar os dados";
   }
 
-  /* late List<GruposApi>? listEntidades;
-  Future<List<EntidadesModel>> getListEntidades() async {
-    try {
-      var url =
-          Uri.parse("https://neo-ii-back-end.azurewebsites.net/entidades");
-
-      var response = await http.get(url);
-
-      if (response.statusCode == 200) {
-        var responseMap = json.decode(response.body) as List;
-
-        return responseMap
-            .map((entidades) => EntidadesModel.fromMap(entidades))
-            .toList();
-      }
-    } catch (e) {
-      print(e);
-    }
-    throw "Erro ao carregar os dados";
-  }*/
-
   Future updateGrupo(GruposModel oGrupo) async {
     try {
       var url = Uri.parse(

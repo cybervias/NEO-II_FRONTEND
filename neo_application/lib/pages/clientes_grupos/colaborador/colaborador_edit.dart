@@ -82,8 +82,6 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
   }
 
   _body() {
-//List _listEntidades = EntidadesApi().getListEntidades();
-
     return FutureBuilder(
       future: ColaboradorApi().getListColaborador(),
       builder: (context, AsyncSnapshot snapshot) {
@@ -214,12 +212,6 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
                                       width: 300,
                                       height: 40,
                                       child: TextFormField(
-                                        /* validator: (value) {
-                                        if (value == "" || value == 0) {
-                                          return "Campo obrigatorio";
-                                        }
-                                        return null;
-                                      },*/
                                         controller: _controllerDataInicio,
                                         style: TextStyle(
                                           color: Colors.black,
@@ -326,12 +318,7 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
       _onClickDialog();
       return;
     }
-
-    /*if (!_formKey.currentState!.validate()) {
-      _onClickDialog();
-      return;
-    }*/
-
+    
     var DataInicio = _controllerDataInicio.text.substring(3, 5) +
         '/' +
         _controllerDataInicio.text.substring(0, 2) +
@@ -395,7 +382,7 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
               leading: Icon(Icons.warning,
               color: Colors.orange,
               size: 30,),
-              title: Text('Preencha os campos obrigatorios.',
+              title: Text('Preencha os campos obrigatórios.',
              style: TextStyle(fontSize: 20),
              ),
               subtitle: Text('Nome, Especialidade.',

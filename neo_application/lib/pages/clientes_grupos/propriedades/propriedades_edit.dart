@@ -225,8 +225,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                                 topLeft: Radius.circular(15),
                                 topRight: Radius.circular(15),
                               ),
-                              color: Color.fromRGBO(78, 204, 196,
-                                  2), //Color.fromRGBO(68, 76, 87, 2),
+                              color: Color.fromRGBO(78, 204, 196, 2),
                             ),
                             tabs: [
                               Tab(text: "Tipos de Manejo"),
@@ -1388,7 +1387,7 @@ class _PropriedadesEditState extends State<PropriedadesEdit>
                   size: 30,
                 ),
                 title: Text(
-                  'Preencha os campos obrigatorios.',
+                  'Preencha os campos obrigatórios.',
                   style: TextStyle(fontSize: 20),
                 ),
                 subtitle: Text(

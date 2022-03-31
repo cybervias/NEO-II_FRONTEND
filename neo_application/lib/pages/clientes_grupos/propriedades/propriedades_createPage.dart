@@ -35,7 +35,6 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
     {"ID": 4, "Descricao": "tipo manejo 3"}
   ];
 
-//DOGLAS - 23/03
   List<PropManejoModel> listPropManejo = [];
   List<PropriedadesModel> listProp = [];
 
@@ -52,7 +51,6 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
   Uf? ufController = Uf();
 
   bool isLoading = false;
-//DOGLAS - 23-03
 
   late PropriedadesModel oProp;
 
@@ -118,49 +116,59 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           listProp = snapshot.data;
 
           List<String> listUfs = Uf().listUfs();
-          return ListView(
-            children: [
-              Card(
-                  child: LayoutBuilder(
-                    builder: (context, constraints) {
-                      if (constraints.maxWidth < 786) {
-                        return Container(
-                          padding: EdgeInsets.all(25),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              _formEsq(),
-                              _formDir(),
-                              _Buttons(),
-                            ],
-                          ),
-                        );
-                      } else {
-                        return Container(
-                          padding: EdgeInsets.all(25),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(child: _formEsq()),
-                                  const SizedBox(
-                                    width:20,
-                                    height: 20,
-                                  ),
-                                  Expanded(child: _formDir()),
-                                ],
-                              ),
-                              _Buttons()
-                            ],
-                          ),
-                        );
-                      }
-                    },
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              CircularProgressIndicator();
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              return ListView(
+                children: [
+                  Card(
+                    child: LayoutBuilder(
+                      builder: (context, constraints) {
+                        if (constraints.maxWidth < 786) {
+                          return Container(
+                            padding: EdgeInsets.all(25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _formEsq(),
+                                _formDir(),
+                                _Buttons(),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return Container(
+                            padding: EdgeInsets.all(25),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  children: [
+                                    Expanded(child: _formEsq()),
+                                    const SizedBox(
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    Expanded(child: _formDir()),
+                                  ],
+                                ),
+                                _Buttons()
+                              ],
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ),
-                ),
-            ],
-          );
+                ],
+              );
+          }
         }
         return const Center(
           child: CircularProgressIndicator(),
@@ -169,147 +177,136 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
     );
   }
 
-   _formEsq(){
-   
-   return Column(
-            children: [
-              SizedBox(
-                width: constWidth,
-                height: 30,
-                child: TextFormField(
-                  textInputAction: TextInputAction.next,
-                  autofocus: true,
-                  onEditingComplete: () => _controllerCNPJFocus.requestFocus(),
-                  controller: _controllerNome,
-                  decoration: const InputDecoration(
-                    labelText: "Nome",
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: constWidth,
-                height: 50,
-                child: TextFormField(
-                  focusNode: _controllerCNPJFocus,
-                  onEditingComplete: () => _controllerXCoordFocus.requestFocus(),
-                  controller: _controllerCNPJ,
-                  maxLength: 18,
-                  decoration: const InputDecoration(
-                    labelText: "CNPJ",
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 5,
-              ),
-              SizedBox(
-                width: constWidth,
-                height: 30,
-                child: TextFormField(
-                  focusNode: _controllerXCoordFocus,
-                  onEditingComplete: () => _controllerYCoordFocus.requestFocus(),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+.?\d{0,2}'))
-                  ],
-                  keyboardType:
-                      TextInputType.numberWithOptions(
-                          decimal: true),
-                  controller: _controllerXCoord,
-                  decoration: const InputDecoration(
-                    labelText: "XCoord",
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: constWidth,
-                height: 30,
-                child: TextFormField(
-                  focusNode: _controllerYCoordFocus,
-                  onEditingComplete: () => _controllerAreaPropriedadeFocus.requestFocus(),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+.?\d{0,2}'))
-                  ],
-                  keyboardType:
-                      TextInputType.numberWithOptions(
-                          decimal: true),
-                  controller: _controllerYCoord,
-                  decoration: const InputDecoration(
-                    labelText: "YCoord",
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: constWidth,
-                height: 30,
-                child: TextFormField(
-                  focusNode: _controllerAreaPropriedadeFocus,
-                  onEditingComplete: () => _controllerAreaTotalFocus.requestFocus(),
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+.?\d{0,2}'))
-                  ],
-                  keyboardType:
-                      TextInputType.numberWithOptions(
-                          decimal: true),
-                  controller: _controllerAreaPropriedade,
-                  decoration: const InputDecoration(
-                    labelText: "Área da Propriedade",
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              SizedBox(
-                width: constWidth,
-                height: 30,
-                child: TextFormField(
-                  focusNode: _controllerAreaTotalFocus,
-                  onEditingComplete: () => _controllerAreaPlantadaFocus.requestFocus(),
-                  controller: _controllerAreaTotal,
-                  inputFormatters: <TextInputFormatter>[
-                    FilteringTextInputFormatter.allow(
-                        RegExp(r'^\d+.?\d{0,2}'))
-                  ],
-                  keyboardType:
-                      TextInputType.numberWithOptions(
-                          decimal: true),
-                  decoration: const InputDecoration(
-                    labelText: "Área Total",
-                    border: OutlineInputBorder(),
-                    isDense: true,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
+  _formEsq() {
+    return Column(
+      children: [
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            textInputAction: TextInputAction.next,
+            autofocus: true,
+            onEditingComplete: () => _controllerCNPJFocus.requestFocus(),
+            controller: _controllerNome,
+            decoration: const InputDecoration(
+              labelText: "Nome",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 50,
+          child: TextFormField(
+            focusNode: _controllerCNPJFocus,
+            onEditingComplete: () => _controllerXCoordFocus.requestFocus(),
+            controller: _controllerCNPJ,
+            maxLength: 18,
+            decoration: const InputDecoration(
+              labelText: "CNPJ",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 5,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            focusNode: _controllerXCoordFocus,
+            onEditingComplete: () => _controllerYCoordFocus.requestFocus(),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
             ],
-          );
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller: _controllerXCoord,
+            decoration: const InputDecoration(
+              labelText: "XCoord",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            focusNode: _controllerYCoordFocus,
+            onEditingComplete: () =>
+                _controllerAreaPropriedadeFocus.requestFocus(),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller: _controllerYCoord,
+            decoration: const InputDecoration(
+              labelText: "YCoord",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            focusNode: _controllerAreaPropriedadeFocus,
+            onEditingComplete: () => _controllerAreaTotalFocus.requestFocus(),
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            controller: _controllerAreaPropriedade,
+            decoration: const InputDecoration(
+              labelText: "Área da Propriedade",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        SizedBox(
+          width: constWidth,
+          height: 30,
+          child: TextFormField(
+            focusNode: _controllerAreaTotalFocus,
+            onEditingComplete: () =>
+                _controllerAreaPlantadaFocus.requestFocus(),
+            controller: _controllerAreaTotal,
+            inputFormatters: <TextInputFormatter>[
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
+            ],
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
+            decoration: const InputDecoration(
+              labelText: "Área Total",
+              border: OutlineInputBorder(),
+              isDense: true,
+            ),
+          ),
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+      ],
+    );
   }
 
-  _formDir(){
+  _formDir() {
     List<String> listUfs = Uf().listUfs();
     return Column(
       children: [
@@ -318,14 +315,12 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           height: 30,
           child: TextFormField(
             focusNode: _controllerAreaPlantadaFocus,
-            onEditingComplete: () => _controllerAreaEstimaConserFocus.requestFocus(),
+            onEditingComplete: () =>
+                _controllerAreaEstimaConserFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(
-                  RegExp(r'^\d+.?\d{0,2}'))
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
             ],
-            keyboardType:
-                TextInputType.numberWithOptions(
-                    decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _controllerAreaPlantada,
             decoration: const InputDecoration(
               labelText: "Área Plantada",
@@ -342,18 +337,15 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           height: 30,
           child: TextFormField(
             focusNode: _controllerAreaEstimaConserFocus,
-            onEditingComplete: () => _controllerAreaInfraestruturaFocus.requestFocus(),
+            onEditingComplete: () =>
+                _controllerAreaInfraestruturaFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(
-                  RegExp(r'^\d+.?\d{0,2}'))
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
             ],
-            keyboardType:
-                TextInputType.numberWithOptions(
-                    decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _controllerAreaEstimaConser,
             decoration: const InputDecoration(
-              labelText:
-                  "Área Estimada de Conservação",
+              labelText: "Área Estimada de Conservação",
               border: OutlineInputBorder(),
               isDense: true,
             ),
@@ -369,12 +361,9 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
             focusNode: _controllerAreaInfraestruturaFocus,
             onEditingComplete: () => _controllerAreaOutroFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(
-                  RegExp(r'^\d+.?\d{0,2}'))
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
             ],
-            keyboardType:
-                TextInputType.numberWithOptions(
-                    decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _controllerAreaInfraestrutura,
             decoration: const InputDecoration(
               labelText: "Área de Infraestrutura",
@@ -393,18 +382,15 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
             focusNode: _controllerAreaOutroFocus,
             onEditingComplete: () => _controllerLocalizacaoFocus.requestFocus(),
             inputFormatters: <TextInputFormatter>[
-              FilteringTextInputFormatter.allow(
-                  RegExp(r'^\d+.?\d{0,2}'))
+              FilteringTextInputFormatter.allow(RegExp(r'^\d+.?\d{0,2}'))
             ],
-            keyboardType:
-                TextInputType.numberWithOptions(
-                    decimal: true),
+            keyboardType: TextInputType.numberWithOptions(decimal: true),
             controller: _controllerAreaOutro,
             decoration: const InputDecoration(
               labelText: " Outras Áreas",
               border: OutlineInputBorder(),
               isDense: true,
-                        ),
+            ),
           ),
         ),
         const SizedBox(
@@ -431,8 +417,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           width: constWidth,
           height: 30,
           decoration: BoxDecoration(
-            border: Border.all(
-                width: 1, color: Colors.grey),
+            border: Border.all(width: 1, color: Colors.grey),
             borderRadius: BorderRadius.circular(5),
           ),
           child: DropdownButtonHideUnderline(
@@ -498,7 +483,6 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
       return;
     }
 
-   
     double areaPropriedade;
     double areaTotal;
     double areaPlantada;
@@ -507,13 +491,14 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
     double areaOutrosUsos;
 
     double xCoord = double.parse(_controllerXCoord.text.replaceAll(",", "."));
-    
+
     double yCoord = double.parse(_controllerYCoord.text.replaceAll(",", "."));
 
     if (_controllerAreaPropriedade.text.isEmpty) {
       areaPropriedade = 0;
     } else {
-      areaPropriedade = double.parse(_controllerAreaPropriedade.text.replaceAll(",", "."));
+      areaPropriedade =
+          double.parse(_controllerAreaPropriedade.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaTotal.text.isEmpty) {
@@ -525,25 +510,29 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
     if (_controllerAreaPlantada.text.isEmpty) {
       areaPlantada = 0;
     } else {
-      areaPlantada = double.parse(_controllerAreaPlantada.text.replaceAll(",", "."));
+      areaPlantada =
+          double.parse(_controllerAreaPlantada.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaEstimaConser.text.isEmpty) {
       areaEstimaConservacao = 0;
     } else {
-      areaEstimaConservacao = double.parse(_controllerAreaEstimaConser.text.replaceAll(",", "."));
+      areaEstimaConservacao =
+          double.parse(_controllerAreaEstimaConser.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaInfraestrutura.text.isEmpty) {
       areaInfraestrutura = 0;
     } else {
-      areaInfraestrutura = double.parse(_controllerAreaInfraestrutura.text.replaceAll(",", "."));
+      areaInfraestrutura =
+          double.parse(_controllerAreaInfraestrutura.text.replaceAll(",", "."));
     }
 
     if (_controllerAreaOutro.text.isEmpty) {
       areaOutrosUsos = 0;
     } else {
-      areaOutrosUsos = double.parse(_controllerAreaOutro.text.replaceAll(",", "."));
+      areaOutrosUsos =
+          double.parse(_controllerAreaOutro.text.replaceAll(",", "."));
     }
 
     PropriedadesApi propriedadesApi = PropriedadesApi();
@@ -560,8 +549,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
         AreaInfraestrutura: areaInfraestrutura,
         AreaOutrosUsos: areaOutrosUsos,
         Localizacao: _controllerLocalizacao.text ?? "",
-        UF: listUfSelecionado ?? ""
-        );
+        UF: listUfSelecionado ?? "");
 
     var messageReturn = await propriedadesApi.createPropriedade(oProp);
 
@@ -574,7 +562,7 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           fontSize: 16.0);
       AppModel app = Provider.of<AppModel>(context, listen: false);
       app.setPage(PropriedadesPage());
-    }else {
+    } else {
       Fluttertoast.showToast(
           msg: messageReturn["message"],
           toastLength: Toast.LENGTH_SHORT,
@@ -591,16 +579,20 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
             height: 60,
             child: Center(
               child: ListTile(
-              leading: Icon(Icons.warning,
-              color: Colors.orange,
-              size: 30,),
-              title: Text('Preencha os campos obrigatorios.',
-             style: TextStyle(fontSize: 20),
-             ),
-              subtitle: Text('Nome, CNPJ, XCoord, YCoord.',
-              style: TextStyle(fontSize: 18),
+                leading: Icon(
+                  Icons.warning,
+                  color: Colors.orange,
+                  size: 30,
+                ),
+                title: Text(
+                  'Preencha os campos obrigatórios.',
+                  style: TextStyle(fontSize: 20),
+                ),
+                subtitle: Text(
+                  'Nome, CNPJ, XCoord, YCoord.',
+                  style: TextStyle(fontSize: 18),
+                ),
               ),
-            ),
             ),
           ),
           actions: [
@@ -613,71 +605,4 @@ class _PropriedadesCreateState extends State<PropriedadesCreate> {
           ],
         ),
       );
-
-  // String? _validateNome(String? value) {
-  //    if (value!.isEmpty) {
-  //     return "Nome não";
-  //   }
-  // }
-
-  // String? _validateCnpj(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateXCoord(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateYCorrd(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPropriedade(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaTotal(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaPlantada(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaEstimaConser(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaInfr(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateAreaOutro(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
-  // String? _validateLocalizacao(String? value) {
-  //   if (value!.isEmpty) {
-  //     return "Digite o usuario";
-  //   }
-  // }
-
 }

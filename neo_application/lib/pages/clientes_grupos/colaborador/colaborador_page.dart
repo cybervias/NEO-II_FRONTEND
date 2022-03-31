@@ -37,13 +37,6 @@ class _ColaboradorPageState extends State<ColaboradorPage> {
         automaticallyImplyLeading: false,
         centerTitle: true,
       ),
-      /*floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _onNavAdd(context);
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Color.fromRGBO(78, 204, 196, 2),
-      ),*/
     );
   }
 
@@ -92,7 +85,7 @@ class _ColaboradorPageState extends State<ColaboradorPage> {
               itemBuilder: (context, index) {
                 return Card(
                   child: ListTile(
-                    title: Text("Nome: " + "${listColaborador[index].Nome}" + " - " "Usuário: " + "${listColaborador[index].Usuario}" + " - " "Especialidade: " + "${listColaborador[index].Especialidade}" + " - " "Auditor: " + "${listColaborador[index].qAuditor}" + " - " "Auditor Líder: " + "${listColaborador[index].qAuditorLider}" + " - " "Lider de Experiência: " + "${listColaborador[index].qLiderExperiencia}" + " - " "Data de Início: " + "${listColaborador[index].DataInicio}"
+                    title: Text("Nome: " + "${listColaborador[index].Nome}" + " - " "Usuário: " + "${listColaborador[index].Usuario}" + " - " "Especialidade: " + "${listColaborador[index].Especialidade}" + " - " "Data de Início: " + "${listColaborador[index].DataInicio}"
                         ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -111,15 +104,6 @@ class _ColaboradorPageState extends State<ColaboradorPage> {
                             color: Color.fromARGB(246, 34, 37, 44),
                           ),
                         ),
-                        /*IconButton(
-                          onPressed: () async {
-                            await _dialogDelete(index, context);
-                          },
-                          icon: const Icon(
-                            Icons.delete,
-                            color: Color.fromARGB(246, 34, 37, 44),
-                          ),
-                        ),*/
                       ],
                     ),
                   ),
@@ -134,49 +118,4 @@ class _ColaboradorPageState extends State<ColaboradorPage> {
       },
     );
   }
-
-   /*Future<void> _deleteColaborador(int index, BuildContext context) async {
-    var resposta =
-        await  colaboradorApi.deleteColaborador(listColaborador[index].idAuditor!);
-    if (resposta["type"] == "S") {
-      Fluttertoast.showToast(
-          msg: resposta["message"],
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          fontSize: 16.0);
-      Navigator.pop(context);
-      setState(() {
-         ColaboradorApi().getListColaborador();
-      });
-    }
-  }*/
-
-  /*_dialogDelete(int index, BuildContext context) => showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          content: Container(
-            height: 50,
-            child: Center(
-              child: Text("Você deseja excluir este item?"),
-            ),
-          ),
-          actions: [
-            ElevatedButton(
-              onPressed: () => _deleteColaborador(index, context),
-              child: Text("Sim"),
-              style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(246, 34, 37, 44)),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Não"),
-              style: ElevatedButton.styleFrom(
-                  primary: Color.fromARGB(246, 34, 37, 44)),
-            ),
-          ],
-        ),
-      );*/
 }

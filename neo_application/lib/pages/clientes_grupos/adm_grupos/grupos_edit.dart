@@ -320,7 +320,7 @@ class _GruposEditState extends State<GruposEdit> {
               leading: Icon(Icons.warning,
               color: Colors.orange,
               size: 30,),
-              title: Text('Preencha os campos obrigatorios.',
+              title: Text('Preencha os campos obrigatórios.',
              style: TextStyle(fontSize: 20),
              ),
               subtitle: Text('Nome, Data da Formatação, Entidade.',

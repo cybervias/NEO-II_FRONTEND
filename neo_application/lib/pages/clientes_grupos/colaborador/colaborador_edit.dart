@@ -91,184 +91,172 @@ class _ColaboradorEditState extends State<ColaboradorEdit> {
         if (snapshot.hasData) {
           listColaborador = snapshot.data;
           if (listColaborador.isNotEmpty) {
-            return SingleChildScrollView(
-              child: Container(
-                padding: EdgeInsets.only(top: 50),
-                child: Card(
-                  child: SafeArea(
-                    child: LayoutBuilder(builder: (context, constraints) {
-                      return Column(
+            return ListView(
+              children: [
+                Card(
+                  child: LayoutBuilder(builder: (context, constraints) {
+                    return Container(
+                      padding: EdgeInsets.all(50),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller: _controllerNome,
+                              decoration: const InputDecoration(
+                                labelText: "Nome",
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller: _controllerUsuario,
+                              decoration: const InputDecoration(
+                                labelText: "Usuário",
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller: _controllerEspecialidade,
+                              decoration: const InputDecoration(
+                                labelText: "Especialidade",
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller: _controllerqAuditor,
+                              decoration: const InputDecoration(
+                                labelText: "Auditor",
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller: _controllerqAuditorLider,
+                              decoration: const InputDecoration(
+                                labelText: "Auditor Líder",
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
+                          SizedBox(
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller:
+                                  _controllerqLiderExperiencia,
+                              decoration: const InputDecoration(
+                                labelText: "Lider de Experiência",
+                                border: OutlineInputBorder(),
+                                isDense: true,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
                           Container(
-                            child: Container(
-                              padding: EdgeInsets.fromLTRB(50, 10, 50, 10),
-                              child: Form(
-                                key: _formKey,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller: _controllerNome,
-                                        decoration: const InputDecoration(
-                                          labelText: "Nome",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller: _controllerUsuario,
-                                        decoration: const InputDecoration(
-                                          labelText: "Usuário",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller: _controllerEspecialidade,
-                                        decoration: const InputDecoration(
-                                          labelText: "Especialidade",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller: _controllerqAuditor,
-                                        decoration: const InputDecoration(
-                                          labelText: "Auditor",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller: _controllerqAuditorLider,
-                                        decoration: const InputDecoration(
-                                          labelText: "Auditor Líder",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    SizedBox(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller:
-                                            _controllerqLiderExperiencia,
-                                        decoration: const InputDecoration(
-                                          labelText: "Lider de Experiência",
-                                          border: OutlineInputBorder(),
-                                          isDense: true,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                    Container(
-                                      width: 300,
-                                      height: 40,
-                                      child: TextFormField(
-                                        controller: _controllerDataInicio,
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 15,
-                                        ),
-                                        decoration: InputDecoration(
-                                          border: const OutlineInputBorder(),
-                                          labelText: "Data de Início",
-                                          suffixIcon: IconButton(
-                                            icon: Icon(
-                                              Icons.date_range,
-                                              color: Color.fromARGB(
-                                                  96, 88, 87, 87),
-                                              size: 20,
-                                            ),
-                                            onPressed: () async {
-                                              final data = await showDatePicker(
-                                                context: context,
-                                                initialDate: DateTime.now(),
-                                                firstDate: DateTime(2000),
-                                                lastDate: DateTime(2100),
-                                              );
-                                              if (data != null)
-                                                setState(() => _valueEntrada =
-                                                    data.toString());
+                            width: 300,
+                            height: 40,
+                            child: TextFormField(
+                              controller: _controllerDataInicio,
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15,
+                              ),
+                              decoration: InputDecoration(
+                                border: const OutlineInputBorder(),
+                                labelText: "Data de Início",
+                                suffixIcon: IconButton(
+                                  icon: Icon(
+                                    Icons.date_range,
+                                    color: Color.fromARGB(
+                                        96, 88, 87, 87),
+                                    size: 20,
+                                  ),
+                                  onPressed: () async {
+                                    final data = await showDatePicker(
+                                      context: context,
+                                      initialDate: DateTime.now(),
+                                      firstDate: DateTime(2000),
+                                      lastDate: DateTime(2100),
+                                    );
+                                    if (data != null)
+                                      setState(() => _valueEntrada =
+                                          data.toString());
 
-                                              _controllerDataInicio
-                                                  .text = _valueEntrada
-                                                      .substring(8, 10) +
-                                                  '/' +
-                                                  _valueEntrada.substring(
-                                                      5, 7) +
-                                                  '/' +
-                                                  _valueEntrada.substring(0, 4);
+                                    _controllerDataInicio
+                                        .text = _valueEntrada
+                                            .substring(8, 10) +
+                                        '/' +
+                                        _valueEntrada.substring(
+                                            5, 7) +
+                                        '/' +
+                                        _valueEntrada.substring(0, 4);
 
-                                              print(_controllerDataInicio.text);
-                                            },
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: 30,
-                                      height: 20,
-                                    ),
-                                  ],
+                                    print(_controllerDataInicio.text);
+                                  },
                                 ),
                               ),
                             ),
                           ),
+                          const SizedBox(
+                            width: 30,
+                            height: 20,
+                          ),
                           _Buttons()
                         ],
-                      );
-                    }),
-                  ),
+                      ),
+                    );
+                  }),
                 ),
-              ),
+              ],
             );
           } else {
             Fluttertoast.showToast(

@@ -65,7 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 76,
                   child: const Center(
                     child: Text(
-                      "NEO ANALYTICS",
+                      " ECO ",
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
